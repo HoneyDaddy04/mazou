@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0A0A0F;
+  --color-sidebar: #0D0D14;
+  --color-surface: #12121A;
+  --color-surface-2: #17171F;
+  --color-surface-3: #1C1C26;
+  --color-border: #1F1F2E;
+  --color-border-light: #2C2C3E;
+  --color-text: #EAEAF4;
+  --color-text-sec: #9898B4;
+  --color-text-dim: #5A5A72;
+  --color-accent: #00D26A;
+  --color-accent-muted: #00A854;
+  --color-naira: #FFB800;
+  --color-red: #FF4D4D;
+  --color-blue: #4D8AFF;
+  --color-purple: #A855F7;
+  --color-teal: #2DD4BF;
+  --color-openai: #10A37F;
+  --color-anthropic: #D4A274;
+  --color-google: #4285F4;
+  --color-meta: #0668E1;
+  --color-mistral: #FF7200;
+  --color-deepseek: #4D6BFE;
+  --color-coinbase: #0052FF;
+  --color-stripe: #635BFF;
+
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-dim); }
+
+/* Smooth transitions on interactive elements only */
+button, a, input, select, textarea {
+  transition-property: background-color, border-color, color, box-shadow, opacity;
+  transition-duration: 120ms;
+  transition-timing-function: ease;
+}
+
+/* --- Premium utility classes --- */
+
+/* Glow card: subtle green glow on hover */
+.glow-card {
+  transition: box-shadow 300ms ease, border-color 300ms ease;
+}
+.glow-card:hover {
+  box-shadow: 0 0 20px rgba(0, 210, 106, 0.06), 0 0 40px rgba(0, 210, 106, 0.03);
+  border-color: var(--color-border-light);
+}
+
+/* Glass morphism */
+.glass {
+  background: rgba(18, 18, 26, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Fade-in-up entry animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInUp 400ms ease-out both;
+}
+
+/* Shimmer skeleton loader */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 25%,
+    var(--color-surface-2) 37%,
+    var(--color-surface) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+/* Recharts dark theme overrides */
+.recharts-default-tooltip {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  padding: 10px 14px !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--color-text-sec) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  margin-bottom: 4px !important;
+}
+
+.recharts-tooltip-item {
+  color: var(--color-text) !important;
+  font-size: 12px !important;
+  padding: 2px 0 !important;
+}
+
+.recharts-tooltip-item-name {
+  color: var(--color-text-sec) !important;
+}
+
+.recharts-cartesian-grid line {
+  stroke: var(--color-border) !important;
+  stroke-opacity: 0.5 !important;
+}
