@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mazou - AI Infrastructure Layer for Africa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Fraunces:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0A0A0C;--surface:#111114;--surface2:#18181C;--border:#222228;--text:#E8E8ED;--text-sec:#8888A0;--text-dim:#555566;--accent:#00D26A;--accent-dark:#00A854;--naira:#FFB800;--red:#FF4D4D;--blue:#4D8AFF;--purple:#A855F7;--font-sans:'DM Sans',sans-serif;--font-serif:'Fraunces',serif;--font-mono:'JetBrains Mono',monospace}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+a{color:inherit;text-decoration:none}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,12,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--font-serif);font-size:1.5rem;font-weight:800;letter-spacing:-0.02em}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{color:var(--text-sec);font-size:0.875rem;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-weight:600;font-size:0.875rem;cursor:pointer;transition:all 0.2s;border:none}
+.btn-primary{background:var(--accent-dark);color:#fff}
+.btn-primary:hover{background:var(--accent);transform:translateY(-1px);box-shadow:0 4px 24px rgba(0,210,106,0.15)}
+.btn-lg{padding:12px 24px;font-size:1rem}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:128px 20px 64px;position:relative}
+.hero-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(0,210,106,0.15) 0%,transparent 70%);pointer-events:none;opacity:0.6}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:0.8125rem;color:var(--text-sec);margin-bottom:32px}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero h1{font-family:var(--font-serif);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1.1;letter-spacing:-0.03em;max-width:800px;margin-bottom:24px}
+.hero h1 .currency{color:var(--naira);display:inline-block;transition:all 0.3s}
+.hero h1 .waste{color:var(--accent)}
+.hero p{font-size:1.125rem;color:var(--text-sec);max-width:560px;margin-bottom:40px;line-height:1.7}
+.hero-stats{margin-top:48px;display:flex;gap:40px;color:var(--text-sec);font-size:0.8125rem;flex-wrap:wrap;justify-content:center}
+.hero-stats .num{font-family:var(--font-mono);font-size:1.25rem;color:var(--text);font-weight:500;display:block;margin-bottom:2px}
+
+/* Code Block */
+.code-section{padding:0 20px 96px;display:flex;justify-content:center}
+.code-block{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:700px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.4)}
+.code-bar{display:flex;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.code-dot{width:10px;height:10px;border-radius:50%}
+.code-file{margin-left:16px;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-sec);padding:4px 12px;background:var(--surface);border-radius:4px}
+.code-body{padding:24px;font-family:var(--font-mono);font-size:0.8125rem;line-height:1.8;overflow-x:auto}
+.c-comment{color:var(--text-dim)}.c-keyword{color:#C792EA}.c-func{color:#82AAFF}.c-str{color:var(--accent)}.c-param{color:var(--naira)}.c-bracket{color:#89DDFF}
+
+/* Sections */
+.section{padding:96px 20px;max-width:960px;margin:0 auto}
+.section-label{font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:24px;text-align:center}
+.section-label.red{color:var(--red)}
+.section h2{font-family:var(--font-serif);font-size:clamp(1.75rem,4vw,2.75rem);font-weight:800;line-height:1.2;letter-spacing:-0.02em;text-align:center;margin-bottom:16px}
+.section .subtitle{text-align:center;color:var(--text-sec);margin-bottom:56px;font-size:1rem}
+
+/* Pain Grid */
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;max-width:960px;margin:56px auto 0}
+.pain-card{background:var(--surface);padding:32px;text-align:left}
+.pain-card .icon{font-size:1.5rem;margin-bottom:16px}
+.pain-card h3{font-size:1rem;font-weight:600;margin-bottom:8px}
+.pain-card p{font-size:0.875rem;color:var(--text-sec);line-height:1.6}
+
+/* Quote */
+.quote{text-align:center;padding:64px 20px;max-width:680px;margin:0 auto}
+.quote-line{width:60px;height:2px;background:var(--accent);margin:0 auto 24px}
+.quote h2{font-size:2.2rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:16px}
+.quote p{font-size:1.05rem;line-height:1.7;color:var(--text-sec)}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;position:relative}
+.step{text-align:center}
+.step-num{width:48px;height:48px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.875rem;font-weight:600;color:var(--accent);margin:0 auto 20px}
+.step h3{font-size:1.125rem;font-weight:700;margin-bottom:8px}
+.step p{font-size:0.875rem;color:var(--text-sec);line-height:1.6}
+
+/* Models */
+.model-pills{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:800px;margin:0 auto 32px}
+.pill{padding:8px 20px;background:var(--surface);border:1px solid var(--border);border-radius:999px;font-size:0.8125rem;font-weight:500;transition:all 0.2s;cursor:default}
+.pill:hover{border-color:var(--text-sec);transform:translateY(-2px)}
+.pill.african{border-color:var(--naira);color:var(--naira);background:rgba(255,184,0,0.12)}
+.pill.african:hover{background:rgba(255,184,0,0.2)}
+.model-legend{display:flex;gap:32px;justify-content:center;font-size:0.8125rem;color:var(--text-sec)}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px}
+
+/* Pricing Cards */
+.pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.pricing-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;transition:border-color 0.2s}
+.pricing-card:hover{border-color:var(--text-sec)}
+.pricing-card.managed{border-top:3px solid var(--accent)}
+.pricing-card.byok{border-top:3px solid var(--naira)}
+.pricing-card .tag{font-family:var(--font-mono);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px}
+.pricing-card.managed .tag{color:var(--accent)}
+.pricing-card.byok .tag{color:var(--naira)}
+.pricing-card h3{font-size:1.375rem;font-weight:700;margin-bottom:10px}
+.pricing-card .desc{color:var(--text-sec);font-size:0.9375rem;margin-bottom:24px;line-height:1.6}
+.pricing-card ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.pricing-card li{font-size:0.875rem;color:var(--text-sec);display:flex;align-items:flex-start;gap:8px}
+.pricing-card li .check{font-weight:700;flex-shrink:0;margin-top:2px}
+.pricing-card.managed li .check{color:var(--accent)}
+.pricing-card.byok li .check{color:var(--naira)}
+
+/* Dashboard Preview */
+.dash-preview{max-width:900px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 32px 100px rgba(0,0,0,0.5)}
+.dash-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.dash-bar .title{font-weight:600;font-size:0.875rem}
+.dash-bar .date{font-size:0.75rem;color:var(--text-sec);padding:4px 12px;background:var(--bg);border-radius:4px}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+.dash-stat{background:var(--surface);padding:20px;text-align:left}
+.dash-stat .label{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-sec);margin-bottom:4px}
+.dash-stat .value{font-family:var(--font-mono);font-size:1.375rem;font-weight:500}
+.dash-stat .value.gold{color:var(--naira)}
+.dash-stat .value.green{color:var(--accent)}
+.dash-stat .change{font-size:0.6875rem;margin-top:4px}
+.dash-stat .change.red{color:var(--red)}
+.dash-stat .change.green{color:var(--accent)}
+.dash-table{padding:24px}
+.dash-table .table-title{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-sec);margin-bottom:16px}
+.dash-row{display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr 1.5fr;padding:12px 0;border-bottom:1px solid var(--border);font-size:0.8125rem;align-items:center}
+.dash-row.header{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-sec);font-weight:600}
+.dash-row .model{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-sec)}
+.dash-row .mono{font-family:var(--font-mono);color:var(--text-sec)}
+.dash-row .mono-w{font-family:var(--font-mono)}
+.dash-row .tip{font-size:0.75rem;color:var(--accent);background:rgba(0,210,106,0.15);padding:4px 8px;border-radius:4px;display:inline-block}
+.dash-row .optimal{font-size:0.75rem;color:var(--text-sec)}
+
+/* CTA */
+.cta{padding:128px 20px;text-align:center;position:relative}
+.cta-glow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(0,210,106,0.15) 0%,transparent 70%);pointer-events:none;opacity:0.4}
+.cta h2{font-family:var(--font-serif);font-size:clamp(2rem,5vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px;position:relative}
+.cta p{color:var(--text-sec);font-size:1.125rem;margin-bottom:40px;position:relative}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);max-width:1100px;margin:0 auto;padding:48px 20px}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+.footer .logo-sm{font-family:var(--font-serif);font-size:1.5rem;font-weight:800;margin-bottom:8px}
+.footer .tagline{font-size:0.875rem;color:var(--text-sec)}
+.footer .contact-label{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-sec);font-weight:600;margin-bottom:12px}
+.footer .contact a{font-size:0.875rem;transition:color 0.2s;display:block;margin-bottom:8px}
+.footer .contact a:hover{color:var(--accent)}
+.footer-bottom{padding-top:32px;border-top:1px solid var(--border);text-align:center;font-size:0.8125rem;color:var(--text-sec)}
+
+/* Tabs */
+.tabs{display:flex;justify-content:center;gap:4px;margin-bottom:32px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;display:inline-flex;margin-left:auto;margin-right:auto}
+.tab{padding:8px 20px;border-radius:8px;font-size:0.875rem;font-weight:500;cursor:pointer;transition:all 0.2s;color:var(--text-sec);border:none;background:none}
+.tab.active{background:var(--accent-dark);color:#fff}
+.tab:hover:not(.active){color:var(--text)}
+.tabs-wrap{text-align:center}
+
+/* Page views */
+.page{display:none}
+.page.active{display:block}
+
+/* Sidebar for dashboard */
+.app-layout{display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;flex-shrink:0;display:flex;flex-direction:column}
+.sidebar .logo-area{padding:4px 8px 20px;font-family:var(--font-serif);font-size:1.25rem;font-weight:800}
+.sidebar .logo-area span{color:var(--accent)}
+.sidebar .nav-group{margin-bottom:20px}
+.sidebar .nav-group-label{font-size:0.625rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-dim);padding:4px 8px;margin-bottom:4px;font-weight:600}
+.sidebar .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;font-size:0.8125rem;font-weight:500;color:var(--text-sec);cursor:pointer;transition:all 0.15s}
+.sidebar .nav-item:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.sidebar .nav-item.active{color:var(--text);background:rgba(0,210,106,0.08)}
+.sidebar .nav-badge{font-size:0.625rem;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.06);color:var(--text-sec);margin-left:auto;font-weight:600}
+.sidebar .nav-badge.live{background:rgba(0,210,106,0.12);color:var(--accent)}
+.main-content{flex:1;padding:24px 32px;overflow-y:auto;max-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.topbar h1{font-size:1.25rem;font-weight:700}
+.topbar .user{display:flex;align-items:center;gap:8px;font-size:0.8125rem;color:var(--text-sec)}
+.topbar .avatar{width:28px;height:28px;border-radius:50%;background:var(--accent-dark);display:flex;align-items:center;justify-content:center;font-size:0.6875rem;font-weight:700;color:#fff}
+
+/* Dashboard cards */
+.stat-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.stat-card .label{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-sec);margin-bottom:6px}
+.stat-card .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:600}
+.stat-card .sub{font-size:0.6875rem;color:var(--text-sec);margin-top:4px}
+.stat-card .sub.green{color:var(--accent)}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
+.panel-title{font-size:0.8125rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.panel-title .icon{font-size:0.875rem}
+.two-col{display:grid;grid-template-columns:3fr 2fr;gap:10px;margin-bottom:10px}
+.two-col-eq{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Feature table in dashboard */
+.feat-table{width:100%;border-collapse:collapse;font-size:0.8125rem}
+.feat-table th{text-align:left;font-size:0.625rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-sec);font-weight:600;padding-bottom:10px}
+.feat-table td{padding:10px 0;border-top:1px solid var(--border)}
+.feat-table .tag-badge{font-family:var(--font-mono);font-size:0.625rem;color:var(--text-dim);background:var(--bg);padding:2px 6px;border-radius:3px;margin-left:6px}
+.feat-table .african{color:var(--naira)}
+.bar-fill{height:6px;border-radius:3px;background:var(--border);overflow:hidden;position:relative}
+.bar-fill-inner{height:100%;border-radius:3px;transition:width 1s ease}
+
+/* Savings banner */
+.savings-banner{background:linear-gradient(to right,rgba(0,210,106,0.06),transparent);border:1px solid rgba(0,210,106,0.2);border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:0.8125rem}
+.savings-banner strong{color:var(--accent)}
+
+/* Route log */
+.route-entry{display:flex;gap:10px;padding:10px;background:var(--bg);border-radius:6px;border:1px solid var(--border);margin-bottom:8px}
+.route-time{font-family:var(--font-mono);font-size:0.625rem;color:var(--text-dim);width:42px;flex-shrink:0;padding-top:2px}
+.route-body{font-size:0.75rem;color:var(--text-sec);line-height:1.5}
+.route-body strong{color:var(--text)}
+.route-body .to{color:var(--accent);font-family:var(--font-mono);font-size:0.6875rem}
+.route-body .from{color:var(--red);font-family:var(--font-mono);font-size:0.6875rem;text-decoration:line-through;opacity:0.6}
+.route-body .saved{color:var(--accent);font-weight:600}
+.route-tag{display:inline-block;font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.05em;padding:2px 6px;border-radius:3px;font-weight:600;margin-top:4px}
+
+/* Opt card */
+.opt-card{padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;display:flex;gap:10px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s}
+.opt-card:hover{border-color:rgba(255,255,255,0.1)}
+.opt-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.875rem;flex-shrink:0}
+.opt-card .title{font-size:0.8125rem;font-weight:600;margin-bottom:2px}
+.opt-card .desc{font-size:0.75rem;color:var(--text-dim);line-height:1.5}
+.opt-card .amount{font-family:var(--font-mono);font-size:0.875rem;font-weight:600;color:var(--accent);white-space:nowrap;padding-top:2px}
+
+/* Model bar */
+.model-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.model-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.625rem;font-weight:700;flex-shrink:0}
+.model-bar .info{flex:1}
+.model-bar .info-top{display:flex;justify-content:space-between;margin-bottom:4px}
+.model-bar .name{font-size:0.8125rem;font-weight:500}
+.model-bar .spend{font-family:var(--font-mono);font-size:0.75rem;color:var(--text-sec)}
+
+/* Responsive */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .pain-grid,.pricing-grid,.steps,.two-col,.two-col-eq{grid-template-columns:1fr}
+  .dash-stats{grid-template-columns:repeat(2,1fr)}
+  .dash-row{grid-template-columns:1fr 1fr}
+  .stat-cards{grid-template-columns:repeat(2,1fr)}
+  .sidebar{display:none}
+  .hero h1{font-size:2.5rem}
+}
+
+/* Fade in animation */
+.fade-in{opacity:0;transform:translateY(32px);transition:all 0.7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ============ LANDING PAGE ============ -->
+<div id="landing" class="page active">
+
+<nav class="nav">
+  <div class="logo">mazou<span>.</span></div>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#models">Models</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#" onclick="showDashboard();return false">Dashboard Demo</a>
+    <button class="btn btn-primary" onclick="showDashboard()">Sign In</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="badge"><span class="dot"></span> AI infrastructure layer for Africa</div>
+  <h1>
+    One API for all your AI.<br>
+    <span class="currency" id="currency-text">Pay in Rand.</span>
+    <span class="waste">Waste nothing.</span>
+  </h1>
+  <p>Access OpenAI, Anthropic, Google, and other top global and African AI models through one intelligent API. Know what every LLM call, every agent, every AI feature is costing you - and how to spend less.</p>
+  <div><button class="btn btn-primary btn-lg" onclick="showDashboard()">Get Started</button></div>
+  <div class="hero-stats">
+    <div><span class="num">16+</span> AI models available</div>
+    <div><span class="num" style="font-family:var(--font-sans)">&#x1F4B3;</span> Local currency billing</div>
+    <div><span class="num">~40%</span> avg. cost reduction</div>
+  </div>
+</section>
+
+<!-- Code Preview -->
+<section class="code-section">
+  <div class="code-block">
+    <div class="code-bar">
+      <span class="code-dot" style="background:#FF5F57"></span>
+      <span class="code-dot" style="background:#FFBD2E"></span>
+      <span class="code-dot" style="background:#28CA41"></span>
+      <span class="code-file">app.py</span>
+    </div>
+    <div class="code-body">
+      <span class="c-comment"># Before: Juggling 3 SDKs, 3 API keys, 3 USD invoices</span><br>
+      <span class="c-comment"># After: One line.</span><br><br>
+      <span class="c-keyword">from</span> <span class="c-func">mazou</span> <span class="c-keyword">import</span> AI<br><br>
+      response = <span class="c-func">AI</span>.<span class="c-func">complete</span><span class="c-bracket">(</span><br>
+      &nbsp;&nbsp;<span class="c-param">prompt</span>=<span class="c-str">"Summarise this customer complaint"</span>,<br>
+      &nbsp;&nbsp;<span class="c-param">model</span>=<span class="c-str">"auto"</span>,&nbsp;&nbsp;<span class="c-comment"># routes to best model for this task</span><br>
+      &nbsp;&nbsp;<span class="c-param">budget</span>=<span class="c-str">"low"</span>,&nbsp;&nbsp;&nbsp;<span class="c-comment"># optimises for cost</span><br>
+      &nbsp;&nbsp;<span class="c-param">tag</span>=<span class="c-str">"support-bot"</span>&nbsp;<span class="c-comment"># tracks spend per feature</span><br>
+      <span class="c-bracket">)</span>
+    </div>
+  </div>
+</section>
+
+<!-- Pain -->
+<section class="section fade-in">
+  <div class="section-label red">The Problem</div>
+  <h2>Your AI spend is a black box.<br>Your team knows it. Your CFO knows it.</h2>
+  <div class="pain-grid">
+    <div class="pain-card"><div class="icon">&#x1F511;</div><h3>10 API keys, 10 dashboards</h3><p>Every model provider wants their own account, their own billing, their own portal. Nobody has the full picture.</p></div>
+    <div class="pain-card"><div class="icon">&#x1F4B5;</div><h3>USD-only billing</h3><p>Getting a USD virtual card, managing FX, justifying dollar charges to finance - it's a tax on building with AI in Africa.</p></div>
+    <div class="pain-card"><div class="icon">&#x1F573;&#xFE0F;</div><h3>No visibility, no control</h3><p>Which feature is burning tokens? Which agent is expensive? Which model is overkill for simple tasks? Nobody knows.</p></div>
+    <div class="pain-card"><div class="icon">&#x1F30D;</div><h3>African models are invisible</h3><p>Local language models exist - for Yoruba, Hausa, Igbo, Swahili - but they're scattered and hard to access.</p></div>
+  </div>
+</section>
+
+<!-- Quote -->
+<div class="quote fade-in">
+  <div class="quote-line"></div>
+  <h2>AI spend is the new cloud spend.</h2>
+  <p>Remember when the Naira collapsed and every AWS bill tripled overnight? AI API costs are following the same trajectory - dollar-denominated, invisible until they're not, and growing faster than anyone expects.</p>
+  <div class="quote-line" style="margin-top:24px"></div>
+</div>
+
+<!-- How It Works -->
+<section class="section fade-in" id="how">
+  <div class="section-label">How It Works</div>
+  <h2>Three steps. Five minutes. Full control.</h2>
+  <div style="height:56px"></div>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><h3>Get started</h3><p>Reach out to our team. We'll set you up with access and fund your account in local currency.</p></div>
+    <div class="step"><div class="step-num">2</div><h3>Integrate seamlessly</h3><p>Swap your OpenAI/Anthropic imports for ours. Or bring your own keys and just add the control layer.</p></div>
+    <div class="step"><div class="step-num">3</div><h3>See everything</h3><p>Your dashboard lights up: per-feature costs, per-model usage, and optimization recommendations.</p></div>
+  </div>
+</section>
+
+<!-- Models -->
+<section class="section fade-in" id="models">
+  <div class="section-label">Model Catalog</div>
+  <h2>Every model. One endpoint.</h2>
+  <p class="subtitle">Global leaders and African-built models, accessible through the same API.</p>
+  <div class="model-pills">
+    <span class="pill">GPT-5.2</span><span class="pill">GPT-5</span><span class="pill">Claude Opus 4.6</span><span class="pill">Claude Sonnet 4.6</span><span class="pill">Gemini 2.5 Pro</span><span class="pill">Gemini 2.5 Flash</span><span class="pill">Llama 4 Maverick</span><span class="pill">DeepSeek R1</span><span class="pill">Mistral Large</span><span class="pill">Cohere</span>
+    <span class="pill african">InkubaLM</span><span class="pill african">Vulavula</span><span class="pill african">YarnGPT</span><span class="pill african">Khaya AI</span><span class="pill african">AfroLM</span><span class="pill african">Lesan AI</span>
+  </div>
+  <div class="model-legend">
+    <span><span class="legend-dot" style="background:var(--text-sec)"></span> Global models</span>
+    <span><span class="legend-dot" style="background:var(--naira)"></span> African models</span>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="section fade-in" id="pricing">
+  <div class="section-label">Two Ways In</div>
+  <h2>Use ours or bring yours.</h2>
+  <p class="subtitle">Whether you want the full managed experience or just the control layer.</p>
+  <div class="pricing-grid">
+    <div class="pricing-card managed">
+      <div class="tag">Managed</div>
+      <h3>Buy Through Us</h3>
+      <p class="desc">We hold the keys. You buy credits in Naira. We handle everything.</p>
+      <ul>
+        <li><span class="check">&#x2713;</span> No USD card needed</li>
+        <li><span class="check">&#x2713;</span> No accounts with OpenAI, Anthropic, Google</li>
+        <li><span class="check">&#x2713;</span> One monthly Naira invoice</li>
+        <li><span class="check">&#x2713;</span> Full dashboard + smart routing</li>
+        <li><span class="check">&#x2713;</span> Best for startups and SMEs</li>
+      </ul>
+    </div>
+    <div class="pricing-card byok">
+      <div class="tag">Bring Your Own Keys</div>
+      <h3>Use Your Existing Accounts</h3>
+      <p class="desc">Plug in your existing API keys. Get the control layer on top.</p>
+      <ul>
+        <li><span class="check">&#x2713;</span> Zero switching cost</li>
+        <li><span class="check">&#x2713;</span> Smart routing across your keys</li>
+        <li><span class="check">&#x2713;</span> Full visibility dashboard</li>
+        <li><span class="check">&#x2713;</span> Cost optimisation recommendations</li>
+        <li><span class="check">&#x2713;</span> Best for enterprises</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard Preview -->
+<section class="section fade-in">
+  <div class="section-label">Visibility</div>
+  <h2>Know exactly where every naira goes.</h2>
+  <p class="subtitle">Not a graph you'll never check. A control centre your team actually opens.</p>
+  <div class="dash-preview">
+    <div class="dash-bar"><div><span class="title">Paystack AI Dashboard</span><span class="date" style="margin-left:24px">Feb 2026</span></div></div>
+    <div class="dash-stats">
+      <div class="dash-stat"><div class="label">Total Spend</div><div class="value gold">&#8358;2,847,200</div><div class="change red">&#8593; 12% vs last month</div></div>
+      <div class="dash-stat"><div class="label">API Calls</div><div class="value">1.2M</div><div class="change green">&#8593; 8%</div></div>
+      <div class="dash-stat"><div class="label">Models Used</div><div class="value">6</div></div>
+      <div class="dash-stat"><div class="label">Potential Savings</div><div class="value green">&#8358;1,138,880</div><div class="change green">40% of current spend</div></div>
+    </div>
+    <div class="dash-table">
+      <div class="table-title">Spend by Feature</div>
+      <div class="dash-row header"><span>Feature</span><span>Model</span><span>Calls</span><span>Cost</span><span>Recommendation</span></div>
+      <div class="dash-row"><span style="font-weight:500">Customer Support Bot</span><span class="model">gpt-4o</span><span class="mono">842K</span><span class="mono-w">&#8358;1,940,000</span><span class="tip">&#8594; Switch to Sonnet, save &#8358;890K</span></div>
+      <div class="dash-row"><span style="font-weight:500">Transaction Summariser</span><span class="model">claude-sonnet</span><span class="mono">286K</span><span class="mono-w">&#8358;620,000</span><span class="tip">&#8594; Use Haiku, save &#8358;248K</span></div>
+      <div class="dash-row"><span style="font-weight:500">Fraud Detection Agent</span><span class="model">gpt-4o</span><span class="mono">91K</span><span class="mono-w">&#8358;287,200</span><span class="optimal">Optimal &#x2713;</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-glow"></div>
+  <h2>Stop guessing.<br>Start building.</h2>
+  <p>Ready to optimize your AI infrastructure?</p>
+  <button class="btn btn-primary btn-lg" onclick="showDashboard()">Get Started</button>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div><div class="logo-sm">mazou<span style="color:var(--accent)">.</span></div><div class="tagline">AI infrastructure layer for Africa</div></div>
+    <div class="contact"><div class="contact-label">Contact</div><a href="mailto:team@mazou.ai">team@mazou.ai</a><span style="font-size:0.875rem">Lagos, Nigeria</span></div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 Mazou. Built for Africa.</div>
+</footer>
+
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard" class="page">
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="logo-area">mazou<span>.</span></div>
+    <div class="nav-group"><div class="nav-group-label">Overview</div>
+      <div class="nav-item active">&#9632; Dashboard</div>
+      <div class="nav-item">&#8599; Usage & Spend</div>
+      <div class="nav-item">&#8621; Smart Routing <span class="nav-badge live">Live</span></div>
+    </div>
+    <div class="nav-group"><div class="nav-group-label">AI Assets</div>
+      <div class="nav-item">&#9673; Agents <span class="nav-badge">4</span></div>
+      <div class="nav-item">&#9636; Active Models <span class="nav-badge">10</span></div>
+      <div class="nav-item">&#9678; Model Catalog <span class="nav-badge">45</span></div>
+    </div>
+    <div class="nav-group"><div class="nav-group-label">Optimise</div>
+      <div class="nav-item">&#9733; Recommendations <span class="nav-badge">5</span></div>
+      <div class="nav-item">&#9919; API Keys</div>
+    </div>
+    <div class="nav-group"><div class="nav-group-label">Billing</div>
+      <div class="nav-item">&#9733; Wallets & Billing</div>
+    </div>
+    <div style="flex:1"></div>
+    <div class="nav-item" onclick="showLanding()">&#8592; Back to site</div>
+  </aside>
+  <main class="main-content">
+    <div class="topbar">
+      <h1>Dashboard</h1>
+      <div class="user"><span>Demo User</span><div class="avatar">DU</div></div>
+    </div>
+
+    <!-- Savings Banner -->
+    <div class="savings-banner">
+      <span>&#9733; Smart Routing found <strong>&#8358;1,138,880 in potential savings</strong> this month across 5 recommendations.</span>
+      <button class="btn btn-primary" style="padding:6px 14px;font-size:0.75rem">Review &#8594;</button>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards">
+      <div class="stat-card"><div class="label">Total Spend</div><div class="val" style="color:var(--naira)">&#8358;2.85M</div><div class="sub">&#8595; 8% vs last month</div></div>
+      <div class="stat-card"><div class="label">API Calls</div><div class="val">1.24M</div><div class="sub">&#8593; 12% vs last month</div></div>
+      <div class="stat-card"><div class="label">Active Models</div><div class="val">8</div><div class="sub">3 global &middot; 2 African &middot; 3 open</div></div>
+      <div class="stat-card"><div class="label">Saved This Month</div><div class="val" style="color:var(--accent)">&#8358;486K</div><div class="sub green">via smart routing</div></div>
+      <div class="stat-card"><div class="label">More Savings Found</div><div class="val" style="color:var(--accent)">&#8358;1.14M</div><div class="sub green">5 recommendations</div></div>
+    </div>
+
+    <!-- Feature Spend + Model Usage -->
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-title"><span class="icon">&#11043;</span> Spend by Feature</div>
+        <table class="feat-table">
+          <thead><tr><th>Feature</th><th>Model</th><th>Calls</th><th style="width:80px">Spend</th><th>Cost</th><th style="text-align:right">Action</th></tr></thead>
+          <tbody id="feat-tbody"></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span class="icon">&#9672;</span> Model Usage</div>
+        <div style="font-size:0.6875rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;font-weight:500">Daily Spend &middot; 14d</div>
+        <canvas id="spend-chart" height="120" style="width:100%;margin-bottom:16px"></canvas>
+        <div id="model-bars"></div>
+      </div>
+    </div>
+
+    <!-- Routing + Recommendations -->
+    <div class="two-col-eq">
+      <div class="panel">
+        <div class="panel-title"><span class="icon">&#8621;</span> Smart Routing &middot; Live</div>
+        <div id="route-log"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title" style="justify-content:space-between"><span><span class="icon">&#128161;</span> Top Recommendations</span><span style="font-size:0.6875rem;color:var(--accent);font-weight:600">&#8358;1.14M saveable</span></div>
+        <div id="opt-cards"></div>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+<script>
+// Currency rotation
+const currencies=["Pay in Naira.","Pay in Cedis.","Pay in Rand.","Pay in KES.","Pay in RWF.","Pay in Birr.","Pay in Local Currency."];
+let ci=0;
+setInterval(()=>{
+  const el=document.getElementById("currency-text");
+  el.style.opacity="0";el.style.transform="translateY(-10px)";
+  setTimeout(()=>{ci=(ci+1)%currencies.length;el.textContent=currencies[ci];el.style.opacity="1";el.style.transform="translateY(0)"},300);
+},2500);
+
+// Fade in
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("visible")}),{threshold:0.1,rootMargin:"0px 0px -50px 0px"});
+document.querySelectorAll(".fade-in").forEach(el=>obs.observe(el));
+
+// Page switching
+function showDashboard(){document.getElementById("landing").classList.remove("active");document.getElementById("dashboard").classList.add("active");window.scrollTo(0,0)}
+function showLanding(){document.getElementById("dashboard").classList.remove("active");document.getElementById("landing").classList.add("active");window.scrollTo(0,0)}
+
+// Dashboard data
+const FEATURES=[
+  {name:"Customer Support Bot",tag:"agent",model:"gpt-5",african:false,calls:"842K",cost:1940000,pct:90,tip:"\u2192 Sonnet 4.6 \u00B7 Save \u20A6890K",actionable:true},
+  {name:"Transaction Summariser",tag:"feature",model:"claude-sonnet-4.6",african:false,calls:"286K",cost:620000,pct:55,tip:"\u2192 Haiku 4.5 \u00B7 Save \u20A6248K",actionable:true},
+  {name:"Yoruba Chat Translation",tag:"feature",model:"YarnGPT",african:true,calls:"64K",cost:86400,pct:18,tip:"\u2713 Optimal",actionable:false},
+  {name:"Fraud Detection Agent",tag:"agent",model:"gpt-5",african:false,calls:"91K",cost:287200,pct:22,tip:"\u2713 Optimal",actionable:false},
+  {name:"Receipt OCR",tag:"feature",model:"gemini-2.5-pro",african:false,calls:"38K",cost:42000,pct:8,tip:"\u2713 Optimal",actionable:false},
+];
+
+const MODELS=[
+  {name:"GPT-5",icon:"OA",color:"#10A37F",spend:2227200,pct:78},
+  {name:"Claude Sonnet 4.6",icon:"AN",color:"#D4A274",spend:320000,pct:32},
+  {name:"GPT-4.1 Mini",icon:"OA",color:"#10A37F",spend:124000,pct:14},
+  {name:"YarnGPT",icon:"AF",color:"#FFB800",spend:86400,pct:12},
+  {name:"Gemini 2.5 Pro",icon:"GO",color:"#4285F4",spend:42000,pct:6},
+  {name:"Claude Haiku 4.5",icon:"AN",color:"#D4A274",spend:18600,pct:4},
+];
+
+const ROUTES=[
+  {time:"2m ago",agent:"Support Bot",action:"routed to",to:"haiku-4.5",from:"gpt-5",reason:"Simple FAQ detected.",saved:"\u20A60.80",tag:"routed"},
+  {time:"4m ago",agent:"Fraud Agent",action:"kept on",to:"gpt-5",from:null,reason:"Complex reasoning required.",saved:null,tag:"optimal"},
+  {time:"6m ago",agent:"Yoruba Chat",action:"routed to",to:"YarnGPT",from:"sonnet-4.6",reason:"Local language detected.",saved:"\u20A61.20",tag:"routed"},
+  {time:"11m ago",agent:"Receipt OCR",action:"fallback to",to:"gpt-4.1-mini",from:"gemini-2.5-pro",reason:"Gemini timed out.",saved:null,tag:"fallback"},
+  {time:"14m ago",agent:"Summariser",action:"batch routed to",to:"haiku-4.5",from:"sonnet-4.6",reason:"48 requests batched.",saved:"\u20A612.40",tag:"routed"},
+];
+
+const OPTS=[
+  {icon:"\uD83D\uDCB0",type:"save",title:"Downgrade Support Bot to Claude Sonnet 4.6",desc:"842K calls/mo using GPT-5 for tier-1 support. Sonnet handles 96% with identical quality.",amount:"\u20A6890K/mo"},
+  {icon:"\uD83D\uDD04",type:"swap",title:"Route Summariser to Haiku 4.5",desc:"72% of inputs under 500 tokens. Haiku matches Sonnet quality at this length.",amount:"\u20A6248K/mo"},
+  {icon:"\uD83D\uDCE6",type:"cache",title:"Enable response caching for Support Bot",desc:"34% of queries are repeated. Caching eliminates redundant API calls.",amount:"\u20A6186K/mo"},
+  {icon:"\u26A1",type:"batch",title:"Batch Transaction Summariser calls",desc:"Batching 50 at a time reduces per-call overhead by 18%.",amount:"\u20A662K/mo"},
+];
+
+function fmtN(n){if(n>=1e6)return"\u20A6"+(n/1e6).toFixed(2)+"M";if(n>=1e3)return"\u20A6"+(n/1e3).toFixed(0)+"K";return"\u20A6"+n.toLocaleString()}
+
+// Render feature table
+const tbody=document.getElementById("feat-tbody");
+FEATURES.forEach((f,i)=>{
+  const barColor=f.pct>70?"#FF4D4D":f.pct>40?"#FFB800":"#00D26A";
+  tbody.innerHTML+=`<tr${i%2===1?' style="background:rgba(255,255,255,0.015)"':''}>
+    <td><span style="font-weight:500">${f.name}</span><span class="tag-badge">${f.tag}</span></td>
+    <td><span style="font-family:var(--font-mono);font-size:0.75rem;color:${f.african?"var(--naira)":"var(--text-sec)"}">${f.model}</span></td>
+    <td><span style="font-family:var(--font-mono);font-size:0.8125rem;color:var(--text-sec)">${f.calls}</span></td>
+    <td><div class="bar-fill"><div class="bar-fill-inner" style="width:${f.pct}%;background:${barColor}"></div></div></td>
+    <td><span style="font-family:var(--font-mono);font-size:0.8125rem;font-weight:500">${fmtN(f.cost)}</span></td>
+    <td style="text-align:right">${f.actionable?`<span style="font-size:0.6875rem;font-weight:500;padding:4px 10px;border-radius:999px;background:rgba(0,210,106,0.1);color:var(--accent);border:1px solid rgba(0,210,106,0.2)">${f.tip}</span>`:`<span style="font-size:0.6875rem;color:var(--text-dim)">${f.tip}</span>`}</td>
+  </tr>`;
+});
+
+// Render model bars
+const mb=document.getElementById("model-bars");
+MODELS.forEach(m=>{
+  mb.innerHTML+=`<div class="model-bar">
+    <div class="model-icon" style="background:${m.color}20;color:${m.color}">${m.icon}</div>
+    <div class="info"><div class="info-top"><span class="name">${m.name}</span><span class="spend">${fmtN(m.spend)}</span></div>
+    <div class="bar-fill"><div class="bar-fill-inner" style="width:${m.pct}%;background:${m.color}"></div></div></div>
+  </div>`;
+});
+
+// Render route log
+const rl=document.getElementById("route-log");
+const tagColors={routed:{bg:"rgba(0,210,106,0.08)",color:"#00D26A",label:"Smart Routed"},optimal:{bg:"rgba(255,184,0,0.08)",color:"#FFB800",label:"Optimal"},cached:{bg:"rgba(168,85,247,0.08)",color:"#A855F7",label:"Cache Hit"},fallback:{bg:"rgba(77,138,255,0.08)",color:"#4D8AFF",label:"Fallback"}};
+ROUTES.forEach(r=>{
+  const t=tagColors[r.tag];
+  rl.innerHTML+=`<div class="route-entry"><div class="route-time">${r.time}</div><div class="route-body">
+    <strong>${r.agent}</strong> &mdash; ${r.action} ${r.to?`<span class="to">${r.to}</span>`:""}${r.from?` instead of <span class="from">${r.from}</span>`:""}.
+    ${r.reason} ${r.saved?`<span class="saved">Saved ${r.saved}</span>`:""}
+    <br><span class="route-tag" style="background:${t.bg};color:${t.color}">${t.label}</span>
+  </div></div>`;
+});
+
+// Render opt cards
+const oc=document.getElementById("opt-cards");
+const optBgs={save:"rgba(0,210,106,0.08)",swap:"rgba(255,184,0,0.08)",cache:"rgba(77,138,255,0.08)",batch:"rgba(168,85,247,0.08)"};
+OPTS.forEach(o=>{
+  oc.innerHTML+=`<div class="opt-card"><div class="opt-icon" style="background:${optBgs[o.type]}">${o.icon}</div>
+    <div style="flex:1"><div class="title">${o.title}</div><div class="desc">${o.desc}</div></div>
+    <div class="amount">${o.amount}</div></div>`;
+});
+
+// Simple spend chart (canvas)
+const SPEND=[98000,112000,105000,134000,98600,127000,118000,142000,108000,131000,131400,118200,124800,136000];
+const canvas=document.getElementById("spend-chart");
+const ctx=canvas.getContext("2d");
+function drawChart(){
+  const W=canvas.width=canvas.offsetWidth*2;const H=canvas.height=240;
+  ctx.clearRect(0,0,W,H);
+  const max=Math.max(...SPEND)*1.1;const min=Math.min(...SPEND)*0.9;
+  const pts=SPEND.map((v,i)=>({x:40+i*(W-80)/(SPEND.length-1),y:H-20-(v-min)/(max-min)*(H-40)}));
+  // Grid
+  ctx.strokeStyle="#1F1F2E";ctx.lineWidth=1;ctx.setLineDash([6,4]);
+  for(let i=0;i<4;i++){const y=20+i*(H-40)/3;ctx.beginPath();ctx.moveTo(40,y);ctx.lineTo(W-40,y);ctx.stroke()}
+  ctx.setLineDash([]);
+  // Fill
+  ctx.beginPath();ctx.moveTo(pts[0].x,H-20);pts.forEach(p=>ctx.lineTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,H-20);ctx.closePath();
+  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,"rgba(0,210,106,0.1)");grad.addColorStop(1,"rgba(0,210,106,0.01)");
+  ctx.fillStyle=grad;ctx.fill();
+  // Line
+  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle="rgba(0,210,106,0.6)";ctx.lineWidth=3;ctx.stroke();
+  // Dots
+  pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fillStyle="#00D26A";ctx.fill()});
+}
+setTimeout(drawChart,100);
+window.addEventListener("resize",drawChart);
+</script>
+</body>
+</html>
