@@ -1,0 +1,51 @@
+[project]
+name = "mazou-backend"
+version = "0.1.0"
+description = "Mazou AI Gateway & Cost Management Backend"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.115",
+    "uvicorn[standard]>=0.34",
+    "sqlalchemy>=2.0",
+    "aiosqlite>=0.20",
+    "alembic>=1.14",
+    "pydantic>=2.10",
+    "pydantic-settings>=2.7",
+    "litellm>=1.55",
+    "httpx>=0.28",
+    "passlib[bcrypt]>=1.7",
+    "python-jose[cryptography]>=3.3",
+    "cryptography>=44",
+    "python-multipart>=0.0.18",
+]
+
+[project.optional-dependencies]
+prod = [
+    "asyncpg>=0.30",
+    "redis[hiredis]>=5.2",
+]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "httpx",
+    "ruff",
+]
+full = [
+    "lingua-language-detector>=2",
+]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"

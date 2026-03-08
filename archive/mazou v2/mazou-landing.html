@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mazou. — AI cost control for the agentic web</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #050508;
+  --surface: #0A0A0F;
+  --surface-2: #0F0F16;
+  --surface-3: #14141D;
+  --border: #18182A;
+  --border-h: #22223A;
+  --text: #E4E4ED;
+  --text-s: #9494AC;
+  --text-d: #56566E;
+  --g: #00D26A;
+  --g-dim: #00A854;
+  --g-bg: rgba(0,210,106,0.05);
+  --g-glow: rgba(0,210,106,0.12);
+  --gold: #FFB800;
+  --gold-bg: rgba(255,184,0,0.05);
+  --red: #FF4D4D;
+  --red-bg: rgba(255,77,77,0.05);
+  --blue: #5B8DEF;
+  --purple: #A56EFF;
+  --font: 'DM Sans', -apple-system, sans-serif;
+  --serif: 'Newsreader', Georgia, serif;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--border-h); border-radius: 10px; }
+a { color: inherit; text-decoration: none; }
+
+/* ========= NAV ========= */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.875rem 2.5rem;
+  background: rgba(5,5,8,0.88); backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: var(--serif); font-weight: 700; font-size: 1.375rem; letter-spacing: -0.04em; }
+.nav-logo b { color: var(--g); font-weight: 700; }
+.nav-mid { display: flex; gap: 2.25rem; }
+.nav-mid a { font-size: 0.8125rem; color: var(--text-s); font-weight: 500; transition: color 0.15s; }
+.nav-mid a:hover { color: var(--text); }
+.nav-right { display: flex; align-items: center; gap: 1rem; }
+.nav-login { font-size: 0.8125rem; color: var(--text-s); font-weight: 500; }
+.nav-cta {
+  background: var(--g); color: #000; padding: 0.4375rem 1.125rem; border-radius: 7px;
+  font-weight: 700; font-size: 0.8125rem; border: none; cursor: pointer; font-family: var(--font);
+  transition: all 0.15s;
+}
+.nav-cta:hover { background: #00E878; transform: translateY(-1px); }
+
+/* ========= HERO ========= */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 7rem 2rem 3rem; text-align: center;
+  position: relative;
+}
+.hero::after {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 1000px; height: 700px;
+  background: radial-gradient(ellipse at 50% 20%, rgba(0,210,106,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-pill {
+  display: inline-flex; align-items: center; gap: 0.625rem;
+  padding: 0.3125rem 1rem 0.3125rem 0.625rem;
+  border: 1px solid var(--border); border-radius: 100px;
+  font-size: 0.75rem; color: var(--text-s); background: var(--surface);
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.7s ease both;
+}
+.pill-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--g); animation: blink 2.4s infinite; }
+@keyframes blink { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,210,106,0.3)} 50%{opacity:0.5;box-shadow:0 0 0 5px rgba(0,210,106,0)} }
+
+.hero h1 {
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(3.25rem, 7.5vw, 6rem);
+  line-height: 1.02; letter-spacing: -0.04em;
+  margin-bottom: 1.75rem; max-width: 880px;
+  animation: fadeUp 0.7s 0.08s ease both;
+}
+.hero h1 em { font-style: italic; font-weight: 500; color: var(--text-d); }
+.hero h1 .g { color: var(--g); }
+
+.hero-p {
+  font-size: 1.1875rem; color: var(--text-s); max-width: 580px; line-height: 1.75;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.7s 0.16s ease both;
+}
+.hero-p strong { color: var(--text); font-weight: 600; }
+
+.hero-actions {
+  display: flex; gap: 0.75rem; margin-bottom: 4rem;
+  animation: fadeUp 0.7s 0.24s ease both;
+}
+.btn-g {
+  background: var(--g); color: #000; padding: 0.75rem 2rem; border-radius: 9px;
+  font-weight: 700; font-size: 0.9375rem; border: none; cursor: pointer; font-family: var(--font);
+  transition: all 0.15s; display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-g:hover { background: #00E878; transform: translateY(-2px); box-shadow: 0 10px 40px rgba(0,210,106,0.15); }
+.btn-o {
+  background: var(--surface-2); color: var(--text); padding: 0.75rem 2rem; border-radius: 9px;
+  font-weight: 600; font-size: 0.9375rem; border: 1px solid var(--border); cursor: pointer; font-family: var(--font);
+  transition: all 0.15s;
+}
+.btn-o:hover { border-color: var(--border-h); background: var(--surface-3); }
+
+/* ---- LIVE TICKER ---- */
+.ticker-wrap {
+  width: 100%; max-width: 900px;
+  animation: fadeUp 0.7s 0.32s ease both;
+  position: relative; z-index: 1;
+}
+.ticker {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  overflow: hidden;
+}
+.ticker-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.875rem 1.5rem; border-bottom: 1px solid var(--border);
+}
+.ticker-title {
+  display: flex; align-items: center; gap: 0.625rem;
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-d);
+}
+.ticker-title .live { color: var(--g); display: flex; align-items: center; gap: 0.375rem; }
+.ticker-title .live::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--g); animation: blink 2.4s infinite; }
+.ticker-stats {
+  display: flex; gap: 2rem;
+}
+.t-stat { text-align: right; }
+.t-stat-label { font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-d); font-weight: 600; }
+.t-stat-val { font-family: var(--mono); font-size: 0.9375rem; font-weight: 600; }
+.t-stat-val.green { color: var(--g); }
+.t-stat-val.gold { color: var(--gold); }
+
+.ticker-body { padding: 0.5rem 0; }
+
+.t-row {
+  display: grid; grid-template-columns: 2.5rem 2fr 1.2fr 1fr 1.2fr 1.8fr;
+  align-items: center; padding: 0.5rem 1.5rem; font-size: 0.8125rem;
+  transition: background 0.1s;
+}
+.t-row:hover { background: var(--surface-2); }
+.t-row.head {
+  font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-d); font-weight: 600; padding-bottom: 0.375rem;
+  border-bottom: 1px solid var(--border);
+}
+.t-time { font-family: var(--mono); font-size: 0.6875rem; color: var(--text-d); }
+.t-agent { font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+.t-agent-dot { width: 5px; height: 5px; border-radius: 50%; }
+.t-agent-dot.live { background: var(--g); box-shadow: 0 0 6px var(--g); }
+.t-model { font-family: var(--mono); font-size: 0.75rem; color: var(--text-s); }
+.t-model.af { color: var(--gold); }
+.t-cost { font-family: var(--mono); font-size: 0.8125rem; font-weight: 500; }
+.t-action { font-size: 0.75rem; }
+.t-tag {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.625rem; font-weight: 600; padding: 0.125rem 0.5rem;
+  border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.t-tag.routed { background: var(--g-bg); color: var(--g); }
+.t-tag.saved { background: var(--g-bg); color: var(--g); }
+.t-tag.optimal { background: var(--gold-bg); color: var(--gold); }
+.t-tag.fallback { background: rgba(91,141,239,0.06); color: var(--blue); }
+.t-saved { font-family: var(--mono); font-weight: 600; color: var(--g); font-size: 0.75rem; margin-left: 0.375rem; }
+
+.ticker-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1.5rem; border-top: 1px solid var(--border);
+  font-size: 0.6875rem; color: var(--text-d);
+}
+.ticker-foot a { color: var(--g); font-weight: 600; transition: color 0.15s; }
+.ticker-foot a:hover { color: #00E878; }
+
+/* ========= SECTION FRAMEWORK ========= */
+.section { padding: 7rem 2rem; max-width: 1120px; margin: 0 auto; }
+.s-label {
+  font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase;
+  letter-spacing: 0.14em; color: var(--g); font-weight: 600; margin-bottom: 1rem;
+}
+.s-h2 {
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.1;
+  letter-spacing: -0.03em; margin-bottom: 1rem; max-width: 680px;
+}
+.s-sub { font-size: 1.0625rem; color: var(--text-s); max-width: 600px; line-height: 1.7; margin-bottom: 3rem; }
+
+/* ========= PROBLEM ========= */
+.prob-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--border); border-radius: 14px; overflow: hidden;
+}
+.prob-card { background: var(--surface); padding: 2.25rem; }
+.prob-num { font-family: var(--mono); font-size: 2.75rem; font-weight: 700; letter-spacing: -0.04em; margin-bottom: 0.625rem; }
+.prob-num.red { color: var(--red); }
+.prob-num.gold { color: var(--gold); }
+.prob-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.375rem; letter-spacing: -0.01em; }
+.prob-card p { font-size: 0.8125rem; color: var(--text-s); line-height: 1.65; }
+
+/* ========= WHY NOW ========= */
+.why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.why-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 2rem; transition: border-color 0.2s; position: relative; overflow: hidden;
+}
+.why-card:hover { border-color: var(--border-h); }
+.why-card.span2 { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.wc-tag {
+  display: inline-block; font-family: var(--mono); font-size: 0.5625rem; text-transform: uppercase;
+  letter-spacing: 0.1em; padding: 0.125rem 0.5rem; border-radius: 4px;
+  font-weight: 600; margin-bottom: 0.875rem;
+}
+.wc-tag.dev { background: var(--g-bg); color: var(--g); }
+.wc-tag.agent { background: rgba(165,110,255,0.06); color: var(--purple); }
+.why-card h3 { font-size: 1.0625rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.why-card p { font-size: 0.8125rem; color: var(--text-s); line-height: 1.65; }
+.wc-icon {
+  width: 38px; height: 38px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.125rem; margin-bottom: 0.875rem; flex-shrink: 0;
+}
+.wc-icon.ig { background: var(--g-bg); }
+.wc-icon.igo { background: var(--gold-bg); }
+.wc-icon.ib { background: rgba(91,141,239,0.06); }
+.wc-icon.ip { background: rgba(165,110,255,0.06); }
+
+/* ========= HOW ========= */
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.how-step { text-align: center; }
+.how-num {
+  font-family: var(--serif); font-size: 3.5rem; font-weight: 700;
+  color: var(--g); opacity: 0.12; line-height: 1; margin-bottom: 0.75rem;
+}
+.how-step h3 { font-size: 1.0625rem; font-weight: 700; margin-bottom: 0.375rem; }
+.how-step p { font-size: 0.8125rem; color: var(--text-s); line-height: 1.65; margin-bottom: 1rem; }
+.how-code {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 0.75rem 1rem; font-family: var(--mono); font-size: 0.6875rem; color: var(--text-s);
+  text-align: left; line-height: 1.7;
+}
+.hc-g { color: var(--g); }
+.hc-go { color: var(--gold); }
+.hc-p { color: var(--purple); }
+.hc-d { color: var(--text-d); }
+
+/* ========= FEATURES ========= */
+.feat-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--border); border-radius: 14px; overflow: hidden;
+}
+.feat-item { background: var(--surface); padding: 2rem; transition: background 0.15s; }
+.feat-item:hover { background: var(--surface-2); }
+.feat-icon { font-size: 1.375rem; margin-bottom: 0.75rem; }
+.feat-item h3 { font-size: 0.9375rem; font-weight: 700; margin-bottom: 0.375rem; }
+.feat-item p { font-size: 0.8125rem; color: var(--text-s); line-height: 1.6; }
+
+/* ========= PRICING ========= */
+.price-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; max-width: 820px; margin: 0 auto; }
+.pc {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 2.5rem; position: relative;
+}
+.pc.pop { border-color: var(--g); box-shadow: 0 0 60px rgba(0,210,106,0.04); }
+.pc-badge {
+  position: absolute; top: -0.6875rem; left: 2rem;
+  background: var(--g); color: #000; font-size: 0.5625rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 0.1875rem 0.75rem; border-radius: 100px;
+}
+.pc h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem; }
+.pc .pc-desc { font-size: 0.8125rem; color: var(--text-d); margin-bottom: 1.5rem; }
+.pc-price { font-family: var(--mono); font-size: 2rem; font-weight: 700; margin-bottom: 0.125rem; }
+.pc-price .u { font-size: 0.8125rem; color: var(--text-d); font-weight: 400; }
+.pc-detail { font-size: 0.8125rem; color: var(--text-s); margin-bottom: 1.75rem; }
+.pc-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
+.pc-list li { font-size: 0.8125rem; color: var(--text-s); display: flex; align-items: center; gap: 0.5rem; }
+.pc-list li::before { content: '✓'; color: var(--g); font-weight: 700; font-size: 0.6875rem; }
+.pc-btn {
+  display: block; width: 100%; padding: 0.75rem; border-radius: 8px;
+  font-weight: 700; font-size: 0.875rem; text-align: center; cursor: pointer; font-family: var(--font); transition: all 0.15s;
+}
+.pc-btn.pri { background: var(--g); color: #000; border: none; }
+.pc-btn.pri:hover { background: #00E878; }
+.pc-btn.sec { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.pc-btn.sec:hover { border-color: var(--border-h); }
+
+/* ========= CTA ========= */
+.cta-section {
+  padding: 8rem 2rem; text-align: center; position: relative;
+}
+.cta-section::before {
+  content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 500px;
+  background: radial-gradient(ellipse, rgba(0,210,106,0.03) 0%, transparent 65%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.08;
+  letter-spacing: -0.03em; margin-bottom: 1rem;
+}
+.cta-section p { font-size: 1.0625rem; color: var(--text-s); max-width: 480px; margin: 0 auto 2rem; line-height: 1.7; }
+
+/* ========= FOOTER ========= */
+.footer {
+  padding: 2.5rem 2.5rem; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1120px; margin: 0 auto;
+}
+.foot-logo { font-family: var(--serif); font-weight: 700; font-size: 1.125rem; }
+.foot-logo b { color: var(--g); }
+.foot-links { display: flex; gap: 1.75rem; }
+.foot-links a { font-size: 0.75rem; color: var(--text-d); transition: color 0.15s; }
+.foot-links a:hover { color: var(--text-s); }
+
+/* ========= REVEAL ========= */
+.rv { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+.rv.v { opacity: 1; transform: none; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+
+@media(max-width:768px) {
+  .nav-mid { display: none; }
+  .prob-grid, .feat-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .why-card.span2 { grid-column: span 1; grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .price-row { grid-template-columns: 1fr; }
+  .t-row { grid-template-columns: 2rem 1.5fr 1fr 1fr; }
+  .t-row .t-model, .t-row .t-action { display: none; }
+  .t-row.head .t-model, .t-row.head .t-action { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">mazou<b>.</b></div>
+  <div class="nav-mid">
+    <a href="#problem">Problem</a>
+    <a href="#why">Why Now</a>
+    <a href="#how">How It Works</a>
+    <a href="#features">Platform</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#">Docs</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-login" href="#">Log In</a>
+    <button class="nav-cta">Get API Key →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pill">
+    <span class="pill-dot"></span>
+    Beta live — Lagos · Nairobi · Johannesburg · Accra
+  </div>
+
+  <h1>One API<span class="g">.</span> Every model<span class="g">.</span><br><em>Pay locally.</em></h1>
+
+  <p class="hero-p">
+    The AI gateway for <strong>developers and autonomous agents</strong>.
+    Route to the best model. See what every call costs.
+    <strong>Stop wasting 30–40% of AI spend.</strong>
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-g">Start Building →</button>
+    <button class="btn-o">View Dashboard</button>
+  </div>
+
+  <!-- LIVE TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <div class="ticker-head">
+        <div class="ticker-title">
+          <span class="live">Live Routing Feed</span>
+          <span style="color:var(--text-d)">·</span>
+          <span>Paystack — Growth Plan</span>
+        </div>
+        <div class="ticker-stats">
+          <div class="t-stat">
+            <div class="t-stat-label">Saved today</div>
+            <div class="t-stat-val green" id="saved-counter">₦18,420</div>
+          </div>
+          <div class="t-stat">
+            <div class="t-stat-label">Calls today</div>
+            <div class="t-stat-val">52,847</div>
+          </div>
+          <div class="t-stat">
+            <div class="t-stat-label">Spend today</div>
+            <div class="t-stat-val gold">₦118,200</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticker-body">
+        <div class="t-row head">
+          <span></span><span>Agent / Feature</span><span>Model</span><span>Cost</span><span class="t-model">From</span><span class="t-action">Action</span>
+        </div>
+        <div class="t-row">
+          <span class="t-time">2s</span>
+          <span class="t-agent"><span class="t-agent-dot live"></span>Support Bot</span>
+          <span class="t-model">claude-haiku</span>
+          <span class="t-cost">₦1.20</span>
+          <span class="t-model" style="text-decoration:line-through;opacity:0.4">gpt-4o</span>
+          <span class="t-action"><span class="t-tag routed">Routed</span><span class="t-saved">-₦3.40</span></span>
+        </div>
+        <div class="t-row">
+          <span class="t-time">4s</span>
+          <span class="t-agent"><span class="t-agent-dot live"></span>Fraud Agent</span>
+          <span class="t-model">gpt-4o</span>
+          <span class="t-cost">₦4.60</span>
+          <span class="t-model" style="opacity:0.3">—</span>
+          <span class="t-action"><span class="t-tag optimal">Optimal</span></span>
+        </div>
+        <div class="t-row">
+          <span class="t-time">7s</span>
+          <span class="t-agent"><span class="t-agent-dot live"></span>Yoruba Chat</span>
+          <span class="t-model af">SabiYarn</span>
+          <span class="t-cost">₦0.80</span>
+          <span class="t-model" style="text-decoration:line-through;opacity:0.4">sonnet</span>
+          <span class="t-action"><span class="t-tag routed">Routed</span><span class="t-saved">-₦2.10</span></span>
+        </div>
+        <div class="t-row">
+          <span class="t-time">12s</span>
+          <span class="t-agent"><span class="t-agent-dot live"></span>Receipt OCR</span>
+          <span class="t-model">gpt-4o-mini</span>
+          <span class="t-cost">₦0.40</span>
+          <span class="t-model" style="text-decoration:line-through;opacity:0.4">gemini-pro</span>
+          <span class="t-action"><span class="t-tag fallback">Fallback</span></span>
+        </div>
+        <div class="t-row">
+          <span class="t-time">18s</span>
+          <span class="t-agent"><span class="t-agent-dot live"></span>Summariser</span>
+          <span class="t-model">claude-haiku</span>
+          <span class="t-cost">₦0.60</span>
+          <span class="t-model" style="text-decoration:line-through;opacity:0.4">sonnet</span>
+          <span class="t-action"><span class="t-tag routed">Routed</span><span class="t-saved">-₦1.80</span></span>
+        </div>
+      </div>
+
+      <div class="ticker-foot">
+        <span>Smart routing active · 5 models · 4 agents</span>
+        <a href="#">Open Full Dashboard →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div style="padding:2.5rem 2rem;text-align:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="font-size:0.625rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--text-d);font-weight:600;margin-bottom:1.25rem">Works with every provider · No lock-in</div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:2.75rem;flex-wrap:wrap;opacity:0.35">
+    <span style="font-family:var(--mono);font-size:0.875rem;font-weight:600;color:var(--text-s)">OpenAI</span>
+    <span style="font-family:var(--mono);font-size:0.875rem;font-weight:600;color:var(--text-s)">Anthropic</span>
+    <span style="font-family:var(--mono);font-size:0.875rem;font-weight:600;color:var(--text-s)">Google</span>
+    <span style="font-family:var(--mono);font-size:0.875rem;font-weight:600;color:var(--text-s)">Meta</span>
+    <span style="font-family:var(--mono);font-size:0.875rem;font-weight:600;color:var(--text-s)">Mistral</span>
+    <span style="font-family:var(--mono);font-size:0.875rem;font-weight:600;color:var(--gold)">SabiYarn</span>
+    <span style="font-family:var(--mono);font-size:0.875rem;font-weight:600;color:var(--gold)">Oversabi</span>
+    <span style="font-family:var(--mono);font-size:0.875rem;font-weight:600;color:var(--gold)">AfriSpeech</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section rv" id="problem">
+  <div class="s-label">The Problem</div>
+  <div class="s-h2">Companies waste 30–40% of AI spend because they can't see what each call costs</div>
+  <div class="s-sub">You're sending thousands of API calls a day. One invoice at month-end. No breakdown by feature or agent. No idea which model fits which task. Now autonomous agents are making calls with zero oversight per request.</div>
+
+  <div class="prob-grid">
+    <div class="prob-card">
+      <div class="prob-num red">$0</div>
+      <h3>Per-call visibility</h3>
+      <p>OpenAI, Anthropic, and Google give you monthly totals. Not per-feature or per-agent breakdowns. You're flying blind.</p>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num red">30–40%</div>
+      <h3>Wasted on wrong models</h3>
+      <p>Most teams use GPT-4o for everything — including tasks where Haiku or a local model performs identically at 1/10th the cost.</p>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num gold">USD</div>
+      <h3>The currency barrier</h3>
+      <p>Every major AI provider bills in dollars. For companies in Nigeria, Kenya, Ghana, and South Africa, this adds FX friction and compliance overhead.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOW -->
+<section class="section rv" id="why">
+  <div class="s-label">Why Now</div>
+  <div class="s-h2">The web is forking. Agents are economic actors. Who controls the bill?</div>
+  <div class="s-sub">Coinbase shipped agent wallets. Stripe rebuilt fraud detection for AI buyers. Cloudflare serves agents markdown. The agentic web is arriving — and every workflow runs on model calls. Mazou is the cost control layer.</div>
+
+  <div class="why-grid">
+    <div class="why-card span2">
+      <div>
+        <span class="wc-tag dev">For Developers</span>
+        <h3>Ship AI features without burning money</h3>
+        <p>Tag every call to a product feature. See exactly what your support bot costs vs. your fraud detector vs. your translation layer. Get recommendations to route cheaper without losing quality. Pay in Naira, KES, ZAR, or GHS.</p>
+      </div>
+      <div>
+        <span class="wc-tag agent">For Agent Builders</span>
+        <h3>Give autonomous agents a budget, not a blank check</h3>
+        <p>LangChain workflows, custom autonomous systems — they all make API calls. Mazou gives each agent its own spend tracking, cost limits, and smart routing. When an agent runs unsupervised, you still know what it spent and why.</p>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="wc-icon ig">⚡</div>
+      <h3>Smart Routing</h3>
+      <p>Send model: "auto" and we pick the best model. Language detection routes Yoruba to SabiYarn. Simple queries → Haiku. Complex reasoning stays on GPT-4o. Configurable rules.</p>
+    </div>
+    <div class="why-card">
+      <div class="wc-icon igo">🌍</div>
+      <h3>African Model Catalogue</h3>
+      <p>Access SabiYarn, Oversabi, AfriSpeech, and N-ATLAS through the same API. One integration. No separate SDKs. Auto-routed when local language is detected.</p>
+    </div>
+    <div class="why-card">
+      <div class="wc-icon ib">📊</div>
+      <h3>Real-Time Dashboard</h3>
+      <p>Spend by feature, by agent, by model, by day. Live routing feed. Actionable recommendations with exact local currency amounts. The trust layer for AI operations.</p>
+    </div>
+    <div class="why-card">
+      <div class="wc-icon ip">🔑</div>
+      <h3>Bring Your Own Keys</h3>
+      <p>Plug in your existing API keys. Get routing and visibility without changing providers. Keys encrypted in hardware isolation — even compromised agents can't extract them.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="section rv" id="how">
+  <div class="s-label" style="text-align:center">How It Works</div>
+  <div class="s-h2" style="text-align:center;margin-left:auto;margin-right:auto">Three minutes to full visibility</div>
+  <div style="height:2rem"></div>
+
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="how-num">01</div>
+      <h3>Point your SDK at Mazou</h3>
+      <p>Change one line — your base URL. Every SDK that speaks OpenAI format works instantly.</p>
+      <div class="how-code">
+        <span class="hc-d"># one-line change</span><br>
+        base_url=<span class="hc-g">"https://api.mazou.ai/v1"</span>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">02</div>
+      <h3>Tag your features & agents</h3>
+      <p>Add one header per call. Mazou groups costs automatically by feature, agent, or team.</p>
+      <div class="how-code">
+        X-Mazou-Feature: <span class="hc-go">support-bot</span><br>
+        X-Mazou-Agent: <span class="hc-p">agent-07</span>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">03</div>
+      <h3>Watch the savings</h3>
+      <p>Smart routing kicks in immediately. Dashboard shows live cost per feature and recommendations.</p>
+      <div class="how-code">
+        Saved this month: <span class="hc-g">₦486,000</span><br>
+        More available: <span class="hc-g">₦1,138,880</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section rv" id="features">
+  <div class="s-label">Platform</div>
+  <div class="s-h2">Everything you need to control AI costs at scale</div>
+  <div style="height:1.5rem"></div>
+
+  <div class="feat-grid">
+    <div class="feat-item"><div class="feat-icon">🔌</div><h3>Unified API</h3><p>One endpoint for OpenAI, Anthropic, Google, Meta, Mistral, and African models. OpenAI-compatible format.</p></div>
+    <div class="feat-item"><div class="feat-icon">⚡</div><h3>Smart Routing</h3><p>Language detection, task complexity, budget constraints. Automatic fallback on timeout or error.</p></div>
+    <div class="feat-item"><div class="feat-icon">💰</div><h3>Local Currency</h3><p>Prepaid wallet in NGN, KES, ZAR, GHS. Fund via Paystack. Auto-fund thresholds.</p></div>
+    <div class="feat-item"><div class="feat-icon">📊</div><h3>Cost Dashboard</h3><p>Per-feature, per-agent, per-model spend. Daily charts. Live feed. CSV export.</p></div>
+    <div class="feat-item"><div class="feat-icon">🤖</div><h3>Agent Controls</h3><p>Per-agent spend limits. Budget caps. Cost alerts. Built for unsupervised agent operation.</p></div>
+    <div class="feat-item"><div class="feat-icon">🌍</div><h3>African Models</h3><p>SabiYarn, Oversabi, AfriSpeech, N-ATLAS. Auto-routed on local language detection.</p></div>
+    <div class="feat-item"><div class="feat-icon">💡</div><h3>Recommendations</h3><p>"Switch Support Bot to Sonnet — save ₦890K/mo." Automated suggestions. One-click apply.</p></div>
+    <div class="feat-item"><div class="feat-icon">🔑</div><h3>BYOK Mode</h3><p>Bring your own keys. Get routing + visibility. Keys encrypted in hardware isolation.</p></div>
+    <div class="feat-item"><div class="feat-icon">🛡️</div><h3>Zero-Trust Security</h3><p>Every agent treated as potential adversary. Key enclave isolation. Spend guardrails. Full audit logs.</p></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section rv" id="pricing">
+  <div class="s-label" style="text-align:center">Pricing</div>
+  <div class="s-h2" style="text-align:center;margin-left:auto;margin-right:auto">Start free. Pay as you grow.</div>
+  <div class="s-sub" style="text-align:center;margin-left:auto;margin-right:auto">No USD required. Fund your wallet in local currency.</div>
+
+  <div class="price-row">
+    <div class="pc pop">
+      <div class="pc-badge">Most Popular</div>
+      <h3>Managed</h3>
+      <p class="pc-desc">We hold the keys. You buy credits.</p>
+      <div class="pc-price">10–20% <span class="u">margin</span></div>
+      <p class="pc-detail">Pay local currency. We handle USD conversion, billing, key management.</p>
+      <ul class="pc-list">
+        <li>All global + African models</li>
+        <li>Smart routing & recommendations</li>
+        <li>Full cost dashboard</li>
+        <li>Local currency billing (NGN, KES, ZAR, GHS)</li>
+        <li>Agent spend controls</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="pc-btn pri">Get API Key →</button>
+    </div>
+    <div class="pc">
+      <h3>BYOK</h3>
+      <p class="pc-desc">Bring your own keys. Get the control layer.</p>
+      <div class="pc-price">$49 <span class="u">/ month</span></div>
+      <p class="pc-detail">Keep existing provider contracts. Add routing, visibility, agent controls.</p>
+      <ul class="pc-list">
+        <li>Connect any provider key</li>
+        <li>Smart routing & recommendations</li>
+        <li>Full cost dashboard</li>
+        <li>Agent spend controls</li>
+        <li>Key encryption & isolation</li>
+        <li>Community support</li>
+      </ul>
+      <button class="pc-btn sec">Connect Keys →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section rv">
+  <h2>Your agents are spending.<br><span style="color:var(--g)">Do you know how much?</span></h2>
+  <p>Full visibility in 3 minutes. No credit card. No USD. Connect and see what you're actually spending.</p>
+  <div style="display:flex;gap:0.75rem;justify-content:center">
+    <button class="btn-g">Start Free →</button>
+    <button class="btn-o">Book a Demo</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="foot-logo">mazou<b>.</b></div>
+  <div class="foot-links">
+    <a href="#">Docs</a>
+    <a href="#">API Reference</a>
+    <a href="#">Blog</a>
+    <a href="#">GitHub</a>
+    <a href="#">Twitter</a>
+    <a href="#">hello@mazou.ai</a>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const ro = new IntersectionObserver(e => e.forEach(x => { if (x.isIntersecting) x.target.classList.add('v'); }), { threshold: 0.08 });
+document.querySelectorAll('.rv').forEach(el => ro.observe(el));
+
+// Animate saved counter
+let saved = 18420;
+setInterval(() => {
+  saved += Math.floor(Math.random() * 8) + 1;
+  document.getElementById('saved-counter').textContent = '₦' + saved.toLocaleString();
+}, 3000);
+</script>
+
+</body>
+</html>

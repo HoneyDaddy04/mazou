@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mazou - AI Infrastructure Layer for Africa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Fraunces:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0A0A0C;--surface:#111114;--s2:#18181C;--border:#222228;--text:#E8E8ED;--ts:#8888A0;--td:#555566;--accent:#00D26A;--ad:#00A854;--naira:#FFB800;--red:#FF4D4D;--blue:#4D8AFF;--purple:#A855F7;--sans:'DM Sans',sans-serif;--serif:'Fraunces',serif;--mono:'JetBrains Mono',monospace}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}a{color:inherit;text-decoration:none}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,12,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--serif);font-size:1.5rem;font-weight:800;letter-spacing:-.02em;cursor:pointer}.logo span{color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:32px}.nav-links a{color:var(--ts);font-size:.875rem;font-weight:500;transition:color .2s}.nav-links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.875rem;cursor:pointer;transition:all .2s;border:none;font-family:var(--sans);color:var(--text)}
+.btn-p{background:var(--ad);color:#fff}.btn-p:hover{background:var(--accent)}.btn-sm{padding:6px 14px;font-size:.75rem}.btn-o{background:0 0;border:1px solid var(--border)}.btn-o:hover{border-color:var(--ts)}.btn-r{background:rgba(255,77,77,.1);color:var(--red);border:1px solid rgba(255,77,77,.3)}
+.page{display:none}.page.active{display:block}
+/* Hero */.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:128px 20px 64px;position:relative}
+.hero-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(0,210,106,.15) 0%,transparent 70%);pointer-events:none;opacity:.6}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:.8125rem;color:var(--ts);margin-bottom:32px}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:var(--serif);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;max-width:800px;margin-bottom:24px}
+.hero h1 .currency{color:var(--naira)}.hero h1 .waste{color:var(--accent)}
+.hero p{font-size:1.125rem;color:var(--ts);max-width:560px;margin-bottom:40px;line-height:1.7}
+.hero-stats{margin-top:48px;display:flex;gap:40px;color:var(--ts);font-size:.8125rem;flex-wrap:wrap;justify-content:center}
+.hero-stats .num{font-family:var(--mono);font-size:1.25rem;color:var(--text);font-weight:500;display:block;margin-bottom:2px}
+.code-section{padding:0 20px 96px;display:flex;justify-content:center}
+.code-block{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:700px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4)}
+.code-bar{display:flex;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--s2)}
+.code-dot{width:10px;height:10px;border-radius:50%}.code-file{margin-left:16px;font-family:var(--mono);font-size:.75rem;color:var(--ts);padding:4px 12px;background:var(--surface);border-radius:4px}
+.code-body{padding:24px;font-family:var(--mono);font-size:.8125rem;line-height:1.8;overflow-x:auto}
+.ck{color:#C792EA}.cf{color:#82AAFF}.cs{color:var(--accent)}.cp{color:var(--naira)}.cb{color:#89DDFF}.cc{color:var(--td)}
+.section{padding:96px 20px;max-width:960px;margin:0 auto}
+.section-label{font-family:var(--mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:24px;text-align:center}.section-label.red{color:var(--red)}
+.section h2{font-family:var(--serif);font-size:clamp(1.75rem,4vw,2.75rem);font-weight:800;line-height:1.2;letter-spacing:-.02em;text-align:center;margin-bottom:16px}
+.section .sub{text-align:center;color:var(--ts);margin-bottom:56px;font-size:1rem}
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin:56px auto 0}
+.pcard{background:var(--surface);padding:32px}.pcard .icon{font-size:1.5rem;margin-bottom:16px}.pcard h3{font-size:1rem;font-weight:600;margin-bottom:8px}.pcard p{font-size:.875rem;color:var(--ts);line-height:1.6}
+.quote{text-align:center;padding:64px 20px;max-width:680px;margin:0 auto}.quote-line{width:60px;height:2px;background:var(--accent);margin:0 auto 24px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}.step{text-align:center}
+.step-num{width:48px;height:48px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.875rem;font-weight:600;color:var(--accent);margin:0 auto 20px}
+.step h3{font-size:1.125rem;font-weight:700;margin-bottom:8px}.step p{font-size:.875rem;color:var(--ts);line-height:1.6}
+.mpills{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:800px;margin:0 auto 32px}
+.pill{padding:8px 20px;background:var(--surface);border:1px solid var(--border);border-radius:999px;font-size:.8125rem;font-weight:500;transition:all .2s;cursor:default}
+.pill:hover{border-color:var(--ts);transform:translateY(-2px)}.pill.af{border-color:var(--naira);color:var(--naira);background:rgba(255,184,0,.12)}
+.pricegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.prcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px}.prcard.m{border-top:3px solid var(--accent)}.prcard.b{border-top:3px solid var(--naira)}
+.prcard .tg{font-family:var(--mono);font-size:.6875rem;text-transform:uppercase;letter-spacing:.15em;margin-bottom:16px}.prcard.m .tg{color:var(--accent)}.prcard.b .tg{color:var(--naira)}
+.prcard h3{font-size:1.375rem;font-weight:700;margin-bottom:10px}.prcard .ds{color:var(--ts);font-size:.9375rem;margin-bottom:24px;line-height:1.6}
+.prcard ul{list-style:none;display:flex;flex-direction:column;gap:10px}.prcard li{font-size:.875rem;color:var(--ts);display:flex;align-items:flex-start;gap:8px}
+.prcard li .ck2{font-weight:700;flex-shrink:0;margin-top:2px}.prcard.m li .ck2{color:var(--accent)}.prcard.b li .ck2{color:var(--naira)}
+.cta{padding:128px 20px;text-align:center;position:relative}
+.cta-glow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(0,210,106,.15) 0%,transparent 70%);pointer-events:none;opacity:.4}
+.cta h2{font-family:var(--serif);font-size:clamp(2rem,5vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:16px;position:relative}
+.cta p{color:var(--ts);font-size:1.125rem;margin-bottom:40px;position:relative}
+.footer{border-top:1px solid var(--border);max-width:1100px;margin:0 auto;padding:48px 20px}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+.footer .logo-sm{font-family:var(--serif);font-size:1.5rem;font-weight:800;margin-bottom:8px}
+.footer-bottom{padding-top:32px;border-top:1px solid var(--border);text-align:center;font-size:.8125rem;color:var(--ts)}
+/* Dashboard layout */
+.app-layout{display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:40}
+.sidebar .logo-area{padding:4px 8px 20px;font-family:var(--serif);font-size:1.25rem;font-weight:800;cursor:pointer}.sidebar .logo-area span{color:var(--accent)}
+.nav-group{margin-bottom:20px}.nav-group-label{font-size:.625rem;text-transform:uppercase;letter-spacing:.12em;color:var(--td);padding:4px 8px;margin-bottom:4px;font-weight:600}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;font-size:.8125rem;font-weight:500;color:var(--ts);cursor:pointer;transition:all .15s}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.04)}.nav-item.active{color:var(--text);background:rgba(0,210,106,.08)}
+.nav-badge{font-size:.625rem;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.06);color:var(--ts);margin-left:auto;font-weight:600}
+.nav-badge.live{background:rgba(0,210,106,.12);color:var(--accent)}
+.main-content{flex:1;padding:24px 32px;overflow-y:auto;max-height:100vh;margin-left:240px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.topbar h1{font-size:1.25rem;font-weight:700}
+.topbar .user{display:flex;align-items:center;gap:8px;font-size:.8125rem;color:var(--ts)}
+.topbar .avatar{width:28px;height:28px;border-radius:50%;background:var(--ad);display:flex;align-items:center;justify-content:center;font-size:.6875rem;font-weight:700;color:#fff}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:20px}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.scard .lb{font-size:.6875rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ts);margin-bottom:6px}
+.scard .vl{font-family:var(--mono);font-size:1.25rem;font-weight:600}
+.scard .sb{font-size:.6875rem;color:var(--ts);margin-top:4px}.scard .sb.grn{color:var(--accent)}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:10px}
+.panel-title{font-size:.8125rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.two-col{display:grid;grid-template-columns:3fr 2fr;gap:10px;margin-bottom:10px}
+.two-col-eq{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ftable{width:100%;border-collapse:collapse;font-size:.8125rem}
+.ftable th{text-align:left;font-size:.625rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ts);font-weight:600;padding-bottom:10px}
+.ftable td{padding:10px 0;border-top:1px solid var(--border)}
+.bar-fill{height:6px;border-radius:3px;background:var(--border);overflow:hidden}
+.bar-fill-inner{height:100%;border-radius:3px;transition:width 1s}
+.savings-banner{background:linear-gradient(to right,rgba(0,210,106,.06),transparent);border:1px solid rgba(0,210,106,.2);border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:.8125rem}
+.savings-banner strong{color:var(--accent)}
+.route-entry{display:flex;gap:10px;padding:10px;background:var(--bg);border-radius:6px;border:1px solid var(--border);margin-bottom:8px}
+.route-time{font-family:var(--mono);font-size:.625rem;color:var(--td);width:42px;flex-shrink:0;padding-top:2px}
+.route-body{font-size:.75rem;color:var(--ts);line-height:1.5}.route-body strong{color:var(--text)}
+.route-body .rto{color:var(--accent);font-family:var(--mono);font-size:.6875rem}
+.route-body .rfrom{color:var(--red);font-family:var(--mono);font-size:.6875rem;text-decoration:line-through;opacity:.6}
+.route-body .rsaved{color:var(--accent);font-weight:600}
+.route-tag{display:inline-block;font-size:.5625rem;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:3px;font-weight:600;margin-top:4px}
+.ocard{padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;display:flex;gap:10px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
+.ocard:hover{border-color:rgba(255,255,255,.1)}
+.ocard .oi{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.875rem;flex-shrink:0}
+.ocard .ot{font-size:.8125rem;font-weight:600;margin-bottom:2px}
+.ocard .od{font-size:.75rem;color:var(--td);line-height:1.5}
+.ocard .oa{font-family:var(--mono);font-size:.875rem;font-weight:600;color:var(--accent);white-space:nowrap;padding-top:2px}
+.mbar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.mbar .mi{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.625rem;font-weight:700;flex-shrink:0}
+.mbar .info{flex:1}.mbar .info-top{display:flex;justify-content:space-between;margin-bottom:4px}
+.mbar .mn{font-size:.8125rem;font-weight:500}.mbar .ms{font-family:var(--mono);font-size:.75rem;color:var(--ts)}
+.tab-bar{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:20px}
+.tab-btn{padding:8px 20px;border-radius:8px;font-size:.8125rem;font-weight:500;cursor:pointer;transition:all .2s;color:var(--ts);border:none;background:none;font-family:var(--sans)}
+.tab-btn.active{background:var(--ad);color:#fff}.tab-btn:hover:not(.active){color:var(--text)}
+.tc{display:none}.tc.active{display:block}
+.dtable{width:100%;border-collapse:collapse;font-size:.8125rem}
+.dtable th{text-align:left;font-size:.625rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ts);font-weight:600;padding:8px 12px;border-bottom:1px solid var(--border)}
+.dtable td{padding:12px;border-bottom:1px solid var(--border)}.dtable tr:hover{background:rgba(255,255,255,.02)}
+.mono{font-family:var(--mono)}.tpill{display:inline-block;font-size:.625rem;padding:2px 8px;border-radius:999px;font-weight:600}
+.tg{background:rgba(0,210,106,.1);color:var(--accent)}.ty{background:rgba(255,184,0,.1);color:var(--naira)}.tr{background:rgba(255,77,77,.1);color:var(--red)}.tb{background:rgba(77,138,255,.1);color:var(--blue)}.tp{background:rgba(168,85,247,.1);color:var(--purple)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h2{font-size:1.125rem;font-weight:700;margin-bottom:16px}.modal .xbtn{float:right;background:none;border:none;color:var(--ts);cursor:pointer;font-size:1.25rem}
+.input{width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--sans);font-size:.875rem;outline:none;margin-bottom:12px}.input:focus{border-color:var(--accent)}
+.ilabel{font-size:.75rem;font-weight:600;color:var(--ts);margin-bottom:6px;display:block}
+.toggle{position:relative;width:36px;height:20px;background:var(--border);border-radius:10px;cursor:pointer;transition:background .2s;display:inline-block}
+.toggle.on{background:var(--accent)}.toggle::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}.toggle.on::after{transform:translateX(16px)}
+.subpage{display:none}.subpage.active{display:block}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.impact-bar{display:flex;gap:2px}.impact-dot{width:8px;height:8px;border-radius:2px;background:var(--border)}.impact-dot.on{background:var(--accent)}
+.doc-layout{display:flex;gap:32px;max-width:900px;margin:0 auto}
+.doc-side{width:200px;flex-shrink:0;position:sticky;top:24px;height:fit-content}
+.doc-side a{display:block;padding:6px 12px;font-size:.8125rem;color:var(--ts);border-left:2px solid var(--border);transition:all .15s}
+.doc-side a:hover{color:var(--accent);border-left-color:var(--accent)}
+.doc-main{flex:1;min-width:0}
+.doc-main h2{font-size:1.25rem;font-weight:700;margin:32px 0 12px;padding-top:16px;border-top:1px solid var(--border)}.doc-main h2:first-child{border-top:none;margin-top:0}
+.doc-main h3{font-size:1rem;font-weight:600;margin:20px 0 8px}
+.doc-main p,.doc-main li{color:var(--ts);font-size:.875rem;margin-bottom:12px;line-height:1.7}
+.doc-main pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:var(--mono);font-size:.75rem;overflow-x:auto;margin-bottom:16px;line-height:1.6;color:var(--ts)}
+.doc-main code{font-family:var(--mono);font-size:.8125rem;background:var(--surface);padding:2px 6px;border-radius:4px}
+.doc-main table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:.8125rem}
+.doc-main th{text-align:left;padding:8px 12px;border-bottom:2px solid var(--border);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ts)}
+.doc-main td{padding:8px 12px;border-bottom:1px solid var(--border)}
+.fade-in{opacity:0;transform:translateY(32px);transition:all .7s ease}.fade-in.visible{opacity:1;transform:translateY(0)}
+@media(max-width:768px){.nav-links{display:none}.pgrid,.pricegrid,.steps,.two-col,.two-col-eq{grid-template-columns:1fr}.sidebar{display:none}.main-content{margin-left:0}.hero h1{font-size:2.5rem}.stat-cards{grid-template-columns:repeat(2,1fr)}.doc-side{display:none}}
+</style>
+</head>
+<body>
+<!-- LANDING PAGE -->
+<div id="landing" class="page active">
+<nav class="nav">
+  <div class="logo" onclick="goLanding()">mazou<span>.</span></div>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#models">Models</a>
+    <a href="#pricing">Pricing</a>
+    <a href="javascript:void(0)" onclick="goPage('docs')">Docs</a>
+    <a href="javascript:void(0)" onclick="goPage('dashboard')">Dashboard Demo</a>
+    <button class="btn btn-p" onclick="goPage('dashboard')">Sign In</button>
+  </div>
+</nav>
+<section class="hero"><div class="hero-glow"></div>
+  <div class="badge"><span class="dot"></span> AI infrastructure layer for Africa</div>
+  <h1>One API for all your AI.<br><span class="currency" id="currency-text">Pay in Naira.</span> <span class="waste">Waste nothing.</span></h1>
+  <p>Access OpenAI, Anthropic, Google, and other top global and African AI models through one intelligent API. Know what every LLM call, every agent, every AI feature is costing you.</p>
+  <div><button class="btn btn-p" style="padding:12px 24px;font-size:1rem" onclick="goPage('dashboard')">Get Started</button></div>
+  <div class="hero-stats"><div><span class="num">45+</span> AI models</div><div><span class="num">&#x1F4B3;</span> Local currency billing</div><div><span class="num">~40%</span> avg. cost reduction</div></div>
+</section>
+<section class="code-section"><div class="code-block"><div class="code-bar"><span class="code-dot" style="background:#FF5F57"></span><span class="code-dot" style="background:#FFBD2E"></span><span class="code-dot" style="background:#28CA41"></span><span class="code-file">app.py</span></div>
+<div class="code-body"><span class="cc"># Before: Juggling 3 SDKs, 3 API keys, 3 USD invoices</span><br><span class="cc"># After: One line.</span><br><br><span class="ck">from</span> <span class="cf">mazou</span> <span class="ck">import</span> AI<br><br>response = <span class="cf">AI</span>.<span class="cf">complete</span><span class="cb">(</span><br>&nbsp;&nbsp;<span class="cp">prompt</span>=<span class="cs">"Summarise this customer complaint"</span>,<br>&nbsp;&nbsp;<span class="cp">model</span>=<span class="cs">"auto"</span>, <span class="cc"># routes to best model</span><br>&nbsp;&nbsp;<span class="cp">budget</span>=<span class="cs">"low"</span>, <span class="cc"># optimises for cost</span><br>&nbsp;&nbsp;<span class="cp">tag</span>=<span class="cs">"support-bot"</span> <span class="cc"># tracks spend per feature</span><br><span class="cb">)</span></div></div></section>
+<section class="section fade-in"><div class="section-label red">The Problem</div><h2>Your AI spend is a black box.</h2>
+  <div class="pgrid">
+    <div class="pcard"><div class="icon">&#x1F511;</div><h3>10 API keys, 10 dashboards</h3><p>Every model provider wants their own account and billing portal. Nobody has the full picture.</p></div>
+    <div class="pcard"><div class="icon">&#x1F4B5;</div><h3>USD-only billing</h3><p>Getting a USD virtual card, managing FX, justifying dollar charges to finance - it's a tax on building with AI in Africa.</p></div>
+    <div class="pcard"><div class="icon">&#x1F573;&#xFE0F;</div><h3>No visibility, no control</h3><p>Which feature is burning tokens? Which agent is expensive? Which model is overkill? Nobody knows.</p></div>
+    <div class="pcard"><div class="icon">&#x1F30D;</div><h3>African models are invisible</h3><p>Local language models exist but they're scattered and hard to access.</p></div>
+  </div>
+</section>
+<div class="quote fade-in"><div class="quote-line"></div><h2>AI spend is the new cloud spend.</h2><p>Remember when the Naira collapsed and every AWS bill tripled overnight? AI API costs are following the same trajectory.</p><div class="quote-line" style="margin-top:24px"></div></div>
+<section class="section fade-in" id="how"><div class="section-label">How It Works</div><h2>Three steps. Five minutes. Full control.</h2><div style="height:56px"></div>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><h3>Get started</h3><p>Reach out to our team. We'll set you up and fund your account in local currency.</p></div>
+    <div class="step"><div class="step-num">2</div><h3>Integrate seamlessly</h3><p>Swap your OpenAI/Anthropic imports for ours. Or bring your own keys.</p></div>
+    <div class="step"><div class="step-num">3</div><h3>See everything</h3><p>Your dashboard lights up: per-feature costs, per-model usage, and optimization recommendations.</p></div>
+  </div>
+</section>
+<section class="section fade-in" id="models"><div class="section-label">Model Catalog</div><h2>Every model. One endpoint.</h2><p class="sub">Global leaders and African-built models, accessible through the same API.</p>
+  <div class="mpills"><span class="pill">GPT-5.2</span><span class="pill">GPT-5</span><span class="pill">Claude Opus 4.6</span><span class="pill">Claude Sonnet 4.6</span><span class="pill">Gemini 2.5 Pro</span><span class="pill">Gemini 2.5 Flash</span><span class="pill">Llama 4 Maverick</span><span class="pill">DeepSeek R1</span><span class="pill">Mistral Large</span><span class="pill">Cohere</span><span class="pill af">InkubaLM</span><span class="pill af">Vulavula</span><span class="pill af">YarnGPT</span><span class="pill af">Khaya AI</span><span class="pill af">AfroLM</span><span class="pill af">Lesan AI</span></div>
+  <div style="display:flex;gap:32px;justify-content:center;font-size:.8125rem;color:var(--ts)"><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ts);margin-right:8px"></span>Global</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--naira);margin-right:8px"></span>African</span></div>
+</section>
+<section class="section fade-in" id="pricing"><div class="section-label">Two Ways In</div><h2>Use ours or bring yours.</h2><p class="sub">Whether you want the full managed experience or just the control layer.</p>
+  <div class="pricegrid">
+    <div class="prcard m"><div class="tg">Managed</div><h3>Buy Through Us</h3><p class="ds">We hold the keys. You buy credits in Naira.</p><ul><li><span class="ck2">&#x2713;</span> No USD card needed</li><li><span class="ck2">&#x2713;</span> No accounts with OpenAI, Anthropic, Google</li><li><span class="ck2">&#x2713;</span> One monthly Naira invoice</li><li><span class="ck2">&#x2713;</span> Full dashboard + smart routing</li><li><span class="ck2">&#x2713;</span> Best for startups and SMEs</li></ul></div>
+    <div class="prcard b"><div class="tg">Bring Your Own Keys</div><h3>Use Your Existing Accounts</h3><p class="ds">Plug in your existing API keys. Get the control layer on top.</p><ul><li><span class="ck2">&#x2713;</span> Zero switching cost</li><li><span class="ck2">&#x2713;</span> Smart routing across your keys</li><li><span class="ck2">&#x2713;</span> Full visibility dashboard</li><li><span class="ck2">&#x2713;</span> Cost optimisation recommendations</li><li><span class="ck2">&#x2713;</span> Best for enterprises</li></ul></div>
+  </div>
+</section>
+<section class="cta"><div class="cta-glow"></div><h2>Stop guessing.<br>Start building.</h2><p>Ready to optimize your AI infrastructure?</p><button class="btn btn-p" style="padding:12px 24px;font-size:1rem" onclick="goPage('dashboard')">Get Started</button></section>
+<footer class="footer"><div class="footer-inner"><div><div class="logo-sm">mazou<span style="color:var(--accent)">.</span></div><div style="font-size:.875rem;color:var(--ts)">AI infrastructure layer for Africa</div></div><div style="text-align:right"><div style="font-size:.875rem">team@mazou.ai</div><div style="font-size:.875rem;color:var(--ts)">Lagos, Nigeria</div></div></div><div class="footer-bottom">&copy; 2026 Mazou. Built for Africa.</div></footer>
+</div>
+
+<!-- DASHBOARD APP -->
+<div id="app" class="page">
+<div class="app-layout">
+<aside class="sidebar" id="sidebar"></aside>
+<main class="main-content">
+<div class="topbar"><h1 id="page-title">Dashboard</h1><div class="user"><span>Demo User</span><div class="avatar">DU</div></div></div>
+
+<!-- Dashboard -->
+<div id="sp-dashboard" class="subpage active">
+<div class="savings-banner"><span>&#9733; Smart Routing found <strong>&#8358;1,138,880 in potential savings</strong> this month across 5 recommendations.</span><button class="btn btn-p btn-sm" onclick="goPage('recommendations')">Review &#8594;</button></div>
+<div class="stat-cards"><div class="scard"><div class="lb">Total Spend</div><div class="vl" style="color:var(--naira)">&#8358;2.85M</div><div class="sb">&#8595; 8% vs last month</div></div><div class="scard"><div class="lb">API Calls</div><div class="vl">1.24M</div><div class="sb">&#8593; 12%</div></div><div class="scard"><div class="lb">Active Models</div><div class="vl">8</div><div class="sb">3 global &middot; 2 African &middot; 3 open</div></div><div class="scard"><div class="lb">Saved This Month</div><div class="vl" style="color:var(--accent)">&#8358;486K</div><div class="sb grn">via smart routing</div></div><div class="scard"><div class="lb">More Savings Found</div><div class="vl" style="color:var(--accent)">&#8358;1.14M</div><div class="sb grn">5 recommendations</div></div></div>
+<div class="two-col"><div class="panel"><div class="panel-title">&#11043; Spend by Feature</div><div id="feat-panel"></div></div><div class="panel"><div class="panel-title">&#9672; Model Usage</div><canvas id="spend-chart" height="120" style="width:100%;margin-bottom:16px"></canvas><div id="model-bars"></div></div></div>
+<div class="two-col-eq"><div class="panel"><div class="panel-title">&#8621; Smart Routing &middot; Live</div><div id="route-log"></div></div><div class="panel"><div class="panel-title" style="justify-content:space-between"><span>&#128161; Top Recommendations</span><span style="font-size:.6875rem;color:var(--accent);font-weight:600">&#8358;1.14M saveable</span></div><div id="opt-cards"></div></div></div>
+</div>
+
+<!-- Usage -->
+<div id="sp-usage" class="subpage">
+<div class="stat-cards"><div class="scard"><div class="lb">Total Spend</div><div class="vl" style="color:var(--naira)">&#8358;2.85M</div><div class="sb">Feb 2026</div></div><div class="scard"><div class="lb">Total Calls</div><div class="vl">1.24M</div><div class="sb">&#8593; 12% vs Jan</div></div><div class="scard"><div class="lb">Avg Cost/Call</div><div class="vl">&#8358;2.30</div><div class="sb">&#8595; 4%</div></div><div class="scard"><div class="lb">Token Usage</div><div class="vl">847M</div><div class="sb">input + output</div></div></div>
+<div class="panel"><div class="panel-title">&#128200; Spend by Model</div><div id="usage-chart"></div></div>
+<div style="margin-top:10px"><div class="tab-bar"><button class="tab-btn active" onclick="usageTab(this,'usage-features')">Features</button><button class="tab-btn" onclick="usageTab(this,'usage-agents')">Agents</button><button class="tab-btn" onclick="usageTab(this,'usage-models')">Models</button></div>
+<div id="usage-features" class="tc active"><div id="usage-feat-table"></div></div>
+<div id="usage-agents" class="tc"><div id="usage-agent-table"></div></div>
+<div id="usage-models" class="tc"><div id="usage-model-table"></div></div></div>
+</div>
+
+<!-- Routing -->
+<div id="sp-routing" class="subpage">
+<div class="stat-cards"><div class="scard"><div class="lb">Routes Today</div><div class="vl">2,847</div><div class="sb grn">&#8593; 15%</div></div><div class="scard"><div class="lb">Saved Today</div><div class="vl" style="color:var(--accent)">&#8358;42.6K</div></div><div class="scard"><div class="lb">Active Rules</div><div class="vl">6</div></div><div class="scard"><div class="lb">Cache Hit Rate</div><div class="vl">34%</div></div></div>
+<div class="tab-bar"><button class="tab-btn active" onclick="routeTab(this,'route-feed')">Live Feed</button><button class="tab-btn" onclick="routeTab(this,'route-rules')">Rules</button></div>
+<div id="route-feed" class="tc active"><div id="routing-log"></div></div>
+<div id="route-rules" class="tc"><div id="rules-list"></div></div>
+</div>
+
+<!-- Agents -->
+<div id="sp-agents" class="subpage">
+<div class="stat-cards"><div class="scard"><div class="lb">Active Agents</div><div class="vl">3</div></div><div class="scard"><div class="lb">Total Cost</div><div class="vl" style="color:var(--naira)">&#8358;2.34M</div></div><div class="scard"><div class="lb">Tasks (30d)</div><div class="vl">16,180</div></div><div class="scard"><div class="lb">Avg Error Rate</div><div class="vl" style="color:var(--accent)">0.19%</div></div></div>
+<div class="card-grid" id="agents-grid"></div>
+</div>
+
+<!-- Active Models -->
+<div id="sp-models" class="subpage">
+<div class="stat-cards"><div class="scard"><div class="lb">Active Models</div><div class="vl">10</div></div><div class="scard"><div class="lb">Total Spend</div><div class="vl" style="color:var(--naira)">&#8358;2.85M</div></div><div class="scard"><div class="lb">Total Calls</div><div class="vl">1.24M</div></div><div class="scard"><div class="lb">Avg Latency</div><div class="vl">0.64s</div></div></div>
+<div class="panel"><table class="dtable"><thead><tr><th>Model</th><th>Provider</th><th>Calls</th><th>Latency</th><th>Spend</th><th>Usage</th></tr></thead><tbody id="models-tbody"></tbody></table></div>
+</div>
+
+<!-- Catalog -->
+<div id="sp-catalog" class="subpage">
+<div class="stat-cards"><div class="scard"><div class="lb">Total Models</div><div class="vl">45</div></div><div class="scard"><div class="lb">Global</div><div class="vl">27</div></div><div class="scard"><div class="lb">African</div><div class="vl">18</div></div><div class="scard"><div class="lb">Categories</div><div class="vl">13</div></div></div>
+<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+<div class="tab-bar" style="margin-bottom:0"><button class="tab-btn active" onclick="catalogFilter(this,'all')">All</button><button class="tab-btn" onclick="catalogFilter(this,'global')">Global</button><button class="tab-btn" onclick="catalogFilter(this,'african')">African</button></div>
+<input type="text" class="input" style="width:250px;margin-bottom:0" placeholder="Search models..." id="catalog-search" oninput="renderCatalog()">
+</div>
+<div class="card-grid" id="catalog-grid"></div>
+</div>
+
+<!-- Recommendations -->
+<div id="sp-recommendations" class="subpage">
+<div class="stat-cards"><div class="scard"><div class="lb">Potential Savings</div><div class="vl" style="color:var(--accent)">&#8358;1.42M/mo</div></div><div class="scard"><div class="lb">Recommendations</div><div class="vl">5</div></div><div class="scard"><div class="lb">Applied This Month</div><div class="vl">2</div></div></div>
+<div id="recs-list"></div>
+</div>
+
+<!-- API Keys -->
+<div id="sp-keys" class="subpage">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3 style="font-size:.9375rem;font-weight:600">Your API Keys</h3><button class="btn btn-p btn-sm" onclick="showModal('key-modal')">+ New Key</button></div>
+<div class="panel"><table class="dtable"><thead><tr><th>Name</th><th>Key</th><th>Created</th><th>Last Used</th><th>Status</th><th></th></tr></thead><tbody>
+<tr><td style="font-weight:500">Production</td><td><span class="mono" style="font-size:.75rem">mz_live_****...a8f2</span></td><td class="mono" style="font-size:.75rem">Jan 15, 2026</td><td class="mono" style="font-size:.75rem">2 min ago</td><td><span class="tpill tg">Active</span></td><td><button class="btn btn-sm btn-o" onclick="alert('Key copied!')">Copy</button></td></tr>
+<tr><td style="font-weight:500">Staging</td><td><span class="mono" style="font-size:.75rem">mz_test_****...c3d1</span></td><td class="mono" style="font-size:.75rem">Feb 3, 2026</td><td class="mono" style="font-size:.75rem">1 hr ago</td><td><span class="tpill tg">Active</span></td><td><button class="btn btn-sm btn-o" onclick="alert('Key copied!')">Copy</button></td></tr>
+<tr><td style="font-weight:500">Development</td><td><span class="mono" style="font-size:.75rem">mz_test_****...e7b9</span></td><td class="mono" style="font-size:.75rem">Feb 20, 2026</td><td class="mono" style="font-size:.75rem">3 days ago</td><td><span class="tpill ty">Test</span></td><td><button class="btn btn-sm btn-o" onclick="alert('Key copied!')">Copy</button></td></tr>
+</tbody></table></div>
+<div style="margin-top:24px"><h3 style="font-size:.9375rem;font-weight:600;margin-bottom:12px">Bring Your Own Keys (BYOK)</h3><p style="color:var(--ts);font-size:.875rem;margin-bottom:16px">Connect your existing provider API keys to use with Mazou's routing and analytics.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px" id="byok-grid">
+</div></div>
+</div>
+
+<!-- Billing -->
+<div id="sp-billing" class="subpage">
+<div class="stat-cards"><div class="scard"><div class="lb">NGN Balance</div><div class="vl" style="color:var(--naira)">&#8358;4,250,000</div><div class="sb">~46 days runway</div></div><div class="scard"><div class="lb">USDT Balance</div><div class="vl">$2,688</div><div class="sb">~30 days runway</div></div><div class="scard"><div class="lb">This Month Spend</div><div class="vl">&#8358;2.85M</div></div><div class="scard"><div class="lb">Daily Burn Rate</div><div class="vl">&#8358;92.4K</div></div></div>
+<div class="tab-bar"><button class="tab-btn active" onclick="billingTab(this,'bill-ngn')">NGN Wallet</button><button class="tab-btn" onclick="billingTab(this,'bill-usdt')">USDT Wallet</button></div>
+<div id="bill-ngn" class="tc active">
+<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div><div style="font-size:.75rem;color:var(--ts);text-transform:uppercase;letter-spacing:.06em">Balance</div><div style="font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--naira)">&#8358;4,250,000</div></div><button class="btn btn-p btn-sm" onclick="showModal('fund-modal')">Fund Wallet</button></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px"><div><div style="font-size:.6875rem;color:var(--ts)">This Month Spend</div><div class="mono" style="font-weight:500">&#8358;2,847,200</div></div><div><div style="font-size:.6875rem;color:var(--ts)">Daily Burn Rate</div><div class="mono" style="font-weight:500">&#8358;92,400</div></div><div><div style="font-size:.6875rem;color:var(--ts)">Runway</div><div class="mono" style="font-weight:500;color:var(--accent)">~46 days</div></div></div></div>
+<div class="panel" style="margin-top:10px"><div class="panel-title">Recent Transactions</div>
+<table class="dtable"><thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Balance</th></tr></thead><tbody>
+<tr><td class="mono" style="font-size:.75rem">Mar 1</td><td>Wallet Funded (Paystack)</td><td style="color:var(--accent);font-family:var(--mono)">+&#8358;2,000,000</td><td class="mono">&#8358;4,250,000</td></tr>
+<tr><td class="mono" style="font-size:.75rem">Feb 28</td><td>Daily Usage - Feb 28</td><td style="color:var(--red);font-family:var(--mono)">-&#8358;94,200</td><td class="mono">&#8358;2,250,000</td></tr>
+<tr><td class="mono" style="font-size:.75rem">Feb 27</td><td>Daily Usage - Feb 27</td><td style="color:var(--red);font-family:var(--mono)">-&#8358;91,800</td><td class="mono">&#8358;2,344,200</td></tr>
+<tr><td class="mono" style="font-size:.75rem">Feb 15</td><td>Wallet Funded (Bank Transfer)</td><td style="color:var(--accent);font-family:var(--mono)">+&#8358;1,500,000</td><td class="mono">&#8358;2,436,000</td></tr>
+</tbody></table></div>
+</div>
+<div id="bill-usdt" class="tc">
+<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div><div style="font-size:.75rem;color:var(--ts);text-transform:uppercase;letter-spacing:.06em">Balance</div><div style="font-family:var(--mono);font-size:1.5rem;font-weight:600">$2,688.00</div></div><button class="btn btn-p btn-sm" onclick="alert('USDT funding coming soon')">Fund Wallet</button></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px"><div><div style="font-size:.6875rem;color:var(--ts)">This Month Spend</div><div class="mono" style="font-weight:500">$1,802</div></div><div><div style="font-size:.6875rem;color:var(--ts)">Daily Burn</div><div class="mono" style="font-weight:500">$58.50</div></div><div><div style="font-size:.6875rem;color:var(--ts)">Runway</div><div class="mono" style="font-weight:500;color:var(--accent)">~46 days</div></div></div></div>
+</div>
+</div>
+
+<!-- Settings -->
+<div id="sp-settings" class="subpage">
+<div class="panel"><div class="panel-title">Organization Settings</div>
+<div style="margin-bottom:16px"><label class="ilabel">Organization Name</label><input class="input" value="Demo Corp" style="max-width:400px"></div>
+<div style="margin-bottom:16px"><label class="ilabel">Billing Email</label><input class="input" value="billing@democorp.com" style="max-width:400px"></div>
+<div style="margin-bottom:16px"><label class="ilabel">Default Monthly Budget</label><select class="input" style="max-width:200px;appearance:auto"><option>&#8358;1,000,000</option><option>&#8358;2,500,000</option><option selected>&#8358;5,000,000</option><option>&#8358;10,000,000</option><option>No limit</option></select></div>
+<button class="btn btn-p btn-sm">Save Changes</button></div>
+<div class="panel" style="margin-top:16px;border-color:rgba(255,77,77,.3)"><div class="panel-title" style="color:var(--red)">Danger Zone</div><p style="font-size:.875rem;color:var(--ts);margin-bottom:12px">Deleting your organization will permanently remove all data including API keys, usage history, and billing records.</p><button class="btn btn-sm" style="background:rgba(255,77,77,.1);color:var(--red);border:1px solid rgba(255,77,77,.3)" onclick="showModal('delete-modal')">Delete Organization</button></div>
+</div>
+
+<!-- Docs -->
+<div id="sp-docs" class="subpage">
+<div class="doc-layout">
+<nav class="doc-side"><a href="javascript:void(0)">Quick Start</a><a href="javascript:void(0)">Authentication</a><a href="javascript:void(0)">Chat Completions</a><a href="javascript:void(0)">Models</a><a href="javascript:void(0)">Streaming</a><a href="javascript:void(0)">Smart Routing</a><a href="javascript:void(0)">API Keys</a><a href="javascript:void(0)">Wallet & Billing</a><a href="javascript:void(0)">Error Handling</a><a href="javascript:void(0)">Rate Limits</a></nav>
+<div class="doc-main">
+<h2>Quick Start</h2>
+<p>Get up and running with Mazou in under 5 minutes. Our API is OpenAI-compatible, so you can use existing SDKs.</p>
+<h3>Python</h3>
+<pre>from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.mazou.ai/v1",
+    api_key="mz_live_your_key_here"
+)
+
+response = client.chat.completions.create(
+    model="gpt-5",
+    messages=[{"role": "user", "content": "Hello!"}]
+)</pre>
+<h3>JavaScript</h3>
+<pre>import OpenAI from "openai";
+
+const client = new OpenAI({
+    baseURL: "https://api.mazou.ai/v1",
+    apiKey: "mz_live_your_key_here"
+});
+
+const response = await client.chat.completions.create({
+    model: "claude-sonnet-4.6",
+    messages: [{ role: "user", content: "Hello!" }]
+});</pre>
+<h3>cURL</h3>
+<pre>curl https://api.mazou.ai/v1/chat/completions \
+  -H "Authorization: Bearer mz_live_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-5","messages":[{"role":"user","content":"Hello!"}]}'</pre>
+
+<h2>Authentication</h2>
+<p>All API requests require a valid API key passed via the <code>Authorization</code> header:</p>
+<pre>Authorization: Bearer mz_live_your_key_here</pre>
+<p>Keys prefixed with <code>mz_live_</code> are production keys that debit your wallet. Keys prefixed with <code>mz_test_</code> are test keys that log usage but skip billing.</p>
+
+<h2>Chat Completions</h2>
+<p>Create a chat completion. This endpoint is fully compatible with the OpenAI Chat Completions API.</p>
+<pre>POST /v1/chat/completions
+
+{
+  "model": "gpt-5",
+  "messages": [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "What is Lagos?"}
+  ],
+  "temperature": 0.7,
+  "max_tokens": 1000,
+  "stream": false
+}</pre>
+<h3>Additional Parameters</h3>
+<table><thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>tag</code></td><td>string</td><td>Label for cost tracking (e.g., "support-bot")</td></tr>
+<tr><td><code>budget</code></td><td>string</td><td>"low", "medium", "high" - influences routing</td></tr>
+<tr><td><code>route</code></td><td>string</td><td>"auto" enables smart routing</td></tr>
+</tbody></table>
+
+<h2>Models</h2>
+<p>List all available models:</p>
+<pre>GET /v1/models
+
+Response:
+{
+  "data": [
+    {"id": "gpt-5", "provider": "openai", "pricing": {...}},
+    {"id": "claude-sonnet-4.6", "provider": "anthropic", ...},
+    {"id": "yarngpt", "provider": "african", "is_african": true, ...}
+  ]
+}</pre>
+
+<h2>Streaming</h2>
+<p>Set <code>"stream": true</code> to receive Server-Sent Events:</p>
+<pre>const stream = await client.chat.completions.create({
+    model: "gpt-5",
+    messages: [{ role: "user", content: "Hello!" }],
+    stream: true
+});
+
+for await (const chunk of stream) {
+    process.stdout.write(chunk.choices[0]?.delta?.content || "");
+}</pre>
+
+<h2>Smart Routing</h2>
+<p>Set <code>model: "auto"</code> to let Mazou pick the optimal model based on your query complexity, language, and budget preference.</p>
+<pre>response = client.chat.completions.create(
+    model="auto",
+    messages=[{"role": "user", "content": "Bawo ni?"}],
+    extra_body={"budget": "low", "tag": "yoruba-chat"}
+)
+# Routes to YarnGPT (Yoruba detected, lower cost)</pre>
+<p>Routing rules can be configured in the dashboard under Smart Routing &rarr; Rules.</p>
+
+<h2>API Keys</h2>
+<pre>GET  /v1/keys           # List all keys
+POST /v1/keys           # Create new key
+DELETE /v1/keys/:id     # Revoke a key</pre>
+
+<h2>Wallet &amp; Billing</h2>
+<pre>GET /v1/wallet          # Get wallet balance
+GET /v1/usage           # Get usage breakdown
+GET /v1/usage?group_by=model&amp;period=30d</pre>
+
+<h2>Error Handling</h2>
+<table><thead><tr><th>Status</th><th>Code</th><th>Description</th></tr></thead><tbody>
+<tr><td>400</td><td>invalid_request</td><td>Missing or invalid parameters</td></tr>
+<tr><td>401</td><td>unauthorized</td><td>Invalid or missing API key</td></tr>
+<tr><td>402</td><td>insufficient_funds</td><td>Wallet balance too low</td></tr>
+<tr><td>429</td><td>rate_limited</td><td>Too many requests</td></tr>
+<tr><td>500</td><td>internal_error</td><td>Server error</td></tr>
+<tr><td>503</td><td>model_unavailable</td><td>Upstream provider down</td></tr>
+</tbody></table>
+
+<h2>Rate Limits</h2>
+<p>Default rate limits per API key:</p>
+<table><thead><tr><th>Tier</th><th>Requests/min</th><th>Tokens/min</th></tr></thead><tbody>
+<tr><td>Free</td><td>60</td><td>100K</td></tr>
+<tr><td>Pro</td><td>600</td><td>1M</td></tr>
+<tr><td>Enterprise</td><td>6,000</td><td>10M</td></tr>
+</tbody></table>
+<p>Rate limit headers are included in every response: <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Reset</code>.</p>
+</div>
+</div>
+</div>
+
+</main>
+</div>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="key-modal" onclick="if(event.target===this)hideModal('key-modal')"><div class="modal"><button class="xbtn" onclick="hideModal('key-modal')">&times;</button><h2>Create New API Key</h2><label class="ilabel">Key Name</label><input class="input" placeholder="e.g., Production"><label class="ilabel">Type</label><select class="input" style="appearance:auto"><option>Live (mz_live_*)</option><option>Test (mz_test_*)</option></select><div style="margin-top:16px"><button class="btn btn-p" onclick="alert('Key created: mz_live_****...x9k2');hideModal('key-modal')">Create Key</button></div></div></div>
+<div class="modal-overlay" id="fund-modal" onclick="if(event.target===this)hideModal('fund-modal')"><div class="modal"><button class="xbtn" onclick="hideModal('fund-modal')">&times;</button><h2>Fund NGN Wallet</h2><label class="ilabel">Amount (NGN)</label><input class="input" placeholder="e.g., 1000000" type="number"><label class="ilabel">Payment Method</label><select class="input" style="appearance:auto"><option>Paystack (Card)</option><option>Bank Transfer</option></select><div style="margin-top:16px"><button class="btn btn-p" onclick="alert('Payment initiated!');hideModal('fund-modal')">Fund Wallet</button></div></div></div>
+<div class="modal-overlay" id="delete-modal" onclick="if(event.target===this)hideModal('delete-modal')"><div class="modal"><button class="xbtn" onclick="hideModal('delete-modal')">&times;</button><h2 style="color:var(--red)">Delete Organization</h2><p style="font-size:.875rem;color:var(--ts);margin-bottom:16px">This action cannot be undone. Type <strong>Demo Corp</strong> to confirm.</p><input class="input" placeholder="Type organization name"><div style="margin-top:16px"><button class="btn btn-sm" style="background:rgba(255,77,77,.15);color:var(--red);border:1px solid rgba(255,77,77,.3)" onclick="alert('Organization deleted (demo)');hideModal('delete-modal')">Delete Forever</button></div></div></div>
+
+<script>
+// ─── DATA ───
+const FEATURES=[{name:"Customer Support Bot",tag:"agent",model:"gpt-5",african:false,calls:"842K",cost:1940000,pct:90,tip:"\u2192 Sonnet 4.6 \u00B7 Save \u20A6890K",act:true},{name:"Transaction Summariser",tag:"feature",model:"claude-sonnet-4.6",african:false,calls:"286K",cost:620000,pct:55,tip:"\u2192 Haiku 4.5 \u00B7 Save \u20A6248K",act:true},{name:"Yoruba Chat Translation",tag:"feature",model:"YarnGPT",african:true,calls:"64K",cost:86400,pct:18,tip:"\u2713 Optimal",act:false},{name:"Fraud Detection Agent",tag:"agent",model:"gpt-5",african:false,calls:"91K",cost:287200,pct:22,tip:"\u2713 Optimal",act:false},{name:"Receipt OCR",tag:"feature",model:"gemini-2.5-pro",african:false,calls:"38K",cost:42000,pct:8,tip:"\u2713 Optimal",act:false},{name:"Hausa Email Classifier",tag:"feature",model:"AfroLM",african:true,calls:"22K",cost:18600,pct:5,tip:"\u2713 Optimal",act:false},{name:"Document Extraction",tag:"feature",model:"gpt-4.1-mini",african:false,calls:"156K",cost:124000,pct:12,tip:"\u2192 Gemini Flash \u00B7 Save \u20A638K",act:true},{name:"Compliance Reviewer",tag:"agent",model:"claude-opus-4.6",african:false,calls:"3.2K",cost:41000,pct:4,tip:"\u2713 Optimal",act:false}];
+const MODELS=[{name:"GPT-5",icon:"OA",color:"#10A37F",spend:2227200,pct:78,calls:"933K",lat:"1.0s"},{name:"Claude Sonnet 4.6",icon:"AN",color:"#D4A274",spend:320000,pct:32,calls:"286K",lat:"0.8s"},{name:"GPT-4.1 Mini",icon:"OA",color:"#10A37F",spend:124000,pct:14,calls:"156K",lat:"0.4s"},{name:"YarnGPT",icon:"AF",color:"#FFB800",spend:86400,pct:12,calls:"64K",lat:"0.8s"},{name:"Gemini 2.5 Pro",icon:"GO",color:"#4285F4",spend:42000,pct:6,calls:"38K",lat:"0.9s"},{name:"Claude Haiku 4.5",icon:"AN",color:"#D4A274",spend:18600,pct:4,calls:"48K",lat:"0.2s"},{name:"InkubaLM",icon:"AF",color:"#FFB800",spend:18600,pct:3,calls:"22K",lat:"0.6s"},{name:"Llama 4 Maverick",icon:"MT",color:"#0668E1",spend:12400,pct:2,calls:"18K",lat:"0.4s"},{name:"DeepSeek V3.2",icon:"DS",color:"#4D6BFE",spend:9800,pct:2,calls:"14K",lat:"0.7s"},{name:"Mistral Large 2",icon:"MI",color:"#F7931A",spend:7200,pct:1,calls:"8K",lat:"0.6s"}];
+const ROUTES=[{time:"2m ago",agent:"Support Bot",action:"routed to",to:"haiku-4.5",from:"gpt-5",reason:"Simple FAQ detected.",saved:"\u20A60.80",tag:"routed"},{time:"4m ago",agent:"Fraud Agent",action:"kept on",to:"gpt-5",from:null,reason:"Complex reasoning required.",saved:null,tag:"optimal"},{time:"6m ago",agent:"Yoruba Chat",action:"routed to",to:"YarnGPT",from:"sonnet-4.6",reason:"Local language detected.",saved:"\u20A61.20",tag:"routed"},{time:"11m ago",agent:"Receipt OCR",action:"fallback to",to:"gpt-4.1-mini",from:"gemini-2.5-pro",reason:"Gemini timed out.",saved:null,tag:"fallback"},{time:"14m ago",agent:"Summariser",action:"batch routed to",to:"haiku-4.5",from:"sonnet-4.6",reason:"48 requests batched.",saved:"\u20A612.40",tag:"routed"},{time:"18m ago",agent:"Hausa Classifier",action:"routed to",to:"AfroLM",from:"gpt-5",reason:"Hausa input detected.",saved:"\u20A62.10",tag:"routed"},{time:"23m ago",agent:"Support Bot",action:"cache hit",to:null,from:null,reason:"Identical query in cache.",saved:"\u20A62.30",tag:"cached"},{time:"31m ago",agent:"Doc Extraction",action:"routed to",to:"gpt-4.1-mini",from:"gpt-5",reason:"Simple document.",saved:"\u20A60.60",tag:"routed"}];
+const OPTS=[{icon:"\uD83D\uDCB0",type:"save",title:"Downgrade Support Bot to Claude Sonnet 4.6",desc:"842K calls/mo using GPT-5 for tier-1 support. Sonnet handles 96% with identical quality.",amount:"\u20A6890K/mo",impact:"high"},{icon:"\uD83D\uDD04",type:"swap",title:"Route Summariser to Haiku 4.5",desc:"72% of inputs under 500 tokens. Haiku matches Sonnet quality at this length.",amount:"\u20A6248K/mo",impact:"high"},{icon:"\uD83D\uDCE6",type:"cache",title:"Enable response caching for Support Bot",desc:"34% of queries are repeated. Caching eliminates redundant API calls.",amount:"\u20A6186K/mo",impact:"medium"},{icon:"\u26A1",type:"batch",title:"Batch Transaction Summariser calls",desc:"Batching 50 at a time reduces per-call overhead by 18%.",amount:"\u20A662K/mo",impact:"medium"},{icon:"\uD83C\uDF0D",type:"swap",title:"Route Hausa tasks to AfroLM",desc:"14K Hausa calls going to GPT-5. AfroLM scores 40% higher at 60% cost.",amount:"\u20A638K/mo",impact:"medium"}];
+const RULES=[{name:"Language Detection",desc:"If input is Yoruba/Hausa/Igbo/Pidgin \u2192 route to YarnGPT or AfroLM",triggers:"1,240/day"},{name:"Simple Query Downgrade",desc:"If Support Bot query < 100 tokens and FAQ pattern \u2192 route to Haiku 4.5",triggers:"680/day"},{name:"Cost Cap",desc:"If feature monthly spend > \u20A6500K \u2192 flag for review",triggers:"2 alerts"},{name:"Latency Fallback",desc:"If primary model > 5s \u2192 fallback to next cheapest model",triggers:"34/day"},{name:"Batch Detection",desc:"If > 10 identical requests within 60s \u2192 batch process",triggers:"89/day"},{name:"Quality Gate",desc:"If routing saves > \u20A61 but quality drops > 5% \u2192 keep original",triggers:"12/day"}];
+const AGENTS=[{name:"Customer Support Bot",status:"live",models:"gpt-5, haiku-4.5",calls:"842K",cost:"\u20A61.94M",trend:"+15%",up:true,tasks:12400,errors:23,uptime:"99.8%"},{name:"Fraud Detection Agent",status:"live",models:"gpt-5",calls:"91K",cost:"\u20A6287K",trend:"-3%",up:false,tasks:2800,errors:2,uptime:"99.99%"},{name:"Onboarding Assistant",status:"live",models:"sonnet-4.6, YarnGPT",calls:"24K",cost:"\u20A668K",trend:"-8%",up:false,tasks:860,errors:5,uptime:"99.7%"},{name:"Compliance Reviewer",status:"idle",models:"claude-opus-4.6",calls:"3.2K",cost:"\u20A641K",trend:"-22%",up:false,tasks:120,errors:0,uptime:"100%"}];
+const CATALOG=[{id:"gpt-5.3-codex",name:"GPT-5.3 Codex",prov:"OpenAI",icon:"OA",cat:"Code",desc:"Most capable agentic coding model.",ctx:"256K",inC:2.00,outC:8.00,af:false},{id:"gpt-5.2",name:"GPT-5.2",prov:"OpenAI",icon:"OA",cat:"General",desc:"State-of-the-art reasoning and vision.",ctx:"256K",inC:2.00,outC:8.00,af:false},{id:"gpt-5",name:"GPT-5",prov:"OpenAI",icon:"OA",cat:"General",desc:"Default ChatGPT model. Excellent all-round performance.",ctx:"128K",inC:1.50,outC:6.00,af:false},{id:"o3-pro",name:"o3-pro",prov:"OpenAI",icon:"OA",cat:"Reasoning",desc:"Extended compute for complex STEM.",ctx:"200K",inC:20.00,outC:80.00,af:false},{id:"o3-mini",name:"o3-mini",prov:"OpenAI",icon:"OA",cat:"Reasoning",desc:"Small reasoning model for science and math.",ctx:"200K",inC:1.10,outC:4.40,af:false},{id:"gpt-4.1",name:"GPT-4.1",prov:"OpenAI",icon:"OA",cat:"Code",desc:"Coding and instruction following specialist.",ctx:"1M",inC:2.00,outC:8.00,af:false},{id:"gpt-4.1-mini",name:"GPT-4.1 Mini",prov:"OpenAI",icon:"OA",cat:"General",desc:"Fast and efficient for high-volume tasks.",ctx:"1M",inC:0.40,outC:1.60,af:false},{id:"claude-opus-4.6",name:"Claude Opus 4.6",prov:"Anthropic",icon:"AN",cat:"General",desc:"Most capable Claude. Exceptional coding and reasoning.",ctx:"200K",inC:15.00,outC:75.00,af:false},{id:"claude-sonnet-4.6",name:"Claude Sonnet 4.6",prov:"Anthropic",icon:"AN",cat:"General",desc:"Fast and capable. Default for most users.",ctx:"200K",inC:3.00,outC:15.00,af:false},{id:"claude-haiku-4.5",name:"Claude Haiku 4.5",prov:"Anthropic",icon:"AN",cat:"General",desc:"Fastest, cheapest Claude for high-volume work.",ctx:"200K",inC:0.80,outC:4.00,af:false},{id:"gemini-2.5-pro",name:"Gemini 2.5 Pro",prov:"Google",icon:"GO",cat:"Reasoning",desc:"Maximum quality thinking model.",ctx:"1M",inC:1.25,outC:10.00,af:false},{id:"gemini-2.5-flash",name:"Gemini 2.5 Flash",prov:"Google",icon:"GO",cat:"General",desc:"Fastest multimodal Gemini with reasoning.",ctx:"1M",inC:0.15,outC:0.60,af:false},{id:"llama-4-scout",name:"Llama 4 Scout",prov:"Meta",icon:"MT",cat:"General",desc:"17B active params, 10M context. Open-weight.",ctx:"10M",inC:0.18,outC:0.35,af:false},{id:"llama-4-maverick",name:"Llama 4 Maverick",prov:"Meta",icon:"MT",cat:"General",desc:"128 experts, beats GPT-4o. Open-weight.",ctx:"1M",inC:0.25,outC:0.65,af:false},{id:"deepseek-v3.2",name:"DeepSeek V3.2",prov:"DeepSeek",icon:"DS",cat:"General",desc:"Latest general-purpose. Optimized for speed.",ctx:"128K",inC:0.27,outC:1.10,af:false},{id:"deepseek-r1",name:"DeepSeek R1",prov:"DeepSeek",icon:"DS",cat:"Reasoning",desc:"o1-level reasoning. Full chain of thought.",ctx:"64K",inC:0.55,outC:2.19,af:false},{id:"mistral-large-2",name:"Mistral Large 2",prov:"Mistral",icon:"MI",cat:"General",desc:"Flagship multilingual model.",ctx:"128K",inC:2.00,outC:6.00,af:false},{id:"codestral-2",name:"Codestral 2",prov:"Mistral",icon:"MI",cat:"Code",desc:"Code generation specialist.",ctx:"256K",inC:0.30,outC:0.90,af:false},{id:"minimax-m2.5",name:"MiniMax M2.5",prov:"MiniMax",icon:"MM",cat:"General",desc:"Frontier quality at 95% lower cost.",ctx:"1M",inC:0.50,outC:2.00,af:false},{id:"kimi-k2.5",name:"Kimi K2.5",prov:"Moonshot",icon:"KM",cat:"General",desc:"1T params, Agent Swarm for 100 agents.",ctx:"128K",inC:0.60,outC:2.50,af:false},{id:"grok-4",name:"Grok 4",prov:"xAI",icon:"XA",cat:"Reasoning",desc:"Advanced reasoning and visual processing.",ctx:"256K",inC:3.00,outC:15.00,af:false},{id:"command-a",name:"Command A",prov:"Cohere",icon:"CO",cat:"General",desc:"Enterprise RAG and agentic. 23 languages.",ctx:"256K",inC:2.50,outC:10.00,af:false},{id:"inkubalm",name:"InkubaLM",prov:"Lelapa AI",icon:"AF",cat:"NLP",desc:"Africa's first multilingual LLM. 5 African languages.",ctx:"4K",inC:0.05,outC:0.10,af:true},{id:"yarngpt",name:"YarnGPT",prov:"Independent",icon:"AF",cat:"Speech",desc:"Nigerian TTS with 11 voices.",ctx:"4K",inC:0.03,outC:0.08,af:true},{id:"afrolm",name:"AfroLM",prov:"Community",icon:"AF",cat:"NLP",desc:"25 African languages. NER and classification.",ctx:"2K",inC:0.04,outC:0.08,af:true},{id:"vulavula",name:"Vulavula",prov:"Lelapa AI",icon:"AF",cat:"NLP",desc:"NLP-as-a-service for Global South.",ctx:"8K",inC:0.06,outC:0.12,af:true},{id:"khaya-ai",name:"Khaya AI",prov:"GhanaNLP",icon:"AF",cat:"Translation",desc:"West African translation. Beats Google Translate on Yoruba.",ctx:"4K",inC:0.04,outC:0.08,af:true},{id:"lesan-ai",name:"Lesan AI",prov:"Lesan",icon:"AF",cat:"Translation",desc:"Ethiopian/Eritrean languages + Ethiopic OCR.",ctx:"4K",inC:0.04,outC:0.08,af:true},{id:"sunflower",name:"Sunflower",prov:"Sunbird AI",icon:"AF",cat:"NLP",desc:"31 Ugandan languages. SOTA translation.",ctx:"4K",inC:0.04,outC:0.08,af:true},{id:"afriberta",name:"AfriBERTa",prov:"Masakhane",icon:"AF",cat:"NLP",desc:"11 African languages. Community-built.",ctx:"2K",inC:0.02,outC:0.04,af:true},{id:"ulizallama",name:"UlizaLlama",prov:"Jacaranda Health",icon:"AF",cat:"Healthcare",desc:"Maternal health LLM for East Africa.",ctx:"4K",inC:0.05,outC:0.10,af:true},{id:"ubenwa",name:"Ubenwa",prov:"Ubenwa Health",icon:"AF",cat:"Healthcare",desc:"Infant cry analysis for birth asphyxia.",ctx:"N/A",inC:0.10,outC:0.20,af:true},{id:"apollo-agri",name:"Apollo Agriculture",prov:"Apollo",icon:"AF",cat:"Agriculture",desc:"ML + satellite for 350K+ farmers.",ctx:"N/A",inC:0.08,outC:0.15,af:true},{id:"black-swan",name:"Black Swan",prov:"Black Swan",icon:"AF",cat:"Fintech",desc:"Credit scoring for Africa's unbanked.",ctx:"N/A",inC:0.10,outC:0.20,af:true},{id:"periculum",name:"Periculum",prov:"Periculum",icon:"AF",cat:"Fintech",desc:"Fraud prevention and identity verification.",ctx:"N/A",inC:0.08,outC:0.15,af:true},{id:"cerebrium",name:"Cerebrium",prov:"Cerebrium",icon:"AF",cat:"Infrastructure",desc:"Serverless GPU for AI workloads.",ctx:"N/A",inC:0.00,outC:0.00,af:true}];
+const BYOK_PROVIDERS=[{name:"OpenAI",icon:"OA",color:"#10A37F",connected:true},{name:"Anthropic",icon:"AN",color:"#D4A274",connected:false},{name:"Google",icon:"GO",color:"#4285F4",connected:true},{name:"Mistral",icon:"MI",color:"#F7931A",connected:false},{name:"DeepSeek",icon:"DS",color:"#4D6BFE",connected:false}];
+const SPEND_DATA=[98000,112000,105000,134000,98600,127000,118000,142000,108000,131000,131400,118200,124800,136000];
+
+// ─── HELPERS ───
+function fmtN(n){if(n>=1e6)return"\u20A6"+(n/1e6).toFixed(2)+"M";if(n>=1e3)return"\u20A6"+(n/1e3).toFixed(0)+"K";return"\u20A6"+n.toLocaleString()}
+const tagColors={routed:{bg:"rgba(0,210,106,.08)",color:"#00D26A",label:"Smart Routed"},optimal:{bg:"rgba(255,184,0,.08)",color:"#FFB800",label:"Optimal"},cached:{bg:"rgba(168,85,247,.08)",color:"#A855F7",label:"Cache Hit"},fallback:{bg:"rgba(77,138,255,.08)",color:"#4D8AFF",label:"Fallback"}};
+const provColors={OA:"#10A37F",AN:"#D4A274",GO:"#4285F4",MT:"#0668E1",DS:"#4D6BFE",MI:"#F7931A",MM:"#00BFA5",KM:"#A855F7",XA:"#4D8AFF",CO:"#A855F7",AF:"#FFB800"};
+
+// ─── NAVIGATION ───
+let currentPage="dashboard";
+const NAV=[{label:"Overview",items:[{id:"dashboard",icon:"\u25A0",name:"Dashboard"},{id:"usage",icon:"\u2197",name:"Usage & Spend"},{id:"routing",icon:"\u21AD",name:"Smart Routing",badge:"Live",bclass:"live"}]},{label:"AI Assets",items:[{id:"agents",icon:"\u2699",name:"Agents",badge:"4"},{id:"models",icon:"\u25A3",name:"Active Models",badge:"10"},{id:"catalog",icon:"\u25CE",name:"Model Catalog",badge:"45"}]},{label:"Optimise",items:[{id:"recommendations",icon:"\u2605",name:"Recommendations",badge:"5"},{id:"keys",icon:"\u26BF",name:"API Keys"}]},{label:"Billing",items:[{id:"billing",icon:"\u20A6",name:"Wallets & Billing"}]},{label:"Explore",items:[{id:"docs",icon:"\u2261",name:"Documentation"}]},{label:"",items:[{id:"settings",icon:"\u2699",name:"Settings"}]}];
+const TITLES={dashboard:"Dashboard",usage:"Usage & Spend",routing:"Smart Routing",agents:"Agents",models:"Active Models",catalog:"Model Catalog",recommendations:"Recommendations",keys:"API Keys",billing:"Wallets & Billing",settings:"Settings",docs:"Documentation"};
+
+function buildSidebar(){
+  const sb=document.getElementById("sidebar");
+  let h='<div class="logo-area" onclick="goLanding()">mazou<span>.</span></div>';
+  NAV.forEach(g=>{
+    h+='<div class="nav-group">';
+    if(g.label)h+='<div class="nav-group-label">'+g.label+'</div>';
+    g.items.forEach(it=>{
+      const ac=it.id===currentPage?" active":"";
+      const bdg=it.badge?'<span class="nav-badge'+(it.bclass?" "+it.bclass:"")+'">'+it.badge+'</span>':"";
+      h+='<div class="nav-item'+ac+'" onclick="goPage(\''+it.id+'\')">'+it.icon+" "+it.name+bdg+'</div>';
+    });
+    h+='</div>';
+  });
+  h+='<div style="flex:1"></div><div class="nav-item" onclick="goLanding()">\u2190 Back to site</div>';
+  sb.innerHTML=h;
+}
+
+function goPage(id){
+  currentPage=id;
+  document.getElementById("landing").classList.remove("active");
+  document.getElementById("app").classList.add("active");
+  document.querySelectorAll(".subpage").forEach(el=>el.classList.remove("active"));
+  const sp=document.getElementById("sp-"+id);
+  if(sp)sp.classList.add("active");
+  document.getElementById("page-title").textContent=TITLES[id]||id;
+  buildSidebar();
+  window.scrollTo(0,0);
+  if(id==="dashboard")drawChart();
+}
+function goLanding(){
+  document.getElementById("app").classList.remove("active");
+  document.getElementById("landing").classList.add("active");
+  window.scrollTo(0,0);
+}
+function showModal(id){document.getElementById(id).classList.add("show")}
+function hideModal(id){document.getElementById(id).classList.remove("show")}
+
+// Tab helpers
+function usageTab(btn,id){btn.parentElement.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");["usage-features","usage-agents","usage-models"].forEach(x=>document.getElementById(x).classList.toggle("active",x===id))}
+function routeTab(btn,id){btn.parentElement.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");["route-feed","route-rules"].forEach(x=>document.getElementById(x).classList.toggle("active",x===id))}
+function billingTab(btn,id){btn.parentElement.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");["bill-ngn","bill-usdt"].forEach(x=>document.getElementById(x).classList.toggle("active",x===id))}
+
+// ─── RENDER: Dashboard ───
+function renderFeaturePanel(){
+  let h='<table class="ftable"><thead><tr><th>Feature</th><th>Model</th><th>Calls</th><th>Cost</th><th style="width:80px">Spend</th><th style="text-align:right">Action</th></tr></thead><tbody>';
+  FEATURES.forEach(f=>{
+    const bc=f.pct>70?"#FF4D4D":f.pct>40?"#FFB800":"#00D26A";
+    h+='<tr><td><span style="font-weight:500">'+f.name+'</span><span style="font-family:var(--mono);font-size:.625rem;color:var(--td);background:var(--bg);padding:2px 6px;border-radius:3px;margin-left:6px">'+f.tag+'</span></td>';
+    h+='<td><span class="mono" style="font-size:.75rem;color:'+(f.african?"var(--naira)":"var(--ts)")+'">'+f.model+'</span></td>';
+    h+='<td class="mono" style="color:var(--ts)">'+f.calls+'</td>';
+    h+='<td style="font-family:var(--mono);font-weight:500">'+fmtN(f.cost)+'</td>';
+    h+='<td><div class="bar-fill"><div class="bar-fill-inner" style="width:'+f.pct+'%;background:'+bc+'"></div></div></td>';
+    h+='<td style="text-align:right">'+(f.act?'<span style="font-size:.6875rem;font-weight:500;padding:4px 10px;border-radius:999px;background:rgba(0,210,106,.1);color:var(--accent);border:1px solid rgba(0,210,106,.2)">'+f.tip+'</span>':'<span style="font-size:.6875rem;color:var(--td)">'+f.tip+'</span>')+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  document.getElementById("feat-panel").innerHTML=h;
+}
+function renderModelBars(){
+  let h='';
+  MODELS.forEach(m=>{
+    h+='<div class="mbar"><div class="mi" style="background:'+m.color+'20;color:'+m.color+'">'+m.icon+'</div><div class="info"><div class="info-top"><span class="mn">'+m.name+'</span><span class="ms">'+fmtN(m.spend)+'</span></div><div class="bar-fill"><div class="bar-fill-inner" style="width:'+m.pct+'%;background:'+m.color+'"></div></div></div></div>';
+  });
+  document.getElementById("model-bars").innerHTML=h;
+}
+function renderRouteLog(targetId){
+  const el=document.getElementById(targetId);
+  let h='';
+  ROUTES.forEach(r=>{
+    const t=tagColors[r.tag];
+    h+='<div class="route-entry"><div class="route-time">'+r.time+'</div><div class="route-body"><strong>'+r.agent+'</strong> \u2014 '+r.action+' '+(r.to?'<span class="rto">'+r.to+'</span>':'')+(r.from?' instead of <span class="rfrom">'+r.from+'</span>':'')+'. '+r.reason+' '+(r.saved?'<span class="rsaved">Saved '+r.saved+'</span>':'')+'<br><span class="route-tag" style="background:'+t.bg+';color:'+t.color+'">'+t.label+'</span></div></div>';
+  });
+  el.innerHTML=h;
+}
+function renderOptCards(){
+  const el=document.getElementById("opt-cards");
+  const bgs={save:"rgba(0,210,106,.08)",swap:"rgba(255,184,0,.08)",cache:"rgba(77,138,255,.08)",batch:"rgba(168,85,247,.08)"};
+  let h='';
+  OPTS.forEach(o=>{
+    h+='<div class="ocard"><div class="oi" style="background:'+(bgs[o.type]||bgs.save)+'">'+o.icon+'</div><div style="flex:1"><div class="ot">'+o.title+'</div><div class="od">'+o.desc+'</div></div><div class="oa">'+o.amount+'</div></div>';
+  });
+  el.innerHTML=h;
+}
+
+// ─── RENDER: Usage ───
+function renderUsagePage(){
+  // Chart
+  let h='';
+  MODELS.slice(0,6).forEach(m=>{
+    h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="mi" style="background:'+m.color+'20;color:'+m.color+';width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.625rem;font-weight:700;flex-shrink:0">'+m.icon+'</div><div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:.8125rem;margin-bottom:4px"><span>'+m.name+'</span><span class="mono" style="color:var(--ts)">'+fmtN(m.spend)+'</span></div><div class="bar-fill" style="height:8px"><div class="bar-fill-inner" style="width:'+m.pct+'%;background:'+m.color+'"></div></div></div></div>';
+  });
+  document.getElementById("usage-chart").innerHTML=h;
+  // Tables
+  let ft='<table class="dtable"><thead><tr><th>Feature</th><th>Model</th><th>Calls</th><th>Spend</th></tr></thead><tbody>';
+  FEATURES.forEach(f=>{ft+='<tr><td style="font-weight:500">'+f.name+'</td><td class="mono" style="font-size:.75rem">'+f.model+'</td><td class="mono">'+f.calls+'</td><td class="mono" style="font-weight:500">'+fmtN(f.cost)+'</td></tr>'});
+  ft+='</tbody></table>';
+  document.getElementById("usage-feat-table").innerHTML=ft;
+  let at='<table class="dtable"><thead><tr><th>Agent</th><th>Models</th><th>Calls</th><th>Cost</th><th>Status</th></tr></thead><tbody>';
+  AGENTS.forEach(a=>{at+='<tr><td style="font-weight:500">'+a.name+'</td><td class="mono" style="font-size:.75rem">'+a.models+'</td><td class="mono">'+a.calls+'</td><td class="mono" style="font-weight:500">'+a.cost+'</td><td><span class="tpill '+(a.status==="live"?"tg":"ty")+'">'+a.status+'</span></td></tr>'});
+  at+='</tbody></table>';
+  document.getElementById("usage-agent-table").innerHTML=at;
+  let mt='<table class="dtable"><thead><tr><th>Model</th><th>Calls</th><th>Latency</th><th>Spend</th><th>Usage</th></tr></thead><tbody>';
+  MODELS.forEach(m=>{mt+='<tr><td><span style="display:inline-flex;align-items:center;gap:8px"><span class="mi" style="background:'+m.color+'20;color:'+m.color+';width:24px;height:24px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:.5625rem;font-weight:700">'+m.icon+'</span><span style="font-weight:500">'+m.name+'</span></span></td><td class="mono">'+m.calls+'</td><td class="mono">'+m.lat+'</td><td class="mono" style="font-weight:500">'+fmtN(m.spend)+'</td><td style="width:100px"><div class="bar-fill"><div class="bar-fill-inner" style="width:'+m.pct+'%;background:'+m.color+'"></div></div></td></tr>'});
+  mt+='</tbody></table>';
+  document.getElementById("usage-model-table").innerHTML=mt;
+}
+
+// ─── RENDER: Routing Rules ───
+function renderRules(){
+  let h='';
+  RULES.forEach(r=>{
+    h+='<div style="padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;display:flex;align-items:center;gap:12px"><div class="toggle on" onclick="this.classList.toggle(\'on\')"></div><div style="flex:1"><div style="font-size:.8125rem;font-weight:600">'+r.name+'</div><div style="font-size:.75rem;color:var(--td)">'+r.desc+'</div></div><div style="font-family:var(--mono);font-size:.6875rem;color:var(--ts)">'+r.triggers+'</div></div>';
+  });
+  document.getElementById("rules-list").innerHTML=h;
+}
+
+// ─── RENDER: Agents ───
+function renderAgents(){
+  let h='';
+  AGENTS.forEach(a=>{
+    const sc=a.status==="live"?"tg":"ty";
+    h+='<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-weight:600">'+a.name+'</div><span class="tpill '+sc+'">'+a.status+'</span></div>';
+    h+='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:.75rem">';
+    h+='<div><span style="color:var(--ts)">Models:</span> <span class="mono">'+a.models+'</span></div>';
+    h+='<div><span style="color:var(--ts)">Calls:</span> <span class="mono">'+a.calls+'</span></div>';
+    h+='<div><span style="color:var(--ts)">Cost:</span> <span class="mono" style="font-weight:500">'+a.cost+'</span></div>';
+    h+='<div><span style="color:var(--ts)">Trend:</span> <span style="color:'+(a.up?"var(--red)":"var(--accent)")+'">'+a.trend+'</span></div>';
+    h+='<div><span style="color:var(--ts)">Tasks (30d):</span> <span class="mono">'+a.tasks.toLocaleString()+'</span></div>';
+    h+='<div><span style="color:var(--ts)">Errors:</span> <span class="mono">'+a.errors+'</span></div>';
+    h+='<div><span style="color:var(--ts)">Uptime:</span> <span class="mono" style="color:var(--accent)">'+a.uptime+'</span></div>';
+    h+='</div></div>';
+  });
+  document.getElementById("agents-grid").innerHTML=h;
+}
+
+// ─── RENDER: Active Models Table ───
+function renderModelsTable(){
+  let h='';
+  MODELS.forEach(m=>{
+    h+='<tr><td><span style="display:inline-flex;align-items:center;gap:8px"><span class="mi" style="background:'+m.color+'20;color:'+m.color+';width:24px;height:24px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:.5625rem;font-weight:700">'+m.icon+'</span><span style="font-weight:500">'+m.name+'</span></span></td><td class="mono" style="font-size:.75rem;color:var(--ts)">'+m.icon+'</td><td class="mono">'+m.calls+'</td><td class="mono">'+m.lat+'</td><td class="mono" style="font-weight:500">'+fmtN(m.spend)+'</td><td style="width:80px"><div class="bar-fill"><div class="bar-fill-inner" style="width:'+m.pct+'%;background:'+m.color+'"></div></div></td></tr>';
+  });
+  document.getElementById("models-tbody").innerHTML=h;
+}
+
+// ─── RENDER: Catalog ───
+let catalogRegion="all";
+function catalogFilter(btn,region){
+  btn.parentElement.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  catalogRegion=region;
+  renderCatalog();
+}
+function renderCatalog(){
+  const search=(document.getElementById("catalog-search").value||"").toLowerCase();
+  let filtered=CATALOG;
+  if(catalogRegion==="global")filtered=filtered.filter(m=>!m.af);
+  if(catalogRegion==="african")filtered=filtered.filter(m=>m.af);
+  if(search)filtered=filtered.filter(m=>m.name.toLowerCase().includes(search)||m.prov.toLowerCase().includes(search)||m.cat.toLowerCase().includes(search));
+  let h='';
+  filtered.forEach(m=>{
+    const c=provColors[m.icon]||"#888";
+    h+='<div class="panel" style="cursor:pointer"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="mi" style="background:'+c+'20;color:'+c+';width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.6875rem;font-weight:700">'+m.icon+'</div><div><div style="font-weight:600;font-size:.875rem">'+m.name+'</div><div style="font-size:.6875rem;color:var(--ts)">'+m.prov+' &middot; '+m.cat+'</div></div>'+(m.af?'<span class="tpill ty" style="margin-left:auto">African</span>':'')+'</div>';
+    h+='<p style="font-size:.75rem;color:var(--td);margin-bottom:8px;line-height:1.5">'+m.desc+'</p>';
+    h+='<div style="display:flex;gap:16px;font-size:.6875rem;color:var(--ts)"><span>Context: <span class="mono">'+m.ctx+'</span></span><span>In: <span class="mono" style="color:var(--accent)">$'+m.inC+'/M</span></span><span>Out: <span class="mono" style="color:var(--accent)">$'+m.outC+'/M</span></span></div></div>';
+  });
+  document.getElementById("catalog-grid").innerHTML=h||'<p style="color:var(--ts);text-align:center;grid-column:1/-1;padding:40px">No models found.</p>';
+}
+
+// ─── RENDER: Recommendations ───
+function renderRecs(){
+  let h='';
+  OPTS.forEach((o,i)=>{
+    const dots=o.impact==="high"?3:2;
+    h+='<div style="padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;border-left:3px solid '+(o.impact==="high"?"var(--accent)":"var(--naira)")+'">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div style="display:flex;gap:10px;align-items:center"><span style="font-size:1.25rem">'+o.icon+'</span><div><div style="font-weight:600">'+o.title+'</div><div style="font-size:.75rem;color:var(--td);margin-top:2px">'+o.desc+'</div></div></div><div style="text-align:right"><div style="font-family:var(--mono);font-size:1rem;font-weight:600;color:var(--accent)">'+o.amount+'</div><div class="impact-bar" style="justify-content:flex-end;margin-top:4px">';
+    for(let j=0;j<3;j++)h+='<div class="impact-dot'+(j<dots?" on":"")+'"></div>';
+    h+='</div></div></div>';
+    h+='<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-p btn-sm" onclick="alert(\'Optimization applied (demo)\')">Apply</button><button class="btn btn-o btn-sm">Dismiss</button></div></div>';
+  });
+  document.getElementById("recs-list").innerHTML=h;
+}
+
+// ─── RENDER: BYOK ───
+function renderBYOK(){
+  let h='';
+  BYOK_PROVIDERS.forEach(p=>{
+    h+='<div class="panel" style="display:flex;align-items:center;gap:10px"><div class="mi" style="background:'+p.color+'20;color:'+p.color+';width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.6875rem;font-weight:700">'+p.icon+'</div><div style="flex:1"><div style="font-weight:500;font-size:.875rem">'+p.name+'</div></div>'+(p.connected?'<span class="tpill tg">Connected</span>':'<button class="btn btn-o btn-sm" onclick="alert(\'Connect '+p.name+' (demo)\')">Connect</button>')+'</div>';
+  });
+  document.getElementById("byok-grid").innerHTML=h;
+}
+
+// ─── CHART ───
+function drawChart(){
+  const canvas=document.getElementById("spend-chart");
+  if(!canvas)return;
+  const ctx=canvas.getContext("2d");
+  const W=canvas.width=canvas.offsetWidth*2;const H=canvas.height=240;
+  ctx.clearRect(0,0,W,H);
+  const max=Math.max(...SPEND_DATA)*1.1,min=Math.min(...SPEND_DATA)*0.9;
+  const pts=SPEND_DATA.map((v,i)=>({x:40+i*(W-80)/(SPEND_DATA.length-1),y:H-20-(v-min)/(max-min)*(H-40)}));
+  ctx.strokeStyle="#1F1F2E";ctx.lineWidth=1;ctx.setLineDash([6,4]);
+  for(let i=0;i<4;i++){const y=20+i*(H-40)/3;ctx.beginPath();ctx.moveTo(40,y);ctx.lineTo(W-40,y);ctx.stroke()}
+  ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(pts[0].x,H-20);pts.forEach(p=>ctx.lineTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,H-20);ctx.closePath();
+  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,"rgba(0,210,106,.1)");grad.addColorStop(1,"rgba(0,210,106,.01)");
+  ctx.fillStyle=grad;ctx.fill();
+  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle="rgba(0,210,106,.6)";ctx.lineWidth=3;ctx.stroke();
+  pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fillStyle="#00D26A";ctx.fill()});
+}
+
+// ─── CURRENCY ROTATION ───
+const currencies=["Pay in Naira.","Pay in Cedis.","Pay in Rand.","Pay in KES.","Pay in RWF.","Pay in Birr.","Pay in Local Currency."];
+let ci=0;
+setInterval(()=>{const el=document.getElementById("currency-text");if(!el)return;el.style.opacity="0";el.style.transform="translateY(-10px)";setTimeout(()=>{ci=(ci+1)%currencies.length;el.textContent=currencies[ci];el.style.opacity="1";el.style.transform="translateY(0)"},300)},2500);
+
+// ─── FADE IN ───
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("visible")}),{threshold:0.1,rootMargin:"0px 0px -50px 0px"});
+document.querySelectorAll(".fade-in").forEach(el=>obs.observe(el));
+
+// ─── INIT ───
+buildSidebar();
+renderFeaturePanel();
+renderModelBars();
+renderRouteLog("route-log");
+renderRouteLog("routing-log");
+renderOptCards();
+renderUsagePage();
+renderRules();
+renderAgents();
+renderModelsTable();
+renderCatalog();
+renderRecs();
+renderBYOK();
+setTimeout(drawChart,100);
+window.addEventListener("resize",drawChart);
+</script>
+</body>
+</html>

@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mazu Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #09090B;
+  --sidebar-bg: #0C0C0F;
+  --surface: #111114;
+  --surface-2: #161619;
+  --surface-3: #1C1C20;
+  --border: #1E1E24;
+  --border-light: #2A2A32;
+  --text: #E8E8ED;
+  --text-secondary: #A0A0B4;
+  --text-dim: #66667A;
+  --accent: #00D26A;
+  --accent-muted: #00A854;
+  --accent-bg: rgba(0, 210, 106, 0.08);
+  --accent-bg-strong: rgba(0, 210, 106, 0.15);
+  --naira: #FFB800;
+  --naira-bg: rgba(255, 184, 0, 0.08);
+  --naira-bg-strong: rgba(255, 184, 0, 0.15);
+  --red: #FF4D4D;
+  --red-bg: rgba(255, 77, 77, 0.08);
+  --blue: #4D8AFF;
+  --blue-bg: rgba(77, 138, 255, 0.08);
+  --purple: #A855F7;
+  --purple-bg: rgba(168, 85, 247, 0.08);
+  --teal: #2DD4BF;
+  --teal-bg: rgba(45, 212, 191, 0.08);
+  --teal-bg-strong: rgba(45, 212, 191, 0.15);
+  --coinbase: #0052FF;
+  --stripe-purple: #635BFF;
+  --font: 'DM Sans', sans-serif;
+  --font-display: 'Fraunces', serif;
+  --mono: 'JetBrains Mono', monospace;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --sidebar-width: 240px;
+}
+
+html, body { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  display: flex;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  font-size: 13px;
+}
+
+/* ---- SCROLLBAR ---- */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 10px; }
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 0;
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.sidebar-logo {
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  color: #000;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+}
+
+.logo-text span { color: var(--accent); }
+
+.sidebar-section {
+  padding: 1rem 0.75rem;
+}
+
+.sidebar-section-label {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  padding: 0 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  position: relative;
+}
+
+.sidebar-item:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.sidebar-item.active {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.sidebar-item .icon {
+  width: 18px;
+  text-align: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.sidebar-item .badge-count {
+  margin-left: auto;
+  background: var(--accent-bg-strong);
+  color: var(--accent);
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 0.125rem 0.375rem;
+  border-radius: 100px;
+  font-family: var(--mono);
+}
+
+.sidebar-item .badge-count.warn {
+  background: var(--naira-bg-strong);
+  color: var(--naira);
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.25rem 0.75rem;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 1rem 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.sidebar-org {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem;
+}
+
+.org-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.org-info .name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.org-info .plan {
+  font-size: 0.6875rem;
+  color: var(--text-dim);
+}
+
+/* ---- MAIN ---- */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- TOPBAR ---- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.topbar-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.topbar-period {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.3125rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.topbar-period:hover { border-color: var(--border-light); }
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topbar-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-family: var(--font);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: all 0.15s;
+}
+
+.topbar-btn:hover {
+  border-color: var(--border-light);
+  color: var(--text);
+}
+
+.topbar-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+  font-weight: 600;
+}
+
+.topbar-btn.primary:hover { background: #00E878; }
+
+/* ---- CONTENT ---- */
+.content {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+/* ---- ALERT BANNER ---- */
+.alert-banner {
+  background: var(--accent-bg);
+  border: 1px solid rgba(0, 210, 106, 0.2);
+  border-radius: var(--radius);
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.5s 0.2s ease both;
+}
+
+.alert-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.alert-icon {
+  font-size: 1.125rem;
+}
+
+.alert-text {
+  font-size: 0.8125rem;
+}
+
+.alert-text strong {
+  color: var(--accent);
+}
+
+.alert-action {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.alert-action:hover { background: #00E878; }
+
+/* ---- STAT CARDS ---- */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.125rem;
+  animation: fadeIn 0.5s ease both;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.05s; }
+.stat-card:nth-child(2) { animation-delay: 0.1s; }
+.stat-card:nth-child(3) { animation-delay: 0.15s; }
+.stat-card:nth-child(4) { animation-delay: 0.2s; }
+.stat-card:nth-child(5) { animation-delay: 0.25s; }
+
+.stat-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value.green { color: var(--accent); }
+.stat-value.gold { color: var(--naira); }
+.stat-value.red { color: var(--red); }
+
+.stat-change {
+  font-size: 0.6875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat-change.up { color: var(--accent); }
+.stat-change.down { color: var(--red); }
+.stat-change.neutral { color: var(--text-dim); }
+
+/* ---- GRID LAYOUT ---- */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.grid-3-2 {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* ---- PANELS ---- */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  animation: fadeIn 0.5s 0.3s ease both;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.125rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panel-title .icon { color: var(--text-dim); }
+
+.panel-tabs {
+  display: flex;
+  gap: 0;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+
+.panel-tab {
+  font-size: 0.6875rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 4px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+
+.panel-tab.active {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.panel-tab:hover:not(.active) { color: var(--text-secondary); }
+
+.panel-body {
+  padding: 1rem 1.125rem;
+}
+
+/* ---- SPEND BY FEATURE TABLE ---- */
+.feature-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.feature-table th {
+  text-align: left;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  padding: 0 0 0.75rem 0;
+  font-weight: 600;
+}
+
+.feature-table th:last-child { text-align: right; }
+
+.feature-table td {
+  padding: 0.625rem 0;
+  border-top: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.feature-name {
+  font-weight: 500;
+  font-size: 0.8125rem;
+}
+
+.feature-tag {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  color: var(--text-dim);
+  background: var(--bg);
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  margin-left: 0.375rem;
+}
+
+.feature-model {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.feature-model.african {
+  color: var(--naira);
+}
+
+.feature-calls {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.feature-cost {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.feature-bar-cell { width: 120px; }
+
+.feature-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: var(--bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.feature-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-bar.high { background: var(--red); }
+.feature-bar.mid { background: var(--naira); }
+.feature-bar.low { background: var(--accent); }
+.feature-bar.minimal { background: var(--blue); }
+
+.feature-savings {
+  text-align: right;
+}
+
+.savings-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.savings-chip.actionable {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.savings-chip.actionable:hover {
+  background: var(--accent-bg-strong);
+}
+
+.savings-chip.optimal {
+  color: var(--text-dim);
+}
+
+/* ---- MODEL USAGE CHART ---- */
+.model-usage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.model-usage-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.model-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.model-icon.openai { background: #10A37F20; color: #10A37F; }
+.model-icon.anthropic { background: #D4A27420; color: #D4A274; }
+.model-icon.google { background: #4285F420; color: #4285F4; }
+.model-icon.mistral { background: #FF720020; color: #FF7200; }
+.model-icon.african { background: var(--naira-bg-strong); color: var(--naira); }
+.model-icon.meta { background: #0668E120; color: #0668E1; }
+
+.model-info { flex: 1; min-width: 0; }
+
+.model-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.model-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.model-spend {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.model-bar-wrap {
+  width: 100%;
+  height: 4px;
+  background: var(--bg);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.model-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.model-bar.c-green { background: #10A37F; }
+.model-bar.c-tan { background: #D4A274; }
+.model-bar.c-blue { background: #4285F4; }
+.model-bar.c-orange { background: #FF7200; }
+.model-bar.c-gold { background: var(--naira); }
+.model-bar.c-meta { background: #0668E1; }
+
+/* ---- ROUTING LOG ---- */
+.route-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.route-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.route-time {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  color: var(--text-dim);
+  padding-top: 0.125rem;
+  white-space: nowrap;
+  width: 42px;
+  flex-shrink: 0;
+}
+
+.route-content { flex: 1; }
+
+.route-action {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.route-action strong { color: var(--text); font-weight: 600; }
+.route-action .model-ref { color: var(--accent); font-family: var(--mono); font-size: 0.6875rem; }
+.route-action .model-from { color: var(--red); font-family: var(--mono); font-size: 0.6875rem; text-decoration: line-through; opacity: 0.6; }
+.route-action .saved { color: var(--accent); font-weight: 600; }
+
+.route-tag {
+  display: inline-block;
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.0625rem 0.3125rem;
+  border-radius: 3px;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.route-tag.routed { background: var(--accent-bg); color: var(--accent); }
+.route-tag.optimised { background: var(--naira-bg); color: var(--naira); }
+.route-tag.fallback { background: var(--blue-bg); color: var(--blue); }
+
+/* ---- OPTIMISATION PANEL ---- */
+.opt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.opt-card {
+  padding: 0.875rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: border-color 0.15s;
+  cursor: pointer;
+}
+
+.opt-card:hover { border-color: var(--border-light); }
+
+.opt-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.opt-icon.save { background: var(--accent-bg); }
+.opt-icon.swap { background: var(--naira-bg); }
+.opt-icon.cache { background: var(--blue-bg); }
+.opt-icon.batch { background: var(--purple-bg); }
+
+.opt-content { flex: 1; }
+
+.opt-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 0.125rem;
+}
+
+.opt-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.opt-amount {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+  padding-top: 0.125rem;
+}
+
+/* ---- AGENTS TABLE ---- */
+.agents-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.agent-row {
+  display: grid;
+  grid-template-columns: 2fr 1.25fr 0.75fr 1fr 0.85fr 0.75fr;
+  align-items: center;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8125rem;
+}
+
+.agent-row.header {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.agent-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.agent-status {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.agent-status.live { background: var(--accent); box-shadow: 0 0 6px var(--accent); animation: pulse 2s infinite; }
+.agent-status.idle { background: var(--text-dim); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.agent-models {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--text-dim);
+}
+
+.agent-calls {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.agent-cost {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.agent-trend {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.agent-trend.up { color: var(--red); }
+.agent-trend.down { color: var(--accent); }
+
+/* ---- SPEND CHART ---- */
+.chart-area {
+  height: 160px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding-top: 1.5rem;
+}
+
+.chart-bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.chart-bar-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 1px;
+  border-radius: 3px 3px 0 0;
+  overflow: hidden;
+}
+
+.chart-segment {
+  width: 100%;
+  transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 0;
+}
+
+.chart-segment.s-openai { background: #10A37F; }
+.chart-segment.s-anthropic { background: #D4A274; }
+.chart-segment.s-google { background: #4285F4; }
+.chart-segment.s-african { background: var(--naira); }
+.chart-segment.s-services { background: var(--teal); }
+.chart-segment.s-other { background: var(--text-dim); }
+
+.chart-label {
+  font-size: 0.5625rem;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  margin-top: 0.75rem;
+}
+
+.chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.625rem;
+  color: var(--text-dim);
+}
+
+.legend-swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+/* ---- AFRICAN MODELS SECTION ---- */
+.african-models-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.af-model-card {
+  padding: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s;
+}
+
+.af-model-card:hover { border-color: var(--naira); }
+
+.af-model-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.375rem;
+}
+
+.af-model-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--naira);
+}
+
+.af-model-type {
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  padding: 0.0625rem 0.3125rem;
+  border-radius: 3px;
+}
+
+.af-model-desc {
+  font-size: 0.6875rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin-bottom: 0.375rem;
+}
+
+.af-model-langs {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.lang-tag {
+  font-size: 0.5625rem;
+  padding: 0.0625rem 0.25rem;
+  background: var(--naira-bg);
+  color: var(--naira);
+  border-radius: 3px;
+  font-family: var(--mono);
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">M</div>
+    <div class="logo-text">mazu<span>.</span></div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Overview</div>
+    <div class="sidebar-item active">
+      <span class="icon">◫</span> Dashboard
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">↗</span> Usage & Spend
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">⚡</span> Smart Routing
+      <span class="badge-count">Live</span>
+    </div>
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">AI Assets</div>
+    <div class="sidebar-item">
+      <span class="icon">🤖</span> Agents
+      <span class="badge-count">4</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">⬡</span> Features
+      <span class="badge-count">8</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">◈</span> Models
+      <span class="badge-count">12</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">🌍</span> African Catalogue
+      <span class="badge-count warn">New</span>
+    </div>
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Optimise</div>
+    <div class="sidebar-item">
+      <span class="icon">💡</span> Recommendations
+      <span class="badge-count">5</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">⚙</span> Routing Rules
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">🔑</span> API Keys & Services
+    </div>
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Billing</div>
+    <div class="sidebar-item">
+      <span class="icon">₦</span> Naira Wallet
+    </div>
+    <div class="sidebar-item">
+      <span class="icon" style="color: var(--teal);">◆</span> USDT Wallet
+    </div>
+    <div class="sidebar-item">
+      <span class="icon">📄</span> Invoices
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-org">
+      <div class="org-avatar">PS</div>
+      <div class="org-info">
+        <div class="name">Paystack</div>
+        <div class="plan">Growth Plan</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-period">📅 Feb 1 – 24, 2026 ▾</div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn">↓ Export</button>
+      <button class="topbar-btn">⚙ Settings</button>
+      <button class="topbar-btn primary">+ Add Key / Service</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- ALERT -->
+    <div class="alert-banner">
+      <div class="alert-left">
+        <span class="alert-icon">💡</span>
+        <span class="alert-text">Smart Routing found <strong>₦1,138,880 in potential savings</strong> this month. Fraud Agent's Stripe spend is up 24% — <strong>review service limits</strong>.</span>
+      </div>
+      <button class="alert-action">Review Suggestions →</button>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Spend</div>
+        <div class="stat-value gold">₦3,016,900</div>
+        <div class="stat-change down">↓ 4% vs last month · LLMs + services</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">API Calls</div>
+        <div class="stat-value">1.24M</div>
+        <div class="stat-change up">↑ 12% vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Connected Services</div>
+        <div class="stat-value">11</div>
+        <div class="stat-change neutral">8 models · 2 wallets · 1 commerce</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Savings This Month</div>
+        <div class="stat-value green">₦486,000</div>
+        <div class="stat-change up">via smart routing</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Wallet Balances</div>
+        <div class="stat-value" style="font-size:1.1rem">₦4.28M <span style="color:var(--teal);font-size:0.875rem;">+ $1,850</span></div>
+        <div class="stat-change neutral">Naira + USDT</div>
+      </div>
+    </div>
+
+    <!-- SPEND BY FEATURE + MODEL USAGE -->
+    <div class="grid-3-2">
+      <!-- Spend by Feature -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="icon">⬡</span> Spend by Feature</div>
+          <div class="panel-tabs">
+            <div class="panel-tab active">Features</div>
+            <div class="panel-tab">Agents</div>
+            <div class="panel-tab">Endpoints</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="feature-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Model</th>
+                <th>Calls</th>
+                <th style="width:120px">Spend</th>
+                <th>Cost</th>
+                <th style="text-align:right">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="feature-name">Customer Support Bot</span><span class="feature-tag">agent</span></td>
+                <td><span class="feature-model">gpt-4o</span></td>
+                <td><span class="feature-calls">842K</span></td>
+                <td class="feature-bar-cell"><div class="feature-bar-wrap"><div class="feature-bar high" style="width:90%"></div></div></td>
+                <td><span class="feature-cost">₦1,940,000</span></td>
+                <td class="feature-savings"><span class="savings-chip actionable">→ Sonnet · Save ₦890K</span></td>
+              </tr>
+              <tr>
+                <td><span class="feature-name">Transaction Summariser</span><span class="feature-tag">feature</span></td>
+                <td><span class="feature-model">claude-sonnet</span></td>
+                <td><span class="feature-calls">286K</span></td>
+                <td class="feature-bar-cell"><div class="feature-bar-wrap"><div class="feature-bar mid" style="width:55%"></div></div></td>
+                <td><span class="feature-cost">₦620,000</span></td>
+                <td class="feature-savings"><span class="savings-chip actionable">→ Haiku · Save ₦248K</span></td>
+              </tr>
+              <tr>
+                <td><span class="feature-name">Yoruba Chat Translation</span><span class="feature-tag">feature</span></td>
+                <td><span class="feature-model african">SabiYarn</span></td>
+                <td><span class="feature-calls">64K</span></td>
+                <td class="feature-bar-cell"><div class="feature-bar-wrap"><div class="feature-bar low" style="width:18%"></div></div></td>
+                <td><span class="feature-cost">₦86,400</span></td>
+                <td class="feature-savings"><span class="savings-chip optimal">✓ Optimal</span></td>
+              </tr>
+              <tr>
+                <td><span class="feature-name">Fraud Detection Agent</span><span class="feature-tag">agent</span></td>
+                <td><span class="feature-model">gpt-4o</span></td>
+                <td><span class="feature-calls">91K</span></td>
+                <td class="feature-bar-cell"><div class="feature-bar-wrap"><div class="feature-bar low" style="width:22%"></div></div></td>
+                <td><span class="feature-cost">₦287,200</span></td>
+                <td class="feature-savings"><span class="savings-chip optimal">✓ Optimal</span></td>
+              </tr>
+              <tr>
+                <td><span class="feature-name">Receipt OCR</span><span class="feature-tag">feature</span></td>
+                <td><span class="feature-model">gemini-pro</span></td>
+                <td><span class="feature-calls">38K</span></td>
+                <td class="feature-bar-cell"><div class="feature-bar-wrap"><div class="feature-bar minimal" style="width:8%"></div></div></td>
+                <td><span class="feature-cost">₦42,000</span></td>
+                <td class="feature-savings"><span class="savings-chip optimal">✓ Optimal</span></td>
+              </tr>
+              <tr>
+                <td><span class="feature-name">Agent Search (Exa)</span><span class="feature-tag" style="background:var(--teal-bg);color:var(--teal);">service</span></td>
+                <td><span class="feature-model" style="color:var(--teal);">Coinbase 0x7a3f</span></td>
+                <td><span class="feature-calls">4.2K</span></td>
+                <td class="feature-bar-cell"><div class="feature-bar-wrap"><div class="feature-bar minimal" style="width:4%;background:var(--teal)"></div></div></td>
+                <td><span class="feature-cost">$84.20</span></td>
+                <td class="feature-savings"><span class="savings-chip optimal">✓ Tracking</span></td>
+              </tr>
+              <tr>
+                <td><span class="feature-name">Risk Data (Stripe)</span><span class="feature-tag" style="background:var(--teal-bg);color:var(--teal);">service</span></td>
+                <td><span class="feature-model" style="color:var(--stripe-purple);">Stripe acct_1Nq</span></td>
+                <td><span class="feature-calls">107</span></td>
+                <td class="feature-bar-cell"><div class="feature-bar-wrap"><div class="feature-bar minimal" style="width:2%;background:var(--stripe-purple)"></div></div></td>
+                <td><span class="feature-cost">$23.40</span></td>
+                <td class="feature-savings"><span class="savings-chip optimal">✓ Tracking</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Model Usage -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="icon">◈</span> Service Usage</div>
+          <div class="panel-tabs">
+            <div class="panel-tab active">By spend</div>
+            <div class="panel-tab">By calls</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="model-usage-list">
+            <div class="model-usage-item">
+              <div class="model-icon openai">OA</div>
+              <div class="model-info">
+                <div class="model-name-row">
+                  <span class="model-name">GPT-4o</span>
+                  <span class="model-spend">₦2,227,200</span>
+                </div>
+                <div class="model-bar-wrap"><div class="model-bar c-green" style="width:78%"></div></div>
+              </div>
+            </div>
+            <div class="model-usage-item">
+              <div class="model-icon anthropic">AN</div>
+              <div class="model-info">
+                <div class="model-name-row">
+                  <span class="model-name">Claude Sonnet</span>
+                  <span class="model-spend">₦320,000</span>
+                </div>
+                <div class="model-bar-wrap"><div class="model-bar c-tan" style="width:32%"></div></div>
+              </div>
+            </div>
+            <div class="model-usage-item">
+              <div class="model-icon" style="background:var(--coinbase);font-size:0.5625rem;">CB</div>
+              <div class="model-info">
+                <div class="model-name-row">
+                  <span class="model-name">Coinbase Agent Wallets <span style="font-size:0.625rem;color:var(--teal);font-weight:600;margin-left:4px;">BYOK</span></span>
+                  <span class="model-spend" style="color:var(--teal);">$146.30</span>
+                </div>
+                <div class="model-bar-wrap"><div class="model-bar" style="width:18%;background:var(--teal)"></div></div>
+              </div>
+            </div>
+            <div class="model-usage-item">
+              <div class="model-icon african">AF</div>
+              <div class="model-info">
+                <div class="model-name-row">
+                  <span class="model-name">SabiYarn</span>
+                  <span class="model-spend">₦86,400</span>
+                </div>
+                <div class="model-bar-wrap"><div class="model-bar c-gold" style="width:14%"></div></div>
+              </div>
+            </div>
+            <div class="model-usage-item">
+              <div class="model-icon google">GO</div>
+              <div class="model-info">
+                <div class="model-name-row">
+                  <span class="model-name">Gemini Pro</span>
+                  <span class="model-spend">₦42,000</span>
+                </div>
+                <div class="model-bar-wrap"><div class="model-bar c-blue" style="width:8%"></div></div>
+              </div>
+            </div>
+            <div class="model-usage-item">
+              <div class="model-icon" style="background:var(--stripe-purple);font-size:0.5625rem;">ST</div>
+              <div class="model-info">
+                <div class="model-name-row">
+                  <span class="model-name">Stripe Agent Commerce <span style="font-size:0.625rem;color:var(--teal);font-weight:600;margin-left:4px;">BYOK</span></span>
+                  <span class="model-spend" style="color:var(--teal);">$23.40</span>
+                </div>
+                <div class="model-bar-wrap"><div class="model-bar" style="width:4%;background:var(--stripe-purple)"></div></div>
+              </div>
+            </div>
+            <div class="model-usage-item">
+              <div class="model-icon anthropic">AN</div>
+              <div class="model-info">
+                <div class="model-name-row">
+                  <span class="model-name">Claude Haiku</span>
+                  <span class="model-spend">₦18,600</span>
+                </div>
+                <div class="model-bar-wrap"><div class="model-bar c-tan" style="width:4%"></div></div>
+              </div>
+            </div>
+            <div class="model-usage-item">
+              <div class="model-icon meta">MT</div>
+              <div class="model-info">
+                <div class="model-name-row">
+                  <span class="model-name">Llama 3</span>
+                  <span class="model-spend">₦12,400</span>
+                </div>
+                <div class="model-bar-wrap"><div class="model-bar c-meta" style="width:3%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROUTING LOG + OPTIMISATIONS -->
+    <div class="grid-2">
+      <!-- Smart Routing Log -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="icon">⚡</span> Smart Routing · Live</div>
+          <div class="panel-tabs">
+            <div class="panel-tab active">Recent</div>
+            <div class="panel-tab">Rules</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="route-log">
+            <div class="route-entry">
+              <div class="route-time">2m ago</div>
+              <div class="route-content">
+                <div class="route-action">
+                  <strong>Support Bot</strong> — routed to <span class="model-ref">claude-haiku</span> instead of <span class="model-from">gpt-4o</span>. Simple FAQ detected. <span class="saved">Saved ₦0.80</span>
+                </div>
+                <div class="route-tag routed">Smart Routed</div>
+              </div>
+            </div>
+            <div class="route-entry">
+              <div class="route-time">4m ago</div>
+              <div class="route-content">
+                <div class="route-action">
+                  <strong>Fraud Agent</strong> — kept on <span class="model-ref">gpt-4o</span>. Complex reasoning required. No downgrade.
+                </div>
+                <div class="route-tag optimised">Optimal</div>
+              </div>
+            </div>
+            <div class="route-entry">
+              <div class="route-time">6m ago</div>
+              <div class="route-content">
+                <div class="route-action">
+                  <strong>Yoruba Chat</strong> — routed to <span class="model-ref">SabiYarn</span>. Local language detected. Better quality + lower cost.
+                </div>
+                <div class="route-tag routed">Smart Routed</div>
+              </div>
+            </div>
+            <div class="route-entry">
+              <div class="route-time">8m ago</div>
+              <div class="route-content">
+                <div class="route-action">
+                  <strong>Support Bot</strong> — agent wallet <span style="color:var(--teal);">0x7a3f</span> paid $0.12 for Exa search via X42. <span class="saved">Tracked</span>
+                </div>
+                <div class="route-tag" style="background:var(--teal-bg);color:var(--teal);">Service</div>
+              </div>
+            </div>
+            <div class="route-entry">
+              <div class="route-time">11m ago</div>
+              <div class="route-content">
+                <div class="route-action">
+                  <strong>Receipt OCR</strong> — <span class="model-ref">gemini-pro</span> timed out. Fallback to <span class="model-ref">gpt-4o-mini</span>. Completed in 1.2s.
+                </div>
+                <div class="route-tag fallback">Fallback</div>
+              </div>
+            </div>
+            <div class="route-entry">
+              <div class="route-time">14m ago</div>
+              <div class="route-content">
+                <div class="route-action">
+                  <strong>Transaction Summariser</strong> — batch of 48 requests routed to <span class="model-ref">claude-haiku</span>. <span class="saved">Saved ₦12.40</span>
+                </div>
+                <div class="route-tag routed">Smart Routed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optimisation Recommendations -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="icon">💡</span> Optimisation Recommendations</div>
+          <span style="font-size:0.6875rem; color: var(--accent); font-weight:600;">₦1.14M saveable</span>
+        </div>
+        <div class="panel-body">
+          <div class="opt-list">
+            <div class="opt-card">
+              <div class="opt-icon save">💰</div>
+              <div class="opt-content">
+                <div class="opt-title">Downgrade Support Bot to Claude Sonnet</div>
+                <div class="opt-desc">842K calls/mo using GPT-4o for tier-1 support. Sonnet handles 96% of these with identical quality scores.</div>
+              </div>
+              <div class="opt-amount">₦890K/mo</div>
+            </div>
+            <div class="opt-card">
+              <div class="opt-icon swap">🔄</div>
+              <div class="opt-content">
+                <div class="opt-title">Route Summariser to Haiku for short inputs</div>
+                <div class="opt-desc">72% of summarisation inputs are under 500 tokens. Haiku matches Sonnet quality at this length.</div>
+              </div>
+              <div class="opt-amount">₦248K/mo</div>
+            </div>
+            <div class="opt-card">
+              <div class="opt-icon cache">📦</div>
+              <div class="opt-content">
+                <div class="opt-title">Enable response caching for Support Bot</div>
+                <div class="opt-desc">34% of support queries are repeated questions. Caching would eliminate redundant API calls.</div>
+              </div>
+              <div class="opt-amount">₦186K/mo</div>
+            </div>
+            <div class="opt-card">
+              <div class="opt-icon batch">⚡</div>
+              <div class="opt-content">
+                <div class="opt-title">Batch Transaction Summariser calls</div>
+                <div class="opt-desc">Currently sending individual requests. Batching 50 at a time reduces per-call overhead by 18%.</div>
+              </div>
+              <div class="opt-amount">₦62K/mo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENTS + SPEND OVER TIME -->
+    <div class="grid-2" style="margin-top: 0;">
+      <!-- Active Agents -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="icon">🤖</span> Active Agents</div>
+        </div>
+        <div class="panel-body">
+          <div class="agents-grid">
+            <div class="agent-row header">
+              <span>Agent</span>
+              <span>Models</span>
+              <span>Calls</span>
+              <span>Cost</span>
+              <span>Service Keys</span>
+              <span>Trend</span>
+            </div>
+            <div class="agent-row">
+              <span class="agent-name"><span class="agent-status live"></span> Customer Support Bot</span>
+              <span class="agent-models">gpt-4o, haiku</span>
+              <span class="agent-calls">842K</span>
+              <span class="agent-cost">₦1.94M</span>
+              <span style="font-size:0.6875rem;"><span style="color:var(--coinbase);">CB</span> 0x7a3f</span>
+              <span class="agent-trend up">↑ 15%</span>
+            </div>
+            <div class="agent-row">
+              <span class="agent-name"><span class="agent-status live"></span> Fraud Detection Agent</span>
+              <span class="agent-models">gpt-4o</span>
+              <span class="agent-calls">91K</span>
+              <span class="agent-cost">₦287K</span>
+              <span style="font-size:0.6875rem;"><span style="color:var(--stripe-purple);">ST</span> acct_1Nq</span>
+              <span class="agent-trend down">↓ 3%</span>
+            </div>
+            <div class="agent-row">
+              <span class="agent-name"><span class="agent-status live"></span> Onboarding Assistant</span>
+              <span class="agent-models">sonnet, SabiYarn</span>
+              <span class="agent-calls">24K</span>
+              <span class="agent-cost">₦68K</span>
+              <span style="font-size:0.6875rem;"><span style="color:var(--coinbase);">CB</span> 0x1b2c</span>
+              <span class="agent-trend down">↓ 8%</span>
+            </div>
+            <div class="agent-row">
+              <span class="agent-name"><span class="agent-status idle"></span> Compliance Reviewer</span>
+              <span class="agent-models">gpt-4o</span>
+              <span class="agent-calls">3.2K</span>
+              <span class="agent-cost">₦41K</span>
+              <span style="font-size:0.6875rem; color: var(--text-dim);">—</span>
+              <span class="agent-trend down">↓ 22%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spend Over Time -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="icon">📊</span> Daily Spend · Feb 2026</div>
+          <div class="panel-tabs">
+            <div class="panel-tab active">By model</div>
+            <div class="panel-tab">Total</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="chart-area" id="chart">
+          </div>
+          <div class="chart-legend">
+            <div class="chart-legend-item"><span class="legend-swatch" style="background:#10A37F"></span> OpenAI</div>
+            <div class="chart-legend-item"><span class="legend-swatch" style="background:#D4A274"></span> Anthropic</div>
+            <div class="chart-legend-item"><span class="legend-swatch" style="background:#4285F4"></span> Google</div>
+            <div class="chart-legend-item"><span class="legend-swatch" style="background:var(--naira)"></span> African</div>
+            <div class="chart-legend-item"><span class="legend-swatch" style="background:var(--teal)"></span> Agent Services</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFRICAN MODEL CATALOGUE -->
+    <div class="panel" style="margin-top: 0;">
+      <div class="panel-header">
+        <div class="panel-title"><span class="icon">🌍</span> African Model Catalogue</div>
+        <div class="panel-tabs">
+          <div class="panel-tab active">Active</div>
+          <div class="panel-tab">Available</div>
+          <div class="panel-tab">Benchmarks</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="african-models-grid">
+          <div class="af-model-card">
+            <div class="af-model-top">
+              <span class="af-model-name">SabiYarn</span>
+              <span class="af-model-type">NLP · Text</span>
+            </div>
+            <div class="af-model-desc">Nigerian multilingual language model. Strong on Yoruba, Hausa, Igbo, and Pidgin text generation and understanding.</div>
+            <div class="af-model-langs">
+              <span class="lang-tag">Yoruba</span>
+              <span class="lang-tag">Hausa</span>
+              <span class="lang-tag">Igbo</span>
+              <span class="lang-tag">Pidgin</span>
+            </div>
+          </div>
+          <div class="af-model-card">
+            <div class="af-model-top">
+              <span class="af-model-name">Oversabi</span>
+              <span class="af-model-type">NLP · Chat</span>
+            </div>
+            <div class="af-model-desc">Conversational AI tuned on West African dialog patterns. Ideal for customer support in local languages.</div>
+            <div class="af-model-langs">
+              <span class="lang-tag">Yoruba</span>
+              <span class="lang-tag">Pidgin</span>
+              <span class="lang-tag">English-NG</span>
+            </div>
+          </div>
+          <div class="af-model-card">
+            <div class="af-model-top">
+              <span class="af-model-name">AfriSpeech</span>
+              <span class="af-model-type">Speech · STT</span>
+            </div>
+            <div class="af-model-desc">Speech-to-text optimised for African accents and multilingual code-switching in voice interactions.</div>
+            <div class="af-model-langs">
+              <span class="lang-tag">120+ accents</span>
+              <span class="lang-tag">Code-switch</span>
+            </div>
+          </div>
+          <div class="af-model-card">
+            <div class="af-model-top">
+              <span class="af-model-name">N-ATLAS</span>
+              <span class="af-model-type">NLP · Translation</span>
+            </div>
+            <div class="af-model-desc">Neural translation across 20+ African languages. Outperforms Google Translate on low-resource language pairs.</div>
+            <div class="af-model-langs">
+              <span class="lang-tag">Swahili</span>
+              <span class="lang-tag">Amharic</span>
+              <span class="lang-tag">Wolof</span>
+              <span class="lang-tag">+17</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Generate chart bars
+const chart = document.getElementById('chart');
+const days = 24;
+const data = [];
+
+for (let i = 0; i < days; i++) {
+  const base = 60 + Math.random() * 40;
+  data.push({
+    openai: base * (0.65 + Math.random() * 0.15),
+    anthropic: base * (0.15 + Math.random() * 0.08),
+    google: base * (0.03 + Math.random() * 0.04),
+    african: base * (0.04 + Math.random() * 0.03),
+    services: base * (0.02 + Math.random() * 0.02),
+  });
+}
+
+const maxTotal = Math.max(...data.map(d => d.openai + d.anthropic + d.google + d.african + d.services));
+
+data.forEach((d, i) => {
+  const group = document.createElement('div');
+  group.className = 'chart-bar-group';
+
+  const stack = document.createElement('div');
+  stack.className = 'chart-bar-stack';
+
+  const total = d.openai + d.anthropic + d.google + d.african + d.services;
+  const scale = 140;
+
+  const segments = [
+    { cls: 's-openai', h: (d.openai / maxTotal) * scale },
+    { cls: 's-anthropic', h: (d.anthropic / maxTotal) * scale },
+    { cls: 's-google', h: (d.google / maxTotal) * scale },
+    { cls: 's-african', h: (d.african / maxTotal) * scale },
+    { cls: 's-services', h: (d.services / maxTotal) * scale },
+  ];
+
+  segments.forEach(s => {
+    const seg = document.createElement('div');
+    seg.className = 'chart-segment ' + s.cls;
+    seg.style.height = '0px';
+    stack.appendChild(seg);
+    setTimeout(() => { seg.style.height = s.h + 'px'; }, 100 + i * 30);
+  });
+
+  const label = document.createElement('div');
+  label.className = 'chart-label';
+  label.textContent = i + 1;
+
+  group.appendChild(stack);
+  group.appendChild(label);
+  chart.appendChild(group);
+});
+</script>
+
+</body>
+</html>

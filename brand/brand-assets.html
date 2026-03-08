@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mazou  - Brand Assets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Primary */
+      --deep-midnight: #0A1628;
+      --electric-mint: #00E5A0;
+      /* Secondary */
+      --warm-amber: #F5A623;
+      --signal-blue: #3B82F6;
+      /* Neutrals */
+      --ink: #1A1D26;
+      --slate: #5B6070;
+      --ash: #8A8F9E;
+      --mist: #E2E4E9;
+      --cloud: #F8F9FB;
+      --white: #FFFFFF;
+      /* Providers */
+      --openai: #10A37F;
+      --anthropic: #C084FC;
+      --google: #4285F4;
+      --meta: #0668E1;
+      --mistral: #F43F5E;
+      --deepseek: #4D6BFE;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cloud);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- TOP BAR ---- */
+    .topbar {
+      background: var(--deep-midnight);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-logo {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+    .topbar-logo .dot { color: var(--electric-mint); }
+    .topbar-label {
+      font-size: 12px;
+      color: var(--ash);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 500;
+    }
+
+    /* ---- LAYOUT ---- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+    .section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--mist);
+    }
+    .section:last-child { border-bottom: none; }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--electric-mint);
+      background: var(--deep-midnight);
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--slate);
+      line-height: 1.6;
+      max-width: 600px;
+      margin-bottom: 48px;
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      background: var(--deep-midnight);
+      padding: 120px 40px 100px;
+      text-align: center;
+    }
+    .hero-overline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--electric-mint);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--ash);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ---- LOGOS ---- */
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .logo-card {
+      border-radius: 16px;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      border: 1px solid var(--mist);
+      position: relative;
+    }
+    .logo-card.dark {
+      background: var(--deep-midnight);
+      border-color: rgba(255,255,255,0.08);
+    }
+    .logo-card.light {
+      background: var(--white);
+    }
+    .logo-card.cloud {
+      background: var(--cloud);
+    }
+    .logo-card-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      position: absolute;
+      top: 16px;
+      left: 20px;
+    }
+    .logo-card.dark .logo-card-label { color: var(--ash); }
+    .logo-card.light .logo-card-label, .logo-card.cloud .logo-card-label { color: var(--slate); }
+
+    .wordmark {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .wordmark.large { font-size: 48px; }
+    .wordmark.medium { font-size: 32px; }
+    .wordmark.dark-text { color: var(--white); }
+    .wordmark.dark-text .dot { color: var(--electric-mint); }
+    .wordmark.light-text { color: var(--ink); }
+    .wordmark.light-text .dot { color: var(--deep-midnight); }
+
+    /* Logomark SVG */
+    .logomark-container {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* ---- COLORS ---- */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .color-card {
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid var(--mist);
+    }
+    .color-swatch {
+      height: 120px;
+      display: flex;
+      align-items: flex-end;
+      padding: 12px 16px;
+    }
+    .color-swatch span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .color-swatch.light-text span { color: rgba(255,255,255,0.9); background: rgba(0,0,0,0.2); }
+    .color-swatch.dark-text span { color: rgba(0,0,0,0.6); background: rgba(255,255,255,0.7); }
+    .color-info {
+      padding: 16px;
+    }
+    .color-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .color-usage {
+      font-size: 12px;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    .color-row {
+      margin-top: 40px;
+    }
+    .color-row h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--slate);
+    }
+    .provider-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .provider-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .provider-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ---- TYPOGRAPHY ---- */
+    .type-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .type-specimen {
+      padding: 32px;
+      border-radius: 12px;
+      border: 1px solid var(--mist);
+      background: var(--white);
+    }
+    .type-specimen-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--mist);
+    }
+    .type-family-name {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--slate);
+    }
+    .type-family-use {
+      font-size: 12px;
+      color: var(--ash);
+    }
+    .type-sample-row {
+      margin-bottom: 20px;
+    }
+    .type-sample-row:last-child { margin-bottom: 0; }
+    .type-weight-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--ash);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .type-scale-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 32px;
+    }
+    .type-scale-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ash);
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--mist);
+    }
+    .type-scale-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--mist);
+      font-size: 13px;
+      vertical-align: middle;
+    }
+    .type-scale-table tr:last-child td { border-bottom: none; }
+    .type-scale-table .mono-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--slate);
+    }
+
+    /* ---- SPACING & RADII ---- */
+    .spacing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .radius-demo {
+      background: var(--white);
+      border: 1px solid var(--mist);
+      padding: 24px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .radius-box {
+      width: 80px;
+      height: 50px;
+      background: var(--deep-midnight);
+      margin: 0 auto 12px;
+    }
+    .radius-label {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .radius-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--slate);
+    }
+
+    .shadow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .shadow-demo {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .shadow-label {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .shadow-css {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--ash);
+      word-break: break-all;
+    }
+
+    /* ---- LOGO CONSTRUCTION ---- */
+    .logo-construction {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .construction-card {
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: 12px;
+      padding: 32px;
+    }
+    .construction-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--slate);
+      margin-bottom: 16px;
+    }
+
+    .clearspace-demo {
+      position: relative;
+      display: inline-block;
+      padding: 40px;
+      border: 1px dashed var(--electric-mint);
+      border-radius: 8px;
+      background: rgba(0, 229, 160, 0.04);
+    }
+    .clearspace-label {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--electric-mint);
+    }
+
+    /* ---- BUTTONS ---- */
+    .button-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all 120ms ease;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--electric-mint);
+      color: var(--deep-midnight);
+    }
+    .btn-primary:hover { background: #00cc8e; transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,229,160,0.25); }
+    .btn-secondary {
+      background: var(--deep-midnight);
+      color: var(--white);
+    }
+    .btn-secondary:hover { background: #0d1f36; transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--mist);
+    }
+    .btn-outline:hover { border-color: var(--ink); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--signal-blue);
+      padding: 12px 16px;
+    }
+    .btn-ghost:hover { background: rgba(59,130,246,0.06); }
+    .btn-sm { padding: 8px 16px; font-size: 13px; }
+    .btn-lg { padding: 16px 32px; font-size: 16px; }
+
+    /* ---- BADGES ---- */
+    .badge-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .badge-mint { background: rgba(0,229,160,0.1); color: #00b880; }
+    .badge-blue { background: rgba(59,130,246,0.1); color: var(--signal-blue); }
+    .badge-amber { background: rgba(245,166,35,0.1); color: #d4900a; }
+    .badge-ink { background: rgba(26,29,38,0.06); color: var(--slate); }
+
+    /* ---- CARDS DEMO ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .demo-card {
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: 12px;
+      padding: 28px;
+      transition: all 200ms ease;
+    }
+    .demo-card:hover {
+      border-color: var(--electric-mint);
+      box-shadow: 0 8px 32px rgba(10,22,40,0.08);
+    }
+    .demo-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+    .demo-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .demo-card p {
+      font-size: 13px;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+
+    /* ---- DONTS ---- */
+    .donts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .dont-card {
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+    }
+    .dont-card::after {
+      content: "DON'T";
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: #EF4444;
+      background: rgba(239,68,68,0.08);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .dont-card .dont-example {
+      padding: 20px;
+      background: var(--cloud);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60px;
+    }
+    .dont-card .dont-desc {
+      font-size: 12px;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    /* ---- FAVICON / OG ---- */
+    .asset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .asset-card {
+      background: var(--white);
+      border: 1px solid var(--mist);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .asset-preview {
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+    .asset-preview.checkerboard {
+      background-image:
+        linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+    .asset-info {
+      padding: 20px;
+      border-top: 1px solid var(--mist);
+    }
+    .asset-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .asset-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--ash);
+    }
+
+    /* ---- VOICE ---- */
+    .voice-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--mist);
+    }
+    .voice-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ash);
+      padding: 14px 20px;
+      border-bottom: 2px solid var(--mist);
+      background: var(--cloud);
+    }
+    .voice-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--mist);
+      font-size: 14px;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .voice-table tr:last-child td { border-bottom: none; }
+    .voice-bad { color: var(--ash); text-decoration: line-through; }
+    .voice-good { color: var(--ink); font-weight: 500; }
+
+    /* ---- DARK SECTION ---- */
+    .dark-section {
+      background: var(--deep-midnight);
+      color: var(--white);
+      padding: 80px 0;
+    }
+    .dark-section .section-label {
+      background: rgba(0,229,160,0.12);
+      color: var(--electric-mint);
+    }
+    .dark-section .section-desc { color: var(--ash); }
+
+    /* ---- OG IMAGE PREVIEW ---- */
+    .og-preview {
+      width: 100%;
+      max-width: 600px;
+      aspect-ratio: 1200/630;
+      background: var(--deep-midnight);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .og-preview .og-wordmark {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 52px;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+    .og-preview .og-wordmark .dot { color: var(--electric-mint); }
+    .og-preview .og-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: var(--ash);
+      letter-spacing: 0.02em;
+    }
+
+    /* ---- FOOTER ---- */
+    .brand-footer {
+      background: var(--deep-midnight);
+      color: var(--ash);
+      padding: 40px;
+      text-align: center;
+      font-size: 13px;
+    }
+    .brand-footer a { color: var(--electric-mint); text-decoration: none; }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .container { padding: 0 20px; }
+      .hero { padding: 80px 20px 60px; }
+      .hero h1 { font-size: 36px; }
+      .section { padding: 60px 0; }
+      .logo-construction { grid-template-columns: 1fr; }
+      .topbar { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">mazou<span class="dot">.</span></div>
+    <div class="topbar-label">Brand Assets v1.0  - March 2026</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-overline">Brand Identity System</div>
+    <h1>mazou<span style="color: var(--electric-mint)">.</span></h1>
+    <p>AI infrastructure layer for Africa. One API. Local currency. Full control.</p>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 1. LOGO -->
+  <!-- ============================================ -->
+  <div class="container">
+    <div class="section">
+      <div class="section-label">01</div>
+      <div class="section-title">Logo</div>
+      <div class="section-desc">The Mazou wordmark is always lowercase. The signal dot is a core brand element  - it represents the single point of access. Never remove it.</div>
+
+      <div class="logo-grid">
+        <!-- Dark bg -->
+        <div class="logo-card dark">
+          <span class="logo-card-label">On dark</span>
+          <div class="wordmark large dark-text">mazou<span class="dot">.</span></div>
+        </div>
+        <!-- Light bg -->
+        <div class="logo-card light">
+          <span class="logo-card-label">On light</span>
+          <div class="wordmark large light-text">mazou<span class="dot">.</span></div>
+        </div>
+        <!-- Logomark dark -->
+        <div class="logo-card dark">
+          <span class="logo-card-label">Logomark  - dark</span>
+          <div class="logomark-container">
+            <svg width="64" height="64" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="6" fill="#0A1628"/>
+              <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+              <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+            </svg>
+            <svg width="48" height="48" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="6" fill="#0A1628"/>
+              <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+              <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+            </svg>
+            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="6" fill="#0A1628"/>
+              <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+              <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Logomark light -->
+        <div class="logo-card cloud">
+          <span class="logo-card-label">Logomark  - light</span>
+          <div class="logomark-container">
+            <svg width="64" height="64" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="6" fill="#0A1628"/>
+              <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+              <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+            </svg>
+            <svg width="48" height="48" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="6" fill="#0A1628"/>
+              <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+              <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+            </svg>
+            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="6" fill="#0A1628"/>
+              <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+              <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clear space & Minimum size -->
+      <div class="logo-construction">
+        <div class="construction-card">
+          <h4>Clear Space</h4>
+          <p style="font-size:13px; color:var(--slate); margin-bottom:20px;">Maintain clear space equal to the height of the letter "m" on all sides.</p>
+          <div style="text-align:center;">
+            <div class="clearspace-demo">
+              <span class="clearspace-label" style="top:-18px; left:50%; transform:translateX(-50%);">1m</span>
+              <span class="clearspace-label" style="bottom:-18px; left:50%; transform:translateX(-50%);">1m</span>
+              <span class="clearspace-label" style="left:-22px; top:50%; transform:translateY(-50%);">1m</span>
+              <span class="clearspace-label" style="right:-22px; top:50%; transform:translateY(-50%);">1m</span>
+              <div class="wordmark medium light-text">mazou<span class="dot">.</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="construction-card">
+          <h4>Minimum Size</h4>
+          <p style="font-size:13px; color:var(--slate); margin-bottom:20px;">Never render the logo below these minimum sizes.</p>
+          <div style="display:flex; flex-direction:column; gap:20px; align-items:flex-start;">
+            <div>
+              <div style="font-size:10px; color:var(--ash); font-family:'JetBrains Mono',monospace; margin-bottom:6px;">WORDMARK  - 80px min</div>
+              <div class="wordmark light-text" style="font-size:18px;">mazou<span class="dot">.</span></div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--ash); font-family:'JetBrains Mono',monospace; margin-bottom:6px;">LOGOMARK  - 24px min</div>
+              <svg width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="6" fill="#0A1628"/>
+                <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+                <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logo Don'ts -->
+      <div style="margin-top:48px;">
+        <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-bottom:16px; text-transform:uppercase; letter-spacing:0.08em;">Logo Misuse</h3>
+        <div class="donts-grid">
+          <div class="dont-card">
+            <div class="dont-example">
+              <span class="wordmark light-text" style="font-size:28px; text-transform:uppercase; letter-spacing:0.05em;">MAZOU<span class="dot">.</span></span>
+            </div>
+            <div class="dont-desc">Don't set in uppercase or title case</div>
+          </div>
+          <div class="dont-card">
+            <div class="dont-example">
+              <span class="wordmark" style="font-size:28px; color: #FF6B6B;">mazou<span style="color:#FF6B6B">.</span></span>
+            </div>
+            <div class="dont-desc">Don't change the logo colors</div>
+          </div>
+          <div class="dont-card">
+            <div class="dont-example">
+              <span class="wordmark light-text" style="font-size:28px; transform:skewX(-12deg); display:inline-block;">mazou<span class="dot">.</span></span>
+            </div>
+            <div class="dont-desc">Don't stretch, rotate, or distort</div>
+          </div>
+          <div class="dont-card">
+            <div class="dont-example">
+              <span class="wordmark light-text" style="font-size:28px;">mazou</span>
+            </div>
+            <div class="dont-desc">Don't remove the signal dot</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 2. COLORS -->
+    <!-- ============================================ -->
+    <div class="section">
+      <div class="section-label">02</div>
+      <div class="section-title">Color Palette</div>
+      <div class="section-desc">Deep Midnight anchors the brand. Electric Mint energizes it. Amber highlights. Blue supports. Everything else is neutral.</div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-bottom:16px; text-transform:uppercase; letter-spacing:0.08em;">Primary</h3>
+      <div class="color-grid" style="margin-bottom:32px;">
+        <div class="color-card">
+          <div class="color-swatch light-text" style="background:var(--deep-midnight);"><span>#0A1628</span></div>
+          <div class="color-info">
+            <div class="color-name">Deep Midnight</div>
+            <div class="color-usage">Primary brand color. Backgrounds, text, logo ground. Infrastructure = depth, solidity.</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch dark-text" style="background:var(--electric-mint);"><span>#00E5A0</span></div>
+          <div class="color-info">
+            <div class="color-name">Electric Mint</div>
+            <div class="color-usage">Primary accent. CTAs, signal dot, success states, currency/money contexts.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-bottom:16px; text-transform:uppercase; letter-spacing:0.08em;">Secondary</h3>
+      <div class="color-grid" style="margin-bottom:32px;">
+        <div class="color-card">
+          <div class="color-swatch dark-text" style="background:var(--warm-amber);"><span>#F5A623</span></div>
+          <div class="color-info">
+            <div class="color-name">Warm Amber</div>
+            <div class="color-usage">Emphasis, alerts, warmth. Max 10% of any composition.</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch light-text" style="background:var(--signal-blue);"><span>#3B82F6</span></div>
+          <div class="color-info">
+            <div class="color-name">Signal Blue</div>
+            <div class="color-usage">Links, interactive elements, data visualization.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-bottom:16px; text-transform:uppercase; letter-spacing:0.08em;">Neutrals</h3>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch light-text" style="background:var(--ink);"><span>#1A1D26</span></div>
+          <div class="color-info">
+            <div class="color-name">Ink</div>
+            <div class="color-usage">Body text, headings</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch light-text" style="background:var(--slate);"><span>#5B6070</span></div>
+          <div class="color-info">
+            <div class="color-name">Slate</div>
+            <div class="color-usage">Secondary text</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch light-text" style="background:var(--ash);"><span>#8A8F9E</span></div>
+          <div class="color-info">
+            <div class="color-name">Ash</div>
+            <div class="color-usage">Tertiary, placeholders</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch dark-text" style="background:var(--mist);"><span>#E2E4E9</span></div>
+          <div class="color-info">
+            <div class="color-name">Mist</div>
+            <div class="color-usage">Borders, dividers</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch dark-text" style="background:var(--cloud);"><span>#F8F9FB</span></div>
+          <div class="color-info">
+            <div class="color-name">Cloud</div>
+            <div class="color-usage">Page backgrounds</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch dark-text" style="background:var(--white); border: 1px solid var(--mist);"><span>#FFFFFF</span></div>
+          <div class="color-info">
+            <div class="color-name">White</div>
+            <div class="color-usage">Cards, surfaces, inputs</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="color-row">
+        <h3>Provider Colors (Ecosystem Only)</h3>
+        <div class="provider-grid">
+          <div class="provider-chip"><span class="provider-dot" style="background:var(--openai);"></span> OpenAI</div>
+          <div class="provider-chip"><span class="provider-dot" style="background:var(--anthropic);"></span> Anthropic</div>
+          <div class="provider-chip"><span class="provider-dot" style="background:var(--google);"></span> Google</div>
+          <div class="provider-chip"><span class="provider-dot" style="background:var(--meta);"></span> Meta</div>
+          <div class="provider-chip"><span class="provider-dot" style="background:var(--mistral);"></span> Mistral</div>
+          <div class="provider-chip"><span class="provider-dot" style="background:var(--deepseek);"></span> DeepSeek</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 3. TYPOGRAPHY -->
+    <!-- ============================================ -->
+    <div class="section">
+      <div class="section-label">03</div>
+      <div class="section-title">Typography</div>
+      <div class="section-desc">Three fonts, clearly scoped. Space Grotesk for marketing headlines, Inter for everything else, JetBrains Mono for code and numbers.</div>
+
+      <div class="type-stack">
+        <!-- Space Grotesk -->
+        <div class="type-specimen">
+          <div class="type-specimen-header">
+            <div class="type-family-name">Space Grotesk</div>
+            <div class="type-family-use">Headlines, marketing, display text (24px+)</div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">Bold 700</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:42px; letter-spacing:-0.03em; line-height:1.1;">
+              One API for all your AI.
+            </div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">SemiBold 600</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:28px; letter-spacing:-0.02em; line-height:1.2;">
+              Know where every naira goes.
+            </div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">Medium 500</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:500; font-size:22px; letter-spacing:-0.01em; line-height:1.3; color:var(--slate);">
+              AI infrastructure, built for Africa.
+            </div>
+          </div>
+          <div class="type-sample-row" style="margin-top:16px;">
+            <div class="type-weight-label">Character Set</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:500; font-size:18px; color:var(--slate); letter-spacing:0.02em;">
+              ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*
+            </div>
+          </div>
+        </div>
+
+        <!-- Inter -->
+        <div class="type-specimen">
+          <div class="type-specimen-header">
+            <div class="type-family-name">Inter</div>
+            <div class="type-family-use">UI, body text, navigation, forms, dashboard</div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">ExtraBold 800  - Wordmark only</div>
+            <div style="font-family:'Inter',sans-serif; font-weight:800; font-size:32px; letter-spacing:-0.02em;">
+              mazou<span style="color:var(--electric-mint)">.</span>
+            </div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">Bold 700</div>
+            <div style="font-family:'Inter',sans-serif; font-weight:700; font-size:24px;">Dashboard Overview</div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">SemiBold 600</div>
+            <div style="font-family:'Inter',sans-serif; font-weight:600; font-size:16px;">Total API Spend This Month</div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">Medium 500</div>
+            <div style="font-family:'Inter',sans-serif; font-weight:500; font-size:14px; color:var(--slate);">Select a model to view detailed pricing and performance data.</div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">Regular 400</div>
+            <div style="font-family:'Inter',sans-serif; font-weight:400; font-size:14px; color:var(--slate); line-height:1.7; max-width:600px;">
+              Access OpenAI, Anthropic, Google, and other top global and African AI models through one intelligent API. Know what every LLM call, every agent, every AI feature is costing you.
+            </div>
+          </div>
+        </div>
+
+        <!-- JetBrains Mono -->
+        <div class="type-specimen">
+          <div class="type-specimen-header">
+            <div class="type-family-name">JetBrains Mono</div>
+            <div class="type-family-use">Code, API keys, numbers, terminal output</div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">Medium 500  - Labels</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color:var(--electric-mint);">
+              How It Works
+            </div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">Regular 400  - Code</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-weight:400; font-size:13px; color:var(--slate); line-height:1.7;">
+              mz_live_sk_a1b2c3d4e5f6g7h8i9j0k1l2m3n4
+            </div>
+          </div>
+          <div class="type-sample-row">
+            <div class="type-weight-label">Regular 400  - Numbers</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-weight:400; font-size:28px; color:var(--ink);">
+              &#8358;2,847,200
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Type Scale Table -->
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-top:48px; margin-bottom:16px; text-transform:uppercase; letter-spacing:0.08em;">Marketing Type Scale</h3>
+      <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; overflow:hidden;">
+        <table class="type-scale-table">
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>Font</th>
+              <th>Size</th>
+              <th>Weight</th>
+              <th>Preview</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hero Headline</td>
+              <td class="mono-val">Space Grotesk</td>
+              <td class="mono-val">clamp(2.5rem, 6vw, 4.5rem)</td>
+              <td class="mono-val">700</td>
+              <td><span style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; letter-spacing:-0.03em;">One API.</span></td>
+            </tr>
+            <tr>
+              <td>Section Heading</td>
+              <td class="mono-val">Space Grotesk</td>
+              <td class="mono-val">clamp(1.75rem, 4vw, 2.75rem)</td>
+              <td class="mono-val">700</td>
+              <td><span style="font-family:'Space Grotesk'; font-weight:700; font-size:20px; letter-spacing:-0.02em;">Every model.</span></td>
+            </tr>
+            <tr>
+              <td>Subheading</td>
+              <td class="mono-val">Inter</td>
+              <td class="mono-val">18px</td>
+              <td class="mono-val">400</td>
+              <td><span style="font-family:'Inter'; font-size:16px; color:var(--slate);">Access all models.</span></td>
+            </tr>
+            <tr>
+              <td>Body</td>
+              <td class="mono-val">Inter</td>
+              <td class="mono-val">16px</td>
+              <td class="mono-val">400</td>
+              <td><span style="font-family:'Inter'; font-size:14px; color:var(--slate);">We handle routing.</span></td>
+            </tr>
+            <tr>
+              <td>Mono Label</td>
+              <td class="mono-val">JetBrains Mono</td>
+              <td class="mono-val">11px</td>
+              <td class="mono-val">500</td>
+              <td><span style="font-family:'JetBrains Mono'; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.15em; color:var(--electric-mint);">PRICING</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 4. COMPONENTS -->
+    <!-- ============================================ -->
+    <div class="section">
+      <div class="section-label">04</div>
+      <div class="section-title">Components</div>
+      <div class="section-desc">Buttons, badges, and cards using the brand system. All interactive elements use 120ms transitions.</div>
+
+      <!-- Buttons -->
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-bottom:20px; text-transform:uppercase; letter-spacing:0.08em;">Buttons</h3>
+      <div class="button-row" style="margin-bottom:24px;">
+        <button class="btn btn-primary">Get Started</button>
+        <button class="btn btn-secondary">Sign In</button>
+        <button class="btn btn-outline">Learn More</button>
+        <button class="btn btn-ghost">View Docs &rarr;</button>
+      </div>
+      <div class="button-row" style="margin-bottom:24px;">
+        <button class="btn btn-primary btn-sm">Small</button>
+        <button class="btn btn-primary">Default</button>
+        <button class="btn btn-primary btn-lg">Large CTA</button>
+      </div>
+
+      <!-- Dark button row -->
+      <div style="background:var(--deep-midnight); border-radius:12px; padding:32px; margin-bottom:32px;">
+        <div class="button-row">
+          <button class="btn btn-primary">Get Started</button>
+          <button class="btn" style="background:rgba(255,255,255,0.08); color:white; border:1px solid rgba(255,255,255,0.12);">Learn More</button>
+          <button class="btn btn-ghost" style="color:var(--electric-mint);">View Docs &rarr;</button>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.08em;">Badges & Tags</h3>
+      <div class="badge-row" style="margin-bottom:40px;">
+        <span class="badge badge-mint">Active</span>
+        <span class="badge badge-blue">Beta</span>
+        <span class="badge badge-amber">Warning</span>
+        <span class="badge badge-ink">Archived</span>
+        <span class="badge" style="background:rgba(16,163,127,0.1); color:#10A37F;">OpenAI</span>
+        <span class="badge" style="background:rgba(192,132,252,0.1); color:#C084FC;">Anthropic</span>
+        <span class="badge" style="background:rgba(66,133,244,0.1); color:#4285F4;">Google</span>
+        <span class="badge" style="background:rgba(244,63,94,0.1); color:#F43F5E;">Mistral</span>
+      </div>
+
+      <!-- Cards -->
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-bottom:16px; text-transform:uppercase; letter-spacing:0.08em;">Cards</h3>
+      <div class="card-grid">
+        <div class="demo-card">
+          <div class="demo-card-icon" style="background:rgba(0,229,160,0.1);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E5A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+          </div>
+          <h4>Local Currency Billing</h4>
+          <p>Fund your wallet in Naira through Paystack. No USD cards, no FX hassle.</p>
+        </div>
+        <div class="demo-card">
+          <div class="demo-card-icon" style="background:rgba(59,130,246,0.1);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16 10-4 4-4-4"/></svg>
+          </div>
+          <h4>Smart Routing</h4>
+          <p>Automatically selects the best model for cost, quality, and language.</p>
+        </div>
+        <div class="demo-card">
+          <div class="demo-card-icon" style="background:rgba(245,166,35,0.1);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          </div>
+          <h4>Cost Visibility</h4>
+          <p>Per-feature, per-model spend tracking with optimization recommendations.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 5. SPACING & SHAPE -->
+    <!-- ============================================ -->
+    <div class="section">
+      <div class="section-label">05</div>
+      <div class="section-title">Spacing & Shape</div>
+      <div class="section-desc">Consistent border radii and shadow levels create visual hierarchy and interactive affordance.</div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-bottom:16px; text-transform:uppercase; letter-spacing:0.08em;">Border Radius</h3>
+      <div class="spacing-grid">
+        <div class="radius-demo">
+          <div class="radius-box" style="border-radius:8px;"></div>
+          <div class="radius-label">Buttons / Inputs</div>
+          <div class="radius-value">8px</div>
+        </div>
+        <div class="radius-demo">
+          <div class="radius-box" style="border-radius:12px;"></div>
+          <div class="radius-label">Cards</div>
+          <div class="radius-value">12px</div>
+        </div>
+        <div class="radius-demo">
+          <div class="radius-box" style="border-radius:16px;"></div>
+          <div class="radius-label">Modals</div>
+          <div class="radius-value">16px</div>
+        </div>
+        <div class="radius-demo">
+          <div class="radius-box" style="border-radius:9999px;"></div>
+          <div class="radius-label">Pills / Tags</div>
+          <div class="radius-value">9999px</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; font-weight:600; color:var(--slate); margin-top:48px; margin-bottom:16px; text-transform:uppercase; letter-spacing:0.08em;">Elevation / Shadows</h3>
+      <div class="shadow-grid">
+        <div class="shadow-demo" style="box-shadow: 0 1px 3px rgba(10,22,40,0.06); border: 1px solid var(--mist);">
+          <div class="shadow-label">Card (Rest)</div>
+          <div class="shadow-css">0 1px 3px rgba(10,22,40,0.06)</div>
+        </div>
+        <div class="shadow-demo" style="box-shadow: 0 8px 32px rgba(10,22,40,0.08); border: 1px solid var(--mist);">
+          <div class="shadow-label">Card (Hover)</div>
+          <div class="shadow-css">0 8px 32px rgba(10,22,40,0.08)</div>
+        </div>
+        <div class="shadow-demo" style="box-shadow: 0 4px 16px rgba(10,22,40,0.1); border: 1px solid var(--mist);">
+          <div class="shadow-label">Dropdown</div>
+          <div class="shadow-css">0 4px 16px rgba(10,22,40,0.1)</div>
+        </div>
+        <div class="shadow-demo" style="box-shadow: 0 4px 24px rgba(0,229,160,0.25); border: 1px solid rgba(0,229,160,0.3);">
+          <div class="shadow-label">CTA (Hover)</div>
+          <div class="shadow-css">0 4px 24px rgba(0,229,160,0.25)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 6. ASSETS -->
+    <!-- ============================================ -->
+    <div class="section">
+      <div class="section-label">06</div>
+      <div class="section-title">Digital Assets</div>
+      <div class="section-desc">Favicon, social avatar, and Open Graph image for consistent presence across platforms.</div>
+
+      <div class="asset-grid">
+        <!-- Favicon -->
+        <div class="asset-card">
+          <div class="asset-preview checkerboard">
+            <div style="display:flex; gap:24px; align-items:end;">
+              <svg width="64" height="64" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="6" fill="#0A1628"/>
+                <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+                <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+              </svg>
+              <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="6" fill="#0A1628"/>
+                <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+                <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+              </svg>
+              <svg width="16" height="16" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="6" fill="#0A1628"/>
+                <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+                <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+              </svg>
+            </div>
+          </div>
+          <div class="asset-info">
+            <div class="asset-name">Favicon</div>
+            <div class="asset-meta">SVG &middot; 32x32 base &middot; favicon.svg</div>
+          </div>
+        </div>
+
+        <!-- Social Avatar -->
+        <div class="asset-card">
+          <div class="asset-preview" style="background:var(--cloud);">
+            <div style="width:128px; height:128px; background:var(--deep-midnight); border-radius:24px; display:flex; align-items:center; justify-content:center; position:relative;">
+              <svg width="80" height="80" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <text x="2" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF">m</text>
+                <circle cx="27" cy="25" r="3" fill="#00E5A0"/>
+              </svg>
+            </div>
+          </div>
+          <div class="asset-info">
+            <div class="asset-name">Social Avatar</div>
+            <div class="asset-meta">PNG &middot; 400x400 &middot; Twitter, LinkedIn, GitHub</div>
+          </div>
+        </div>
+
+        <!-- OG Image -->
+        <div class="asset-card" style="grid-column: span 2;">
+          <div class="asset-preview" style="background:var(--cloud);">
+            <div class="og-preview">
+              <div class="og-wordmark">mazou<span class="dot">.</span></div>
+              <div class="og-tagline">AI infrastructure layer for Africa</div>
+            </div>
+          </div>
+          <div class="asset-info">
+            <div class="asset-name">Open Graph Image</div>
+            <div class="asset-meta">PNG &middot; 1200x630 &middot; Social sharing, link previews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 7. VOICE -->
+    <!-- ============================================ -->
+    <div class="section">
+      <div class="section-label">07</div>
+      <div class="section-title">Voice & Tone</div>
+      <div class="section-desc">Direct. Confident, not arrogant. Technical but accessible. African by context, not costume.</div>
+
+      <table class="voice-table">
+        <thead>
+          <tr>
+            <th style="width:45%;">Instead of...</th>
+            <th style="width:45%;">Write...</th>
+            <th style="width:10%;">Context</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="voice-bad">Revolutionizing AI access across the continent</span></td>
+            <td><span class="voice-good">One API key. 40+ models. Pay in Naira.</span></td>
+            <td style="font-size:12px; color:var(--ash);">Marketing</td>
+          </tr>
+          <tr>
+            <td><span class="voice-bad">Our cutting-edge smart routing engine</span></td>
+            <td><span class="voice-good">We pick the cheapest model that still gets it right.</span></td>
+            <td style="font-size:12px; color:var(--ash);">Product</td>
+          </tr>
+          <tr>
+            <td><span class="voice-bad">Empowering African developers</span></td>
+            <td><span class="voice-good">Built for how you actually build.</span></td>
+            <td style="font-size:12px; color:var(--ash);">Brand</td>
+          </tr>
+          <tr>
+            <td><span class="voice-bad">Seamless integration experience</span></td>
+            <td><span class="voice-good">Drop-in replacement. Zero code changes.</span></td>
+            <td style="font-size:12px; color:var(--ash);">Docs</td>
+          </tr>
+          <tr>
+            <td><span class="voice-bad">End-to-end visibility platform</span></td>
+            <td><span class="voice-good">See what every feature costs. Model by model. Naira by naira.</span></td>
+            <td style="font-size:12px; color:var(--ash);">Dashboard</td>
+          </tr>
+          <tr>
+            <td><span class="voice-bad">We're disrupting the AI space</span></td>
+            <td><span class="voice-good"><em>Delete the sentence entirely.</em></span></td>
+            <td style="font-size:12px; color:var(--ash);">Always</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:40px; display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <h4 style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--electric-mint); margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Always
+          </h4>
+          <ul style="font-size:14px; line-height:2; color:var(--slate); list-style:none;">
+            <li>Lead with the benefit</li>
+            <li>Use specific numbers</li>
+            <li>Short sentences</li>
+            <li>Active voice</li>
+            <li>Code as copy</li>
+            <li>One CTA per section</li>
+          </ul>
+        </div>
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <h4 style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#EF4444; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Never
+          </h4>
+          <ul style="font-size:14px; line-height:2; color:var(--slate); list-style:none;">
+            <li>Exclamation marks in product copy</li>
+            <li>"Cutting-edge" or "best-in-class"</li>
+            <li>"Empower" or "revolutionize"</li>
+            <li>"Seamless" or "end-to-end"</li>
+            <li>"Disrupt" in any form</li>
+            <li>Multiple CTAs in one section</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 8. TAGLINES -->
+    <!-- ============================================ -->
+    <div class="section">
+      <div class="section-label">08</div>
+      <div class="section-title">Taglines & Key Messages</div>
+      <div class="section-desc">Approved taglines for different contexts. The primary tagline should appear on every major brand touchpoint.</div>
+
+      <div style="background:var(--deep-midnight); border-radius:16px; padding:60px 40px; text-align:center; margin-bottom:32px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.2em; color:var(--electric-mint); margin-bottom:20px;">Primary Tagline</div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:36px; color:white; letter-spacing:-0.02em;">
+          One API. Local currency. Full control.
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ash); margin-bottom:12px;">Developer-Facing</div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:22px; letter-spacing:-0.02em;">Drop in. Ship out.</div>
+        </div>
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ash); margin-bottom:12px;">Cost / CFO Messaging</div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:22px; letter-spacing:-0.02em;">Know where every naira goes.</div>
+        </div>
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ash); margin-bottom:12px;">Market Positioning</div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:22px; letter-spacing:-0.02em;">AI infrastructure, built for Africa.</div>
+        </div>
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ash); margin-bottom:12px;">Competitive</div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:22px; letter-spacing:-0.02em;">OpenRouter doesn't take naira.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
+  <!-- ============================================ -->
+  <!-- DARK SECTION: CODE BLOCK STYLE -->
+  <!-- ============================================ -->
+  <div class="dark-section">
+    <div class="container">
+      <div class="section-label">09</div>
+      <div class="section-title" style="color:white;">Code Block Style</div>
+      <div class="section-desc">Code samples are a core part of the brand. They should look this good everywhere  - docs, landing page, pitch deck.</div>
+
+      <div style="background:#111114; border:1px solid #1F1F2E; border-radius:16px; overflow:hidden; max-width:700px; margin-top:32px;">
+        <div style="display:flex; align-items:center; gap:8px; padding:14px 20px; border-bottom:1px solid #1F1F2E; background:#18181C;">
+          <span style="width:10px; height:10px; border-radius:50%; background:#FF5F57;"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#FFBD2E;"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#28CA41;"></span>
+          <span style="margin-left:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#8888A0; background:#111114; padding:4px 12px; border-radius:4px;">app.py</span>
+        </div>
+        <div style="padding:24px; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.9; color:#E8E8ED;">
+          <span style="color:#555566;"># One line. That's it.</span><br>
+          <span style="color:#C792EA;">from</span> <span style="color:#82AAFF;">mazou</span> <span style="color:#C792EA;">import</span> AI<br><br>
+          response = <span style="color:#82AAFF;">AI</span>.<span style="color:#82AAFF;">complete</span><span style="color:#89DDFF;">(</span><br>
+          &nbsp;&nbsp;<span style="color:#00E5A0;">prompt</span>=<span style="color:#3B82F6;">"Summarise this complaint"</span>,<br>
+          &nbsp;&nbsp;<span style="color:#00E5A0;">model</span>=<span style="color:#3B82F6;">"auto"</span>,<br>
+          &nbsp;&nbsp;<span style="color:#00E5A0;">budget</span>=<span style="color:#3B82F6;">"low"</span>,<br>
+          &nbsp;&nbsp;<span style="color:#00E5A0;">tag</span>=<span style="color:#3B82F6;">"support-bot"</span><br>
+          <span style="color:#89DDFF;">)</span>
+        </div>
+      </div>
+
+      <div style="margin-top:32px; display:flex; gap:24px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="width:14px; height:14px; border-radius:3px; background:#C792EA;"></span>
+          <span style="font-size:13px; color:var(--ash);">Keywords  - <code style="font-family:'JetBrains Mono'; font-size:12px;">#C792EA</code></span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="width:14px; height:14px; border-radius:3px; background:#82AAFF;"></span>
+          <span style="font-size:13px; color:var(--ash);">Functions  - <code style="font-family:'JetBrains Mono'; font-size:12px;">#82AAFF</code></span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="width:14px; height:14px; border-radius:3px; background:#00E5A0;"></span>
+          <span style="font-size:13px; color:var(--ash);">Parameters  - <code style="font-family:'JetBrains Mono'; font-size:12px;">#00E5A0</code></span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="width:14px; height:14px; border-radius:3px; background:#3B82F6;"></span>
+          <span style="font-size:13px; color:var(--ash);">Strings  - <code style="font-family:'JetBrains Mono'; font-size:12px;">#3B82F6</code></span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="width:14px; height:14px; border-radius:3px; background:#555566;"></span>
+          <span style="font-size:13px; color:var(--ash);">Comments  - <code style="font-family:'JetBrains Mono'; font-size:12px;">#555566</code></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- BOILERPLATE -->
+  <!-- ============================================ -->
+  <div class="container">
+    <div class="section">
+      <div class="section-label">10</div>
+      <div class="section-title">Boilerplate Copy</div>
+      <div class="section-desc">Approved descriptions at three lengths. Copy exactly  - don't paraphrase.</div>
+
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--electric-mint); margin-bottom:12px;">One-Liner</div>
+          <p style="font-size:16px; line-height:1.6; font-weight:500;">Mazou is a unified AI gateway for Africa  - one API, local currency billing, smart cost routing.</p>
+        </div>
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--electric-mint); margin-bottom:12px;">Short  - 50 Words</div>
+          <p style="font-size:15px; line-height:1.7; color:var(--slate);">Mazou gives developers and product teams one API to access 40+ AI models  - including African language models  - with billing in local currency through Paystack. Smart routing automatically selects the best model for each request, cutting costs 15-40% while providing full per-feature spend visibility.</p>
+        </div>
+        <div style="background:var(--white); border:1px solid var(--mist); border-radius:12px; padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:var(--electric-mint); margin-bottom:12px;">Medium  - 100 Words</div>
+          <p style="font-size:15px; line-height:1.7; color:var(--slate);">Mazou is the AI infrastructure layer for Africa. We provide a single, OpenAI-compatible API that connects developers to 40+ AI models  - from GPT and Claude to African-built models for Yoruba, Hausa, and Swahili. Teams fund a wallet in naira through Paystack, and our smart routing engine automatically selects the optimal model for each request based on cost, quality, and language requirements. The dashboard shows exactly what every feature, agent, and model costs  - with actionable recommendations that save teams 15-40% on average. No USD cards. No vendor lock-in. No black box.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="brand-footer">
+    <div style="font-family:'Inter',sans-serif; font-weight:800; font-size:20px; color:white; margin-bottom:8px;">mazou<span style="color:var(--electric-mint)">.</span></div>
+    <p>Brand Assets v1.0 &middot; March 2026 &middot; <a href="mailto:team@mazou.ai">team@mazou.ai</a></p>
+    <p style="margin-top:6px; font-size:12px; color:rgba(255,255,255,0.3);">Confidential. For internal and partner use only.</p>
+  </div>
+
+</body>
+</html>
