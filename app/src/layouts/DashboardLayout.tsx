@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-import { Sidebar } from "@/components/layout/sidebar";
+import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { ToastProvider } from "@/components/ui/toast";
 import { supabase } from "@/lib/supabase";
