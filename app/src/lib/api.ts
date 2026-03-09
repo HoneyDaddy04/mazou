@@ -1,14 +1,18 @@
 /**
  * API client utilities for connecting frontend to FastAPI backend.
- * Uses TanStack Query for data fetching with caching and revalidation.
- * Auth tokens are injected from Supabase session automatically.
+ * When VITE_API_URL is set, uses the backend API.
+ * When empty (Vercel static hosting), queries Supabase directly via RLS.
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "./supabase";
+import * as sq from "./supabase-queries";
 
 // API base URL: uses VITE_API_URL in production, empty in dev (Vite proxy handles it)
 const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
+// True when we have a backend API to call (dev with Vite proxy, or explicit VITE_API_URL)
+const HAS_BACKEND = !!API_BASE || import.meta.env.DEV;
 
 // Get Supabase auth token for API requests
 async function getAuthHeaders(): Promise<Record<string, string>> {
@@ -71,7 +75,7 @@ export async function apiRequest<T = unknown>(
   return res.json();
 }
 
-// Dashboard API
+// Dashboard API (backend paths)
 export const dashboardApi = {
   stats: (days = 30) => `/api/dashboard/stats?days=${days}`,
   usage: (days = 30, groupBy = "day") =>
@@ -91,20 +95,30 @@ export const dashboardApi = {
 export const routingApi = {
   rules: "/api/routing/rules",
   createRule: (data: unknown) =>
-    apiRequest("/api/routing/rules", { body: data }),
+    HAS_BACKEND
+      ? apiRequest("/api/routing/rules", { body: data })
+      : sq.createRoutingRule(data),
   updateRule: (id: string, data: unknown) =>
-    apiRequest(`/api/routing/rules/${id}`, { method: "PUT", body: data }),
+    HAS_BACKEND
+      ? apiRequest(`/api/routing/rules/${id}`, { method: "PUT", body: data })
+      : sq.updateRoutingRule(id, data),
   deleteRule: (id: string) =>
-    apiRequest(`/api/routing/rules/${id}`, { method: "DELETE" }),
+    HAS_BACKEND
+      ? apiRequest(`/api/routing/rules/${id}`, { method: "DELETE" })
+      : sq.deleteRoutingRule(id),
 };
 
 // Keys API
 export const keysApi = {
   list: "/v1/keys",
   create: (data: { name: string; environment?: string }) =>
-    apiRequest("/v1/keys", { body: data }),
+    HAS_BACKEND
+      ? apiRequest("/v1/keys", { body: data })
+      : sq.createApiKey(data),
   revoke: (id: string) =>
-    apiRequest(`/v1/keys/${id}`, { method: "DELETE" }),
+    HAS_BACKEND
+      ? apiRequest(`/v1/keys/${id}`, { method: "DELETE" })
+      : sq.revokeApiKey(id),
 };
 
 // Models API
@@ -121,102 +135,103 @@ export const modelsApi = {
 };
 
 // --- TanStack Query hooks ---
+// Each hook uses Supabase-direct queries when no backend is available
 
 export function useDashboardStats(days = 30) {
   return useQuery({
     queryKey: ["dashboard", "stats", days],
-    queryFn: () => fetcher(dashboardApi.stats(days)),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.stats(days)) : sq.fetchDashboardStats(days),
   });
 }
 
 export function useDashboardUsage(days = 30, groupBy = "day") {
   return useQuery({
     queryKey: ["dashboard", "usage", days, groupBy],
-    queryFn: () => fetcher(dashboardApi.usage(days, groupBy)),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.usage(days, groupBy)) : sq.fetchUsageTimeseries(days, groupBy),
   });
 }
 
 export function useRecommendations() {
   return useQuery({
     queryKey: ["recommendations"],
-    queryFn: () => fetcher(dashboardApi.recommendations),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.recommendations) : sq.fetchRecommendations(),
   });
 }
 
 export function useAgents() {
   return useQuery({
     queryKey: ["agents"],
-    queryFn: () => fetcher(dashboardApi.agents),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.agents) : sq.fetchAgents(),
   });
 }
 
 export function useWallet() {
   return useQuery({
     queryKey: ["wallet"],
-    queryFn: () => fetcher(dashboardApi.wallet),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.wallet) : sq.fetchWallet(),
   });
 }
 
 export function useWalletTransactions(limit = 20, offset = 0) {
   return useQuery({
     queryKey: ["wallet", "transactions", limit, offset],
-    queryFn: () => fetcher(dashboardApi.walletTransactions(limit, offset)),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.walletTransactions(limit, offset)) : sq.fetchWalletTransactions(limit, offset),
   });
 }
 
 export function useInvoices() {
   return useQuery({
     queryKey: ["invoices"],
-    queryFn: () => fetcher(dashboardApi.invoices),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.invoices) : sq.fetchInvoices(),
   });
 }
 
 export function useDepartments(days = 30) {
   return useQuery({
     queryKey: ["dashboard", "departments", days],
-    queryFn: () => fetcher(dashboardApi.departments(days)),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.departments(days)) : sq.fetchDashboardStats(days).then(s => s.features),
   });
 }
 
 export function useBundles() {
   return useQuery({
     queryKey: ["bundles"],
-    queryFn: () => fetcher(dashboardApi.bundles),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.bundles) : Promise.resolve([]),
   });
 }
 
 export function useBundlePackages() {
   return useQuery({
     queryKey: ["bundles", "packages"],
-    queryFn: () => fetcher(dashboardApi.bundlePackages),
+    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.bundlePackages) : Promise.resolve([]),
   });
 }
 
 export function useApiKeys() {
   return useQuery({
     queryKey: ["keys"],
-    queryFn: () => fetcher(keysApi.list),
+    queryFn: () => HAS_BACKEND ? fetcher(keysApi.list) : sq.fetchApiKeys(),
   });
 }
 
 export function useModels(params?: { is_african?: boolean; category?: string }) {
   return useQuery({
     queryKey: ["models", params],
-    queryFn: () => fetcher(modelsApi.list(params)),
+    queryFn: () => HAS_BACKEND ? fetcher(modelsApi.list(params)) : Promise.resolve(sq.fetchModels(params)),
   });
 }
 
 export function useRoutingRules() {
   return useQuery({
     queryKey: ["routing", "rules"],
-    queryFn: () => fetcher(routingApi.rules),
+    queryFn: () => HAS_BACKEND ? fetcher(routingApi.rules) : sq.fetchRoutingRules(),
   });
 }
 
 export function useCurrentUser() {
   return useQuery({
     queryKey: ["auth", "me"],
-    queryFn: () => fetcher("/api/auth/me"),
+    queryFn: () => HAS_BACKEND ? fetcher("/api/auth/me") : sq.fetchCurrentUser(),
     retry: false,
   });
 }
@@ -272,9 +287,9 @@ export function usePurchaseBundle() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (packageId: string) =>
-      apiRequest("/api/dashboard/bundles/purchase", {
-        body: { package_id: packageId },
-      }),
+      HAS_BACKEND
+        ? apiRequest("/api/dashboard/bundles/purchase", { body: { package_id: packageId } })
+        : Promise.reject(new Error("Bundle purchase requires backend API")),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bundles"] });
       queryClient.invalidateQueries({ queryKey: ["wallet"] });
@@ -287,10 +302,9 @@ export function useUpdateRecommendation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) =>
-      apiRequest(`/api/dashboard/recommendations/${id}`, {
-        method: "PATCH",
-        body: { status },
-      }),
+      HAS_BACKEND
+        ? apiRequest(`/api/dashboard/recommendations/${id}`, { method: "PATCH", body: { status } })
+        : sq.updateRecommendation(id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["recommendations"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard", "stats"] });
