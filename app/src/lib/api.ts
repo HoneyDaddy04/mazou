@@ -7,6 +7,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "./supabase";
 
+// API base URL: uses VITE_API_URL in production, empty in dev (Vite proxy handles it)
+const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 // Get Supabase auth token for API requests
 async function getAuthHeaders(): Promise<Record<string, string>> {
   const { data: { session } } = await supabase.auth.getSession();
@@ -19,7 +22,7 @@ async function getAuthHeaders(): Promise<Record<string, string>> {
 // Fetcher - includes Supabase auth token
 export const fetcher = async (url: string) => {
   const authHeaders = await getAuthHeaders();
-  const res = await fetch(url, {
+  const res = await fetch(`${API_BASE}${url}`, {
     credentials: "include",
     headers: authHeaders,
   });
@@ -49,7 +52,7 @@ export async function apiRequest<T = unknown>(
   } = {}
 ): Promise<T> {
   const authHeaders = await getAuthHeaders();
-  const res = await fetch(url, {
+  const res = await fetch(`${API_BASE}${url}`, {
     method: options.method || "POST",
     credentials: "include",
     headers: {
