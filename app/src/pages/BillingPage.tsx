@@ -191,7 +191,7 @@ export default function BillingPage() {
                   <Badge color="#66667A" bg="rgba(102,102,122,0.08)">NGN</Badge>
                 </div>
                 <span className={`font-mono font-semibold ${isCredit ? "text-accent" : "text-text"}`}>
-                  {isCredit ? "+" : "-"}NGN {t.amount_naira?.toLocaleString("en-NG") ?? formatNaira(t.amount_kobo)}
+                  {isCredit ? "+" : "-"}{t.amount_naira != null ? `NGN ${t.amount_naira.toLocaleString("en-NG")}` : formatNaira(t.amount_kobo)}
                 </span>
               </div>
             );
@@ -218,7 +218,7 @@ export default function BillingPage() {
                   <div className="text-[11px] text-text-dim">{dateLabel}</div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-mono font-semibold">NGN {inv.total_cost_naira?.toLocaleString("en-NG") ?? formatNaira(inv.total_cost_kobo)}</span>
+                  <span className="font-mono font-semibold">{inv.total_cost_naira != null ? `NGN ${inv.total_cost_naira.toLocaleString("en-NG")}` : formatNaira(inv.total_cost_kobo)}</span>
                   <Badge>{inv.status}</Badge>
                   <button
                     onClick={() => toast(`Downloading invoice for ${monthLabel}`)}
