@@ -5,6 +5,9 @@
 
 export const IS_DEMO_MODE = !import.meta.env.VITE_SUPABASE_URL;
 
+/** True when demo auth is active (either via IS_DEMO_MODE or fallback) */
+export function isDemoActive() { return _demoLoggedIn; }
+
 let _demoLoggedIn = false;
 const listeners = new Set<(loggedIn: boolean) => void>();
 

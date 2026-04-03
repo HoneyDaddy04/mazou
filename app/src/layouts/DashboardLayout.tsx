@@ -11,25 +11,33 @@ export default function DashboardLayout() {
   const [authState, setAuthState] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
 
   useEffect(() => {
+    // Always listen to demo auth (fallback demo mode works even when Supabase is configured)
+    const unsub = demoAuth.onAuthChange((loggedIn) => {
+      if (loggedIn) setAuthState("authenticated");
+    });
+
     if (IS_DEMO_MODE) {
       setAuthState(demoAuth.isLoggedIn ? "authenticated" : "unauthenticated");
-      const unsub = demoAuth.onAuthChange((loggedIn) => {
-        setAuthState(loggedIn ? "authenticated" : "unauthenticated");
-      });
       return unsub;
     }
 
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setAuthState(session ? "authenticated" : "unauthenticated");
+      if (demoAuth.isLoggedIn) {
+        setAuthState("authenticated");
+      } else {
+        setAuthState(session ? "authenticated" : "unauthenticated");
+      }
     });
 
     // Listen for auth changes (sign in, sign out, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setAuthState(session ? "authenticated" : "unauthenticated");
+      if (!demoAuth.isLoggedIn) {
+        setAuthState(session ? "authenticated" : "unauthenticated");
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => { unsub(); subscription.unsubscribe(); };
   }, []);
 
   useEffect(() => {

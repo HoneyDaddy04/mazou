@@ -51,8 +51,9 @@ export default function LoginPage() {
     });
 
     if (authError) {
-      setError("Demo login failed: " + authError.message);
-      setLoading(false);
+      // Supabase demo account doesn't exist — fall back to local demo mode
+      demoAuth.login();
+      navigate("/dashboard");
       return;
     }
 

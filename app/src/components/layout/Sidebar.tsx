@@ -121,7 +121,7 @@ export function Sidebar() {
         </div>
         <button
           onClick={async () => {
-            if (IS_DEMO_MODE) { demoAuth.logout(); } else { await supabase.auth.signOut(); }
+            if (demoAuth.isLoggedIn) { demoAuth.logout(); } else { await supabase.auth.signOut(); }
             navigate("/login");
           }}
           title="Sign out"
