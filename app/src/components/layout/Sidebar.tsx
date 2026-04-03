@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+import { IS_DEMO_MODE, demoAuth } from "@/lib/demo-auth";
 import { NAV_SECTIONS } from "@/lib/constants";
 import { useAppStore } from "@/lib/store";
 import {
@@ -120,7 +121,7 @@ export function Sidebar() {
         </div>
         <button
           onClick={async () => {
-            await supabase.auth.signOut();
+            if (IS_DEMO_MODE) { demoAuth.logout(); } else { await supabase.auth.signOut(); }
             navigate("/login");
           }}
           title="Sign out"

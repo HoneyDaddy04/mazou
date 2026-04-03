@@ -4,12 +4,21 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { ToastProvider } from "@/components/ui/toast";
 import { supabase } from "@/lib/supabase";
+import { IS_DEMO_MODE, demoAuth } from "@/lib/demo-auth";
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const [authState, setAuthState] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
 
   useEffect(() => {
+    if (IS_DEMO_MODE) {
+      setAuthState(demoAuth.isLoggedIn ? "authenticated" : "unauthenticated");
+      const unsub = demoAuth.onAuthChange((loggedIn) => {
+        setAuthState(loggedIn ? "authenticated" : "unauthenticated");
+      });
+      return unsub;
+    }
+
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setAuthState(session ? "authenticated" : "unauthenticated");

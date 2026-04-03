@@ -7,6 +7,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "./supabase";
 import * as sq from "./supabase-queries";
+import { IS_DEMO_MODE, MOCK_DASHBOARD_STATS, MOCK_USAGE_TIMESERIES, MOCK_RECOMMENDATIONS, MOCK_AGENTS, MOCK_WALLET, MOCK_WALLET_TRANSACTIONS, MOCK_INVOICES, MOCK_KEYS, MOCK_MODELS, MOCK_ROUTING_RULES, MOCK_USER } from "./demo-auth";
 
 // API base URL: uses VITE_API_URL in production, empty in dev (Vite proxy handles it)
 const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
@@ -140,56 +141,56 @@ export const modelsApi = {
 export function useDashboardStats(days = 30) {
   return useQuery({
     queryKey: ["dashboard", "stats", days],
-    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.stats(days)) : sq.fetchDashboardStats(days),
+    queryFn: () => IS_DEMO_MODE ? MOCK_DASHBOARD_STATS : HAS_BACKEND ? fetcher(dashboardApi.stats(days)) : sq.fetchDashboardStats(days),
   });
 }
 
 export function useDashboardUsage(days = 30, groupBy = "day") {
   return useQuery({
     queryKey: ["dashboard", "usage", days, groupBy],
-    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.usage(days, groupBy)) : sq.fetchUsageTimeseries(days, groupBy),
+    queryFn: () => IS_DEMO_MODE ? MOCK_USAGE_TIMESERIES : HAS_BACKEND ? fetcher(dashboardApi.usage(days, groupBy)) : sq.fetchUsageTimeseries(days, groupBy),
   });
 }
 
 export function useRecommendations() {
   return useQuery({
     queryKey: ["recommendations"],
-    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.recommendations) : sq.fetchRecommendations(),
+    queryFn: () => IS_DEMO_MODE ? MOCK_RECOMMENDATIONS : HAS_BACKEND ? fetcher(dashboardApi.recommendations) : sq.fetchRecommendations(),
   });
 }
 
 export function useAgents() {
   return useQuery({
     queryKey: ["agents"],
-    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.agents) : sq.fetchAgents(),
+    queryFn: () => IS_DEMO_MODE ? MOCK_AGENTS : HAS_BACKEND ? fetcher(dashboardApi.agents) : sq.fetchAgents(),
   });
 }
 
 export function useWallet() {
   return useQuery({
     queryKey: ["wallet"],
-    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.wallet) : sq.fetchWallet(),
+    queryFn: () => IS_DEMO_MODE ? MOCK_WALLET : HAS_BACKEND ? fetcher(dashboardApi.wallet) : sq.fetchWallet(),
   });
 }
 
 export function useWalletTransactions(limit = 20, offset = 0) {
   return useQuery({
     queryKey: ["wallet", "transactions", limit, offset],
-    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.walletTransactions(limit, offset)) : sq.fetchWalletTransactions(limit, offset),
+    queryFn: () => IS_DEMO_MODE ? MOCK_WALLET_TRANSACTIONS : HAS_BACKEND ? fetcher(dashboardApi.walletTransactions(limit, offset)) : sq.fetchWalletTransactions(limit, offset),
   });
 }
 
 export function useInvoices() {
   return useQuery({
     queryKey: ["invoices"],
-    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.invoices) : sq.fetchInvoices(),
+    queryFn: () => IS_DEMO_MODE ? MOCK_INVOICES : HAS_BACKEND ? fetcher(dashboardApi.invoices) : sq.fetchInvoices(),
   });
 }
 
 export function useDepartments(days = 30) {
   return useQuery({
     queryKey: ["dashboard", "departments", days],
-    queryFn: () => HAS_BACKEND ? fetcher(dashboardApi.departments(days)) : sq.fetchDashboardStats(days).then(s => s.features),
+    queryFn: () => IS_DEMO_MODE ? MOCK_DASHBOARD_STATS.features : HAS_BACKEND ? fetcher(dashboardApi.departments(days)) : sq.fetchDashboardStats(days).then(s => s.features),
   });
 }
 
@@ -210,28 +211,28 @@ export function useBundlePackages() {
 export function useApiKeys() {
   return useQuery({
     queryKey: ["keys"],
-    queryFn: () => HAS_BACKEND ? fetcher(keysApi.list) : sq.fetchApiKeys(),
+    queryFn: () => IS_DEMO_MODE ? MOCK_KEYS : HAS_BACKEND ? fetcher(keysApi.list) : sq.fetchApiKeys(),
   });
 }
 
 export function useModels(params?: { is_african?: boolean; category?: string }) {
   return useQuery({
     queryKey: ["models", params],
-    queryFn: () => HAS_BACKEND ? fetcher(modelsApi.list(params)) : Promise.resolve(sq.fetchModels(params)),
+    queryFn: () => IS_DEMO_MODE ? MOCK_MODELS.filter(m => params?.is_african !== undefined ? m.is_african === params.is_african : true) : HAS_BACKEND ? fetcher(modelsApi.list(params)) : Promise.resolve(sq.fetchModels(params)),
   });
 }
 
 export function useRoutingRules() {
   return useQuery({
     queryKey: ["routing", "rules"],
-    queryFn: () => HAS_BACKEND ? fetcher(routingApi.rules) : sq.fetchRoutingRules(),
+    queryFn: () => IS_DEMO_MODE ? MOCK_ROUTING_RULES : HAS_BACKEND ? fetcher(routingApi.rules) : sq.fetchRoutingRules(),
   });
 }
 
 export function useCurrentUser() {
   return useQuery({
     queryKey: ["auth", "me"],
-    queryFn: () => HAS_BACKEND ? fetcher("/api/auth/me") : sq.fetchCurrentUser(),
+    queryFn: () => IS_DEMO_MODE ? MOCK_USER : HAS_BACKEND ? fetcher("/api/auth/me") : sq.fetchCurrentUser(),
     retry: false,
   });
 }

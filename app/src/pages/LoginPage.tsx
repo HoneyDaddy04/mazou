@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { supabase } from "@/lib/supabase";
+import { IS_DEMO_MODE, demoAuth } from "@/lib/demo-auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -13,6 +14,12 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    if (IS_DEMO_MODE) {
+      demoAuth.login();
+      navigate("/dashboard");
+      return;
+    }
 
     const { error: authError } = await supabase.auth.signInWithPassword({
       email,
@@ -31,6 +38,12 @@ export default function LoginPage() {
   async function fillDemo() {
     setLoading(true);
     setError("");
+
+    if (IS_DEMO_MODE) {
+      demoAuth.login();
+      navigate("/dashboard");
+      return;
+    }
 
     const { error: authError } = await supabase.auth.signInWithPassword({
       email: "demo@mazou.io",
