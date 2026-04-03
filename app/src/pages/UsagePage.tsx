@@ -50,16 +50,16 @@ export default function UsagePage() {
   const topFeature = features.length > 0
     ? features.reduce((a: any, b: any) => a.cost_kobo > b.cost_kobo ? a : b)
     : null;
-  const topFeaturePct = topFeature ? Math.round((topFeature.cost_kobo / stats.total_spend_kobo) * 100) : 0;
+  const topFeaturePct = topFeature ? Math.round((topFeature.cost_kobo / (stats?.total_spend_kobo || 1)) * 100) : 0;
 
   // Avg cost per call
-  const avgCostPerCall = stats.total_calls > 0 ? Math.round(stats.total_spend_kobo / stats.total_calls) : 0;
+  const avgCostPerCall = (stats?.total_calls ?? 0) > 0 ? Math.round((stats?.total_spend_kobo ?? 0) / stats!.total_calls) : 0;
 
   return (
     <div>
       <div className="grid grid-cols-4 gap-2.5 mb-5 animate-in-stagger">
-        <StatCard label="Total Spend" value={formatNaira(stats.total_spend_kobo)} change={stats.spend_change_pct != null ? `${stats.spend_change_pct >= 0 ? "↑" : "↓"} ${Math.abs(stats.spend_change_pct)}% vs last period` : "this period"} changeType={stats.spend_change_pct != null && stats.spend_change_pct <= 0 ? "up" : "down"} color="#00E5A0" />
-        <StatCard label="Total Calls" value={stats.total_calls >= 1_000_000 ? `${(stats.total_calls / 1_000_000).toFixed(2)}M` : stats.total_calls >= 1_000 ? `${(stats.total_calls / 1_000).toFixed(0)}K` : String(stats.total_calls)} change="this period" changeType="up" />
+        <StatCard label="Total Spend" value={formatNaira(stats?.total_spend_kobo ?? 0)} change={stats?.spend_change_pct != null ? `${stats.spend_change_pct >= 0 ? "↑" : "↓"} ${Math.abs(stats.spend_change_pct)}% vs last period` : "this period"} changeType={stats?.spend_change_pct != null && stats.spend_change_pct <= 0 ? "up" : "down"} color="#00E5A0" />
+        <StatCard label="Total Calls" value={(stats?.total_calls ?? 0) >= 1_000_000 ? `${((stats?.total_calls ?? 0) / 1_000_000).toFixed(2)}M` : (stats?.total_calls ?? 0) >= 1_000 ? `${((stats?.total_calls ?? 0) / 1_000).toFixed(0)}K` : String(stats?.total_calls ?? 0)} change="this period" changeType="up" />
         <StatCard label="Avg Cost/Call" value={formatNaira(avgCostPerCall)} change="via routing" changeType="up" color="#00E5A0" />
         <StatCard label="Most Expensive" value={topFeature?.tag ?? "N/A"} change={topFeature ? `${formatNaira(topFeature.cost_kobo)} - ${topFeaturePct}% of total` : ""} changeType="down" color="#EF4444" />
       </div>
